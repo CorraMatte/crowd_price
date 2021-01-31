@@ -22,7 +22,7 @@ class Profile(models.Model):
     address = models.CharField(max_length=100, default=False)
 
     tel_number = models.CharField(max_length=20, null=True, default=None)
-    birth = models.DateField(bool=False, validators=[AgeValidator])
+    birth = models.DateField(default=False, validators=[AgeValidator])
 
 
 class NormalUser(models.Model):
