@@ -42,9 +42,10 @@ INSTALLED_APPS = [
     'products',
     'profiles',
     'capabilities',
+    'geofeatures',
 
     # Installed from Django
-    # 'django.contrib.gis',
+    'django.contrib.gis',
 ]
 
 MIDDLEWARE = [

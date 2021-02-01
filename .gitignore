@@ -1,5 +1,6 @@
 # Pycharn IDE files
 .idea/
+migrations/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
