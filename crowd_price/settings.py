@@ -85,8 +85,12 @@ WSGI_APPLICATION = 'crowd_price.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.mysql',
+        'NAME': 'crowd_price',
+        'USER': 'root',
+        'PASSWORD': 'password',
+        'HOST': '0.0.0.0',   # Or an IP Address that your DB is hosted on
+        'PORT': '3306',
     }
 }
 
