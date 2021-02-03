@@ -46,6 +46,10 @@ INSTALLED_APPS = [
 
     # Installed from Django
     'django.contrib.gis',
+
+    # Rest framework
+    'rest_framework',
+    # 'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -79,6 +83,26 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'crowd_price.wsgi.application'
 
+# REST FRAMEWORK
+REST_FRAMEWORK = {
+    ## Ale
+    # Toglie la formattazione delle pagine html e restituisce puro json
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+
+    ## UGO
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
