@@ -22,7 +22,6 @@ def NotFuture(enroll_date):
 
 class Organization(models.Model):
     name = models.CharField(max_length=100, default=False)
-    location = models.ForeignKey(Location, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ['name']
@@ -31,19 +30,18 @@ class Organization(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     picture = models.ImageField(upload_to='img/profile/%Y', default="img/blank_profile.png")
-    email = models.EmailField(max_length=50, default=False)
-    tel_number = models.CharField(max_length=20, null=True, default=None)
-    subscribe_date = models.DateField(default=False, validators=[NotFuture])
+    subscribe_date = models.DateTimeField(validators=[NotFuture], auto_now_add=True)
     location = models.ForeignKey(Location, null=True, on_delete=models.SET_NULL)
 
     class Meta:
-        ordering = ['email']
+        ordering = ['subscribe_date']
 
 
-class ConsumerUser(models.Model):
+class Consumer(models.Model):
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     experience = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(1000)])
-    followers = models.ManyToManyField("self")
-    birth = models.DateField(default=False, validators=[AgeValidator, NotFuture])
+    # followers = models.ManyToManyField("self")
+    # birth = models.DateField(default=False, validators=[AgeValidator, NotFuture])
 
     # Could be useful
     # is_oauth = models.BooleanField(default=False)
@@ -54,5 +52,5 @@ class ConsumerUser(models.Model):
 
 
 class Analyst(models.Model):
-    user = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     organization = models.ForeignKey(Organization, null=True, on_delete=models.SET_NULL)
