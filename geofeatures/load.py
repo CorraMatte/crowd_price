@@ -1,6 +1,6 @@
 from pathlib import Path
 from django.contrib.gis.utils import LayerMapping
-from .models import WorldBorder
+from .models import Country
 
 
 world_mapping = {
@@ -18,11 +18,9 @@ world_mapping = {
     'mpoly': 'MULTIPOLYGON',
 }
 
-world_shp = Path(__file__).resolve().parent / 'data' / 'Europe_coastline_poly.shp'
-# Path('/home/corra/Dropbox/Unimore/Magistrale/Secondo\ Anno/Primo\ Semestre/Applicazone\ distribuite\ e\ mobili/crowd_price/Europe_coastline_poly.shp')
-#
+world_shp = Path(__file__).resolve().parent / 'data' / 'TM_WORLD_BORDERS-0.3.shp'
 
 
 def run(verbose=True):
-    lm = LayerMapping(WorldBorder, str(world_shp), world_mapping, transform=False)
+    lm = LayerMapping(Country, str(world_shp), world_mapping, transform=False)
     lm.save(strict=True, verbose=verbose)
