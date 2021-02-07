@@ -9,7 +9,7 @@ class SearchSerializer(geo_serializers.GeoFeatureModelSerializer):
         geo_field = 'pnt'
         fields = [
             'profile', 'product_query', 'is_starred', 'price_min', 'price_max', 'after_date',
-            'distance', 'pnt', 'ordering_by'
+            'distance', 'pnt', 'ordering_by', 'categories'
         ]
 
 

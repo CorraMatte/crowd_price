@@ -20,6 +20,9 @@ def get_reports_by_search(search_pk):
         created_time__gte=search.after_date
     )
 
+    if search.categories.all():
+        reports = reports.filter(product__categories__in=search.categories.all())
+
     # if search.pnt:
     #     reports = reports.filter(pnt__distance_lte=(search.pnt, D(km=search.distance)))
 

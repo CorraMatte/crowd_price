@@ -40,7 +40,7 @@ class Search(models.Model):
     distance = models.PositiveIntegerField(default=MAX_DISTANCE, validators=[MaxValueValidator(MAX_DISTANCE)])
     pnt = models.PointField(srid=4326, null=True)
     ordering_by = models.CharField(max_length=13, choices=OrderBy.choices, default=OrderBy.TMP_DESC)
-    categories = models.ManyToManyField(Category, null=True)
+    categories = models.ManyToManyField(Category, blank=True)
 
     def __str__(self):
         return ' '.join(f'{field}: {value}' for field, value in model_to_dict(self).items())

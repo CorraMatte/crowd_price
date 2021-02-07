@@ -1,4 +1,4 @@
-from django.db import models
+from django.contrib.gis.db import models
 from profiles.models import Consumer
 from geofeatures.models import Location
 
@@ -19,21 +19,20 @@ class Category(models.Model):
 class Store(models.Model):
     picture = models.ImageField(upload_to='img/store/%Y', default='img/store_blank.png')
     name = models.CharField(max_length=50)
-    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    # location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
 
     class Meta:
         ordering = ['name']
-        unique_together = ('name', 'location')
+        # unique_together = ('name', 'location')
 
 
 class Product(models.Model):
     picture = models.ImageField(upload_to='img/products/%Y', default='img/product_blank.png')
     name = models.CharField(max_length=50, unique=True)
     categories = models.ManyToManyField(Category)
-    store = models.ForeignKey(Store, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.name
