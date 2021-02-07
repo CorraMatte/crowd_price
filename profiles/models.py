@@ -1,23 +1,8 @@
-import datetime
-from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
+from crowd_price.validators import *
+from crowd_price.const import *
 from django.core.validators import MaxValueValidator
-from django.db import models
-from geofeatures.models import Location
-
-
-def AgeValidator(birth):
-    age = relativedelta(datetime.datetime.now(), birth).years
-    if age < 18:
-        raise ValidationError('User is underage')
-    if age > 80:
-        raise ValidationError('User is too old')
-
-
-def NotFuture(enroll_date):
-    if datetime.datetime.now() < enroll_date:
-        raise ValidationError('Can enroll in the future')
+from django.contrib.gis.db import models
 
 
 class Organization(models.Model):
@@ -31,26 +16,41 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     picture = models.ImageField(upload_to='img/profile/%Y', default="img/blank_profile.png")
     subscribe_date = models.DateTimeField(validators=[NotFuture], auto_now_add=True)
-    location = models.ForeignKey(Location, null=True, on_delete=models.SET_NULL)
+    pnt = models.PointField(srid=4326)
+
+    def __str__(self):
+        return self.user.email
 
     class Meta:
-        ordering = ['subscribe_date']
+        ordering = ['user__email']
 
 
 class Consumer(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    experience = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(1000)])
+    experience = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(MAX_EXPERIENCE)])
     # followers = models.ManyToManyField("self")
-    # birth = models.DateField(default=False, validators=[AgeValidator, NotFuture])
+    # birth = models.DateField(default=False, validators=[AgeValidator])
 
     # Could be useful
     # is_oauth = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.profile.user.email
 
     @property
     def experience_level(self):
         return self.experience / 10
 
+    class Meta:
+        ordering = ['profile__user__email']
+
 
 class Analyst(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     organization = models.ForeignKey(Organization, null=True, on_delete=models.SET_NULL)
+
+    class Meta:
+        ordering = ['profile__user__email']
+
+    def __str__(self):
+        return self.profile.user.email

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from profiles.models import Organization, Profile, Consumer, Analyst
+from rest_framework_gis import serializers as geo_serializers
 
 
 class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
@@ -8,10 +9,11 @@ class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['name']
 
 
-class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+class ProfileSerializer(geo_serializers.GeoFeatureModelSerializer):
     class Meta:
         model = Profile
-        fields = ['user', 'picture', 'subscribe_date', 'location']
+        geo_field = 'pnt'
+        fields = ['user', 'picture', 'subscribe_date', 'pnt']
 
 
 class ConsumerSerializer(serializers.HyperlinkedModelSerializer):
