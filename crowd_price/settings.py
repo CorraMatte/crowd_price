@@ -50,6 +50,9 @@ INSTALLED_APPS = [
     # Rest framework
     'rest_framework',
 
+    # https://github.com/openwisp/django-rest-framework-gis#geofeaturemodelserializer
+    'rest_framework_gis',
+
     'rest_framework.authtoken',
 
     # 'dj_rest_auth.jwt_auth',
