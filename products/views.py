@@ -18,7 +18,7 @@ class RetrieveStoreView(generics.RetrieveAPIView):
 
 class RetrieveCategoryProductView(APIView):
     def get(self, request, pk):
-        generics.get_object_or_404(Category, pk)
+        generics.get_object_or_404(Category.objects.all(), pk=pk)
         return Response(
             serial.ProductSerializer(Product.objects.filter(categories=pk), many=True).data,
             status=status.HTTP_200_OK
@@ -34,15 +34,23 @@ class RetrieveMostReportedProduct(generics.ListAPIView):
         return Product.objects.annotate(count=Count('report')).order_by('-count')[:10]
 
 
-class RetrieveStoreProductView(APIView):
-    def get(self, request, pk):
-        generics.get_object_or_404(Store, pk)
-        return Response(
-            serial.ProductSerializer(Product.objects.filter(store=pk), many=True).data,
-            status=status.HTTP_200_OK
-        )
+class RetrieveCategoriesView(APIView):
+    def get(self, request):
+        categories = Category.objects.annotate(product_count=Count('product'))
+        res = []
+        for c in categories:
+            r = {'pk': c.pk, 'name': c.name, 'product_count': c.product_count}
+            res.append(r)
+
+        return Response({'detail': res}, status.HTTP_200_OK)
 
 
-class AddProductView(generics.CreateAPIView):
+# post: views that create objects
+class CreateProductView(generics.CreateAPIView):
     queryset = Product.objects.all()
     serializer_class = serial.ProductSerializer
+
+
+class CreateCategoryView(generics.CreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = serial.CategorySerializer
