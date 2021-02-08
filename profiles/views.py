@@ -13,7 +13,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.db.utils import IntegrityError
 
 
-class AddConsumerView(APIView):         # To test (password, dup user)
+class CreateConsumerView(APIView):         # To test (password, dup user)
     def post(self, request):
         # User validation
         data = request.data

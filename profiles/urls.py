@@ -4,7 +4,7 @@ from profiles import views
 
 urlpatterns = [
     # Custom
-    path('consumer/add', views.AddConsumerView.as_view()),
+    path('consumer/add', views.CreateConsumerView.as_view()),
     path('consumer/<int:pk>', views.RetrieveConsumerView.as_view()),
     path('analyst/<int:pk>', views.RetrieveAnalystView.as_view()),
     path('organization/<int:pk>', views.RetrieveOrganizationView.as_view()),

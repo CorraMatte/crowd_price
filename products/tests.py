@@ -4,7 +4,10 @@ from rest_framework import status
 
 # Create your tests here.
 class CategoryTests(TestCase):
-    # path('category/add', views.CreateCategoryView.as_view()),
+    """
+        Check if it gives an error for a duplicate category
+        path('category/add', views.CreateCategoryView.as_view()),
+    """
     def test_category_duplicate_name(self):
         url = '/category/add'
         response = self.client.post(url, data={'name': 'category'})
@@ -14,7 +17,10 @@ class CategoryTests(TestCase):
 
 
 class ProductTests(TestCase):
-    # path('product/add', views.CreateCategoryView.as_view()),
+    """
+        Check if it gives an error for a duplicate product
+        path('product/add', views.CreateCategoryView.as_view()),
+    """
     def test_product_duplicate_name(self):
         url = '/product/add'
         response_cat = self.client.post('/category/add', data={'name': 'category'})
@@ -24,7 +30,10 @@ class ProductTests(TestCase):
         response = self.client.post(url, data={'name': 'product', 'categories': [pk_cat]})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    # path('category/<int:pk>/products', views.RetrieveCategoryProductView.as_view()),
+    """
+        Check if it gives for a not existing category
+        path('category/<int:pk>/products', views.RetrieveCategoryProductView.as_view()),
+    """
     def test_retrieve_products_by_category(self):
         url = '/category/{}/products'
         response_cat = self.client.post('/category/add', data={'name': 'category'})
