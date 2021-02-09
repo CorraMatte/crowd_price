@@ -42,7 +42,7 @@ class RetrieveCategoriesView(APIView):
             r = {'pk': c.pk, 'name': c.name, 'product_count': c.product_count}
             res.append(r)
 
-        return Response({'detail': res}, status.HTTP_200_OK)
+        return Response(res, status.HTTP_200_OK)
 
 
 # post: views that create objects

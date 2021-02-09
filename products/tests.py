@@ -1,5 +1,6 @@
 from django.test import TestCase
 from rest_framework import status
+from products.models import Category
 
 
 # Create your tests here.
@@ -17,17 +18,18 @@ class CategoryTests(TestCase):
 
 
 class ProductTests(TestCase):
+    def setUp(self):
+        response_cat = self.client.post('/category/add', data={'name': 'category'})
+
     """
         Check if it gives an error for a duplicate product
         path('product/add', views.CreateCategoryView.as_view()),
     """
     def test_product_duplicate_name(self):
         url = '/product/add'
-        response_cat = self.client.post('/category/add', data={'name': 'category'})
-        pk_cat = response_cat.json()['pk']
-        response = self.client.post(url, data={'name': 'product', 'categories': [pk_cat]})
+        response = self.client.post(url, data={'name': 'product', 'categories': [Category.objects.get().pk]})
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        response = self.client.post(url, data={'name': 'product', 'categories': [pk_cat]})
+        response = self.client.post(url, data={'name': 'product', 'categories': [Category.objects.get().pk]})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     """
@@ -36,11 +38,9 @@ class ProductTests(TestCase):
     """
     def test_retrieve_products_by_category(self):
         url = '/category/{}/products'
-        response_cat = self.client.post('/category/add', data={'name': 'category'})
-        pk_cat = response_cat.json()['pk']
-        self.client.post('/product/add', data={'name': 'product', 'categories': [pk_cat]})
+        self.client.post('/product/add', data={'name': 'product', 'categories': [Category.objects.get().pk]})
 
-        response = self.client.get(url.format(pk_cat))
+        response = self.client.get(url.format(Category.objects.get().pk))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         response = self.client.get(url.format('not_existing_cat'))
