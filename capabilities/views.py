@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from capabilities.utils import *
 from rest_framework.views import APIView
 from capabilities.models import Report
@@ -19,7 +20,17 @@ class RetrieveReportBySearchAPI(APIView):
         return Response(get_serial_reports_by_search(search.pk), status.HTTP_200_OK)
 
 
-class RetrieveNearestReport(generics.ListAPIView):
+@login_required
+class RetrieveReportByUserAPI(APIView):
+    def get(self, request):
+        return Response(
+            serial.ReportSerializer(Report.objects.filter(consumer__profile__user=request.user), many=True).data,
+            status=status.HTTP_200_OK
+        )
+
+
+@login_required
+class RetrieveNearestReportAPI(generics.ListAPIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer
 
@@ -28,7 +39,8 @@ class RetrieveNearestReport(generics.ListAPIView):
         return Report.objects.all().annotate(distance=Distance("pnt", pnt)).order_by("distance")[:10]
 
 
-class RetrieveNewerReport(generics.ListAPIView):
+@login_required
+class RetrieveNewerReportAPI(generics.ListAPIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer
 
@@ -36,6 +48,7 @@ class RetrieveNewerReport(generics.ListAPIView):
         return Report.objects.all().order_by('-created_time')[:10]
 
 
+@login_required
 class CreateReportAPI(generics.CreateAPIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer
@@ -62,6 +75,7 @@ class CreateReportAPI(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
+@login_required
 class DownloadDumpAPI(APIView):
     def get(self, request):
         serial_dump = serial.DumpSerializer(data=request.GET)

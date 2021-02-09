@@ -13,7 +13,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.db.utils import IntegrityError
 
 
-class CreateConsumerView(APIView):         # To test (password, dup user)
+class CreateConsumerAPI(APIView):         # To test (password, dup user)
     def post(self, request):
         # User validation
         data = request.data
@@ -53,17 +53,17 @@ class CreateConsumerView(APIView):         # To test (password, dup user)
         return Response({"detail": "consumer created"}, status.HTTP_201_CREATED)
 
 
-class RetrieveAnalystView(generics.RetrieveAPIView):
+class RetrieveAnalystAPI(generics.RetrieveAPIView):
     queryset = Analyst.objects.all()
     serializer_class = serial.AnalystSerializer
 
 
-class RetrieveConsumerView(generics.RetrieveAPIView):
+class RetrieveConsumerAPI(generics.RetrieveAPIView):
     queryset = Consumer.objects.all()
     serializer_class = serial.ConsumerSerializer
 
 
-class RetrieveOrganizationView(generics.RetrieveAPIView):
+class RetrieveOrganizationAPI(generics.RetrieveAPIView):
     queryset = Organization.objects.all()
     serializer_class = serial.ConsumerSerializer
 
