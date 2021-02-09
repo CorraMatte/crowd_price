@@ -1,10 +1,9 @@
-from django.contrib.auth.decorators import login_required
 from capabilities.utils import *
 from rest_framework.views import APIView
 from capabilities.models import Report
 from capabilities import serializers as serial
 from rest_framework.response import Response
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from profiles.models import Profile
 from django.contrib.gis.db.models.functions import Distance
 import datetime
@@ -20,8 +19,8 @@ class RetrieveReportBySearchAPI(APIView):
         return Response(get_serial_reports_by_search(search.pk), status.HTTP_200_OK)
 
 
-@login_required
 class RetrieveReportByUserAPI(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self, request):
         return Response(
             serial.ReportSerializer(Report.objects.filter(consumer__profile__user=request.user), many=True).data,
@@ -29,29 +28,29 @@ class RetrieveReportByUserAPI(APIView):
         )
 
 
-@login_required
 class RetrieveNearestReportAPI(generics.ListAPIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_object(self):
         pnt = Profile.objects.get(user__pk=self.request.user.pk).pnt
         return Report.objects.all().annotate(distance=Distance("pnt", pnt)).order_by("distance")[:10]
 
 
-@login_required
 class RetrieveNewerReportAPI(generics.ListAPIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_object(self):
         return Report.objects.all().order_by('-created_time')[:10]
 
 
-@login_required
 class CreateReportAPI(generics.CreateAPIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -75,8 +74,9 @@ class CreateReportAPI(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-@login_required
 class DownloadDumpAPI(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
     def get(self, request):
         serial_dump = serial.DumpSerializer(data=request.GET)
         if not serial_dump.is_valid():
