@@ -38,7 +38,7 @@ class Search(models.Model):
 
     after_date = models.DateField(validators=[NotFuture], default=(datetime.datetime.now() - datetime.timedelta(days=30)))
     distance = models.PositiveIntegerField(default=MAX_DISTANCE, validators=[MaxValueValidator(MAX_DISTANCE)])
-    pnt = models.PointField(srid=4326, null=True)
+    pnt = models.PointField(srid=SRID, null=True)
     ordering_by = models.CharField(max_length=13, choices=OrderBy.choices, default=OrderBy.TMP_DESC)
     categories = models.ManyToManyField(Category, blank=True)
 
@@ -80,10 +80,10 @@ class Report(models.Model):
         validators=[MinValueValidator(MIN_PRICE), MaxValueValidator(MAX_PRICE)]
     )
 
-    pnt = models.PointField(srid=4326, null=True)
+    pnt = models.PointField(srid=SRID, null=True)
 
     def __str__(self):
-        return f"{self.product.name} {self.consumer.profile.user.email} {self.price}"
+        return f"{self.pk}: {self.product.name} {self.consumer.profile.user.email} {self.price}"
 
     class Meta:
         ordering = ['-created_time']

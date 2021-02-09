@@ -1,7 +1,7 @@
 from capabilities.utils import *
 from rest_framework.views import APIView
-from capabilities import serializers as cap_serial
 from capabilities.models import Report
+from capabilities import serializers as serial
 from rest_framework.response import Response
 from rest_framework import generics, status
 from profiles.models import Profile
@@ -11,17 +11,17 @@ import datetime
 
 class RetrieveReportBySearchAPI(APIView):
     def get(self, request):
-        serial_search = cap_serial.SearchSerializer(data=request.data)
+        serial_search = serial.SearchSerializer(data=request.GET)
         if not serial_search.is_valid():
             return Response(serial_search.errors, status.HTTP_400_BAD_REQUEST)
 
         search = serial_search.save()
-        return Response({'detail': get_serial_reports_by_search(search.pk)}, status.HTTP_200_OK)
+        return Response(get_serial_reports_by_search(search.pk), status.HTTP_200_OK)
 
 
 class RetrieveNearestReport(generics.ListAPIView):
     queryset = Report.objects.all()
-    serializer_class = cap_serial.ReportSerializer
+    serializer_class = serial.ReportSerializer
 
     def get_object(self):
         pnt = Profile.objects.get(user__pk=self.request.user.pk).pnt
@@ -30,7 +30,7 @@ class RetrieveNearestReport(generics.ListAPIView):
 
 class RetrieveNewerReport(generics.ListAPIView):
     queryset = Report.objects.all()
-    serializer_class = cap_serial.ReportSerializer
+    serializer_class = serial.ReportSerializer
 
     def get_object(self):
         return Report.objects.all().order_by('-created_time')[:10]
@@ -38,7 +38,7 @@ class RetrieveNewerReport(generics.ListAPIView):
 
 class CreateReportAPI(generics.CreateAPIView):
     queryset = Report.objects.all()
-    serializer_class = cap_serial.ReportSerializer
+    serializer_class = serial.ReportSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -53,19 +53,23 @@ class CreateReportAPI(generics.CreateAPIView):
         consumer.experience += 1
         consumer.save()
 
-        serializer.save()
+        report = serializer.save()
+        if not report.pnt:
+            report.pnt = report.store.pnt
+            report.save()
+
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class DownloadDumpAPI(APIView):
     def get(self, request):
-        serial_dump = cap_serial.DumpSerializer(data=request.data)
+        serial_dump = serial.DumpSerializer(data=request.GET)
         if not serial_dump.is_valid():
             return Response(serial_dump.errors, status.HTTP_400_BAD_REQUEST)
 
         dump = serial_dump.save()
-        filename = f"report_{datetime.datetime.now().strftime('')}.{dump.export_format}"
+        filename = f"report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.{dump.export_format}"
 
         if dump.export_format == 'csv':
             return get_dump_csv(dump.search.pk, filename)

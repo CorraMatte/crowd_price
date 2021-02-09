@@ -4,6 +4,7 @@ from django.http.response import HttpResponse
 from capabilities.models import Search, Report
 from decimal import Decimal
 from django.contrib.gis.measure import D
+from copy import copy
 from capabilities import serializers as serial
 from excel_response import ExcelResponse
 from profiles.models import Consumer
@@ -36,7 +37,10 @@ def get_serial_reports_by_search(search_pk):
 
 
 def get_dump_fieldnames():
-    return serial.ReportSerializer.Meta.fields
+    fields = copy(serial.ReportSerializer.Meta.fields)
+    fields.remove('pnt')
+    fields.extend(['latitude', 'longitude'])
+    return fields
 
 
 def cast_features_results(reports):
@@ -45,8 +49,8 @@ def cast_features_results(reports):
         geo = r['geometry']
         r = r['properties']
         if geo is not None:
-            r['latitude'] = r['geometry']['coordinates'][0]
-            r['longitude'] = r['geometry']['coordinates'][1]
+            r['latitude'] = geo['coordinates'][0]
+            r['longitude'] = geo['coordinates'][1]
         else:
             r['store'] = Store.objects.get(pk=r['store']).name
 
