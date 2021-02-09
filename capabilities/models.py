@@ -36,7 +36,7 @@ class Search(models.Model):
         validators=[MinValueValidator(MIN_PRICE), MaxValueValidator(MAX_PRICE)]
     )
 
-    after_date = models.DateField(validators=[NotFuture], default=(datetime.datetime.now() - datetime.timedelta(days=30)))
+    after_date = models.DateTimeField(validators=[NotFuture], default=(datetime.datetime.now() - datetime.timedelta(days=30)))
     distance = models.PositiveIntegerField(default=MAX_DISTANCE, validators=[MaxValueValidator(MAX_DISTANCE)])
     pnt = models.PointField(srid=SRID, null=True)
     ordering_by = models.CharField(max_length=13, choices=OrderBy.choices, default=OrderBy.TMP_DESC)
