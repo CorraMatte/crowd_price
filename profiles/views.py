@@ -50,7 +50,7 @@ class CreateConsumerView(APIView):         # To test (password, dup user)
         p = profile.save()
         consumer = Consumer(profile=p, experience=0)
         consumer.save()
-        return Response({"detail": "consumer created"}, status.HTTP_200_OK)
+        return Response({"detail": "consumer created"}, status.HTTP_201_CREATED)
 
 
 class RetrieveAnalystView(generics.RetrieveAPIView):
