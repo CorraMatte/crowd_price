@@ -12,3 +12,6 @@ DECIMAL_PLACES = 2
 
 # Max distance in KM
 MAX_DISTANCE = 100
+
+# SRID for the project
+SRID = 4326
