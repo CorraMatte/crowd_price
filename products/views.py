@@ -16,6 +16,11 @@ class RetrieveStoreAPI(generics.RetrieveAPIView):
     serializer_class = serial.StoreSerializer
 
 
+class RetrieveAllStoresAPI(generics.ListAPIView):
+    queryset = Store.objects.all()
+    serializer_class = serial.StoreSerializer
+
+
 class RetrieveCategoryProductAPI(APIView):
     def get(self, request, pk):
         generics.get_object_or_404(Category.objects.all(), pk=pk)
@@ -30,7 +35,7 @@ class RetrieveMostReportedProductAPI(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = serial.ProductSerializer
 
-    def get_object(self):
+    def get_queryset(self):
         return Product.objects.annotate(count=Count('report')).order_by('-count')[:10]
 
 

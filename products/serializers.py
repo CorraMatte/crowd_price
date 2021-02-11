@@ -17,4 +17,4 @@ class ProductSerializer(serializers.ModelSerializer):
 class StoreSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Store
-        fields = ['pk', 'picture', 'name', 'location']
+        fields = ['pk', 'picture', 'name', 'pnt']

@@ -6,6 +6,7 @@ urlpatterns = [
     # Get
     path('product/<int:pk>', views.RetrieveProductAPI.as_view()),
     path('store/<int:pk>', views.RetrieveStoreAPI.as_view()),
+    path('stores', views.RetrieveAllStoresAPI.as_view()),
     path('category/<int:pk>/products', views.RetrieveCategoryProductAPI.as_view()),
     path('categories/', views.RetrieveCategoriesAPI.as_view()),
     path('store', views.RetrieveStoreAPI.as_view()),
