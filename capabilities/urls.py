@@ -10,6 +10,9 @@ urlpatterns = [
     path('reports/newer', views.RetrieveNewerReportAPI.as_view()),
     path('reports/nearest', views.RetrieveNearestReportAPI.as_view()),
 
+    path('search/latest', views.RetrieveLatestSearchAPI.as_view()),
+    path('search/starred', views.RetrieveStarredSearchAPI.as_view()),
+
     # Post
     path('report/add', views.CreateReportAPI.as_view())
 ]

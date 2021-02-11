@@ -20,7 +20,8 @@ class RetrieveReportBySearchAPI(APIView):
 
 
 class RetrieveReportByUserAPI(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
+
     def get(self, request):
         return Response(
             serial.ReportSerializer(Report.objects.filter(consumer__profile__user=request.user), many=True).data,
@@ -31,9 +32,9 @@ class RetrieveReportByUserAPI(APIView):
 class RetrieveNearestReportAPI(generics.ListAPIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self):
+    def get_queryset(self):
         pnt = Profile.objects.get(user__pk=self.request.user.pk).pnt
         return Report.objects.all().annotate(distance=Distance("pnt", pnt)).order_by("distance")[:10]
 
@@ -41,16 +42,15 @@ class RetrieveNearestReportAPI(generics.ListAPIView):
 class RetrieveNewerReportAPI(generics.ListAPIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get_object(self):
+    def get_queryset(self):
         return Report.objects.all().order_by('-created_time')[:10]
 
 
 class CreateReportAPI(generics.CreateAPIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -74,9 +74,28 @@ class CreateReportAPI(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class DownloadDumpAPI(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+class RetrieveLatestSearchAPI(generics.ListAPIView):
+    queryset = Search.objects.all()
+    serializer_class = serial.SearchSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        return Search.objects.filter(profile__user=self.request.user.pk).order_by('-created_time')[:3]
+
+
+class RetrieveStarredSearchAPI(generics.ListAPIView):
+    queryset = Search.objects.all()
+    serializer_class = serial.SearchSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Search.objects.filter(profile__user=self.request.user.pk, is_starred=True).order_by('-created_time')[:3]
+
+
+class DownloadDumpAPI(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    # Check if the user is an analyst
     def get(self, request):
         serial_dump = serial.DumpSerializer(data=request.GET)
         if not serial_dump.is_valid():
