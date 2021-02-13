@@ -13,7 +13,6 @@ class DetailProductItem extends React.Component {
                 <br/>
                 Has {props.count} review
                 <br/>
-
             </div>
         )
     }
@@ -34,4 +33,4 @@ class DetailGroupProduct extends React.Component {
         }
     }
 }
-export {DetailGroupProduct};
+export {DetailProductItem, DetailGroupProduct};

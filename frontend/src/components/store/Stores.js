@@ -1,16 +1,23 @@
 import React from "react";
 import axios from "axios";
-import {STORES_API, REPORTS_STORE_API} from "../urls/endpoints";
+import {STORES_API, REPORTS_STORE_API, REPORTS_NEWER_API} from "../../urls/endpoints";
 
 class Stores extends React.Component{
     constructor(props) {
         super(props);
+        this.state = {
+            store: []
+        }
+
+    }
+
+    componentDidMount() {
         axios.get(STORES_API).then(
             res => {
                 let stores = res.data.result;
                 stores['results']['features'].forEach(
                     store => {
-                        axios.get(`${REPORTS_STORE_API}/${store['pk']}`).then(
+                        axios.get(`${REPORTS_STORE_API}/${store['id']}`).then(
                             res => {
                                 let reports = res.data.result;
                                 store['reports'] = reports['results']['features'];
