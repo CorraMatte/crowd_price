@@ -3,7 +3,9 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Home from "./components/Home";
 import Stores from "./components/Stores";
 import Profile from "./components/Profile";
+import Product from "./components/Product";
 import Login from './components/Login';
+import DetailReport from './components/report/DetailReport';
 import {isLoggedIn, logOut} from "./auth";
 import LoginRequiredRoute from './custom_routes/LoginRequiredRoute'
 import {Button} from "react-bootstrap";
@@ -29,17 +31,11 @@ export class BaseRouter extends React.Component {
                 <Route path="/home/" component={Home} />
                 <Route path="/stores/" component={Stores} />
                 {/*<LoginRequiredRoute path='/upload/' component={Upload}/>*/}
-                <LoginRequiredRoute path='/profile/' component={Profile}/>
-
-
-                {/*
                 <Route path="/login/" component={Login} />
-
-            <PrivateRoute exact path="/" component={Overview} />
-            <PrivateRoute path="/add_barrel/" component={AddBarrel} />
-            <PrivateRoute path="/add_user/" component={AddUser} />
-            <PrivateRoute path="/barrel/" component={EditBarrel} />
-            <PrivateRoute path="/operations/" component={Operations} />*/}
+                <Route path="/product/:id" component={Product} />
+                <Route path="/report/:id" component={DetailReport} />
+                <LoginRequiredRoute path='/profile/' component={Profile}/>
+                
             </Router>
         );
     }
