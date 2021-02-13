@@ -8,7 +8,7 @@ class SearchSerializer(geo_serializers.GeoFeatureModelSerializer):
         model = Search
         geo_field = 'pnt'
         fields = [
-            'profile', 'product_query', 'is_starred', 'price_min', 'price_max', 'after_date',
+            'id', 'profile', 'product_query', 'is_starred', 'price_min', 'price_max', 'after_date',
             'distance', 'pnt', 'ordering_by', 'categories'
         ]
 
@@ -16,11 +16,12 @@ class SearchSerializer(geo_serializers.GeoFeatureModelSerializer):
 class DumpSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dump
-        fields = ['search', 'analyst', 'download_timestamp', 'export_format']
+        fields = ['id', 'search', 'analyst', 'download_timestamp', 'export_format']
 
 
 class ReportSerializer(geo_serializers.GeoFeatureModelSerializer):
     class Meta:
         model = Report
         geo_field = 'pnt'
-        fields = ['pk', 'product', 'consumer', 'store', 'created_time', 'price', 'pnt']
+        depth = 3
+        fields = ['id', 'product', 'consumer', 'store', 'created_time', 'price', 'pnt']

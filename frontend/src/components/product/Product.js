@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import {PRODUCT_URL} from "../urls/navigation";
+import {PRODUCT_URL} from "../../urls/navigation";
 
 class Product extends React.Component {
     constructor(props) {

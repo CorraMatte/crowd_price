@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import {MOST_REPORTED_PRODUCTS_API} from "../urls/endpoints";
+import {MOST_REPORTED_PRODUCTS_API} from "../../urls/endpoints";
 
 class MostReportedProducts extends React.Component {
     constructor(props) {

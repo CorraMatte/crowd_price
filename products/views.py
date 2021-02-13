@@ -29,13 +29,16 @@ class RetrieveCategoryProductAPI(generics.ListAPIView):
         return Product.objects.filter(categories=self.kwargs.get('pk'))
 
 
-# Would be cool to return also the count of the report for each prods
-class RetrieveMostReportedProductAPI(generics.ListAPIView):
-    queryset = Product.objects.all()
-    serializer_class = serial.ProductSerializer
+class RetrieveMostReportedProductAPI(APIView):
+    def get(self, request):
+        prods = Product.objects.annotate(count=Count('report')).order_by('-count')[:10]
+        res = []
+        for p in prods:
+            ps = serial.ProductSerializer(p).data
+            ps['count'] = p.count
+            res.append(ps)
 
-    def get_queryset(self):
-        return Product.objects.annotate(count=Count('report')).order_by('-count')[:10]
+        return Response(res, status.HTTP_200_OK)
 
 
 class RetrieveCategoriesAPI(APIView):
@@ -43,8 +46,7 @@ class RetrieveCategoriesAPI(APIView):
         categories = Category.objects.annotate(product_count=Count('product'))
         res = []
         for c in categories:
-            r = {'pk': c.pk, 'name': c.name, 'product_count': c.product_count}
-            res.append(r)
+            res.append({'id': c.pk, 'name': c.name, 'product_count': c.product_count})
 
         return Response(res, status.HTTP_200_OK)
 
