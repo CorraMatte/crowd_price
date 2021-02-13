@@ -6,24 +6,24 @@ from rest_framework_gis import serializers as geo_serializers
 class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Organization
-        fields = ['name']
+        fields = ['id', 'name']
 
 
 class ProfileSerializer(geo_serializers.GeoFeatureModelSerializer):
     class Meta:
         model = Profile
         geo_field = 'pnt'
-        fields = ['user', 'picture', 'subscribe_date', 'pnt']
+        fields = ['id', 'user', 'picture', 'subscribe_date', 'pnt']
 
 
 class ConsumerSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 2
         model = Consumer
-        fields = ['profile', 'experience'] # , 'birth']
+        fields = ['id', 'profile', 'experience'] # , 'birth']
 
 
 class AnalystSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Analyst
-        fields = ['profile', 'organization']
+        fields = ['id', 'profile', 'organization']

@@ -46,6 +46,15 @@ class RetrieveReportByStoreAPI(generics.ListAPIView):
         return Report.objects.filter(store=store)
 
 
+class RetrieveReportByProductAPI(generics.ListAPIView):
+    queryset = Report.objects.all()
+    serializer_class = serial.ReportSerializer
+
+    def get_queryset(self):
+        product = generics.get_object_or_404(Product.objects.all(), pk=self.kwargs.get('pk'))
+        return Report.objects.filter(product=product)
+
+
 class RetrieveNearestReportAPI(generics.ListAPIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer

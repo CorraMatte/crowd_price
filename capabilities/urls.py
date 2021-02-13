@@ -6,6 +6,7 @@ urlpatterns = [
     # Get
     path('reports/search', views.RetrieveReportByNewSearchAPI.as_view()),
     path('reports/user', views.RetrieveReportByUserAPI.as_view()),
+    path('reports/product/<int:pk>', views.RetrieveReportByProductAPI.as_view()),
     path('reports/store/<int:pk>', views.RetrieveReportByStoreAPI.as_view()),
     path('reports/search/<int:pk>', views.RetrieveReportBySearchAPI.as_view()),
     path('reports/dump', views.DownloadDumpAPI.as_view()),
