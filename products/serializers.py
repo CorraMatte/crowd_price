@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Product, Store, Category
+from rest_framework_gis import serializers as geo_serializers
 
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
@@ -14,7 +15,8 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ['pk', 'picture', 'name', 'categories']
 
 
-class StoreSerializer(serializers.HyperlinkedModelSerializer):
+class StoreSerializer(geo_serializers.GeoFeatureModelSerializer):
     class Meta:
         model = Store
+        geo_field = 'pnt'
         fields = ['pk', 'picture', 'name', 'pnt']

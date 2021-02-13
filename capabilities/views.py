@@ -9,7 +9,7 @@ from django.contrib.gis.db.models.functions import Distance
 import datetime
 
 
-class RetrieveReportBySearchAPI(APIView):
+class RetrieveReportByNewSearchAPI(APIView):
     def get(self, request):
         serial_search = serial.SearchSerializer(data=request.GET)
         if not serial_search.is_valid():
@@ -19,14 +19,31 @@ class RetrieveReportBySearchAPI(APIView):
         return Response(get_serial_reports_by_search(search.pk), status.HTTP_200_OK)
 
 
-class RetrieveReportByUserAPI(APIView):
+class RetrieveReportBySearchAPI(APIView):
+    def get(self, request, pk):
+        generics.get_object_or_404(Search.objects.all(), pk=pk)
+        return Response(get_serial_reports_by_search(pk), status.HTTP_200_OK)
+
+
+class RetrieveReportByUserAPI(generics.ListAPIView):
+    queryset = Report.objects.all()
+    serializer_class = serial.ReportSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request):
+    def get_queryset(self):
         return Response(
-            serial.ReportSerializer(Report.objects.filter(consumer__profile__user=request.user), many=True).data,
+            serial.ReportSerializer(Report.objects.filter(consumer__profile__user=self.request.user), many=True).data,
             status=status.HTTP_200_OK
         )
+
+
+class RetrieveReportByStoreAPI(generics.ListAPIView):
+    queryset = Report.objects.all()
+    serializer_class = serial.ReportSerializer
+
+    def get_queryset(self):
+        store = generics.get_object_or_404(Store.objects.all(), pk=self.kwargs.get('pk'))
+        return Report.objects.filter(store=store)
 
 
 class RetrieveNearestReportAPI(generics.ListAPIView):

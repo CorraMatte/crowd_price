@@ -16,10 +16,11 @@ class ProfileSerializer(geo_serializers.GeoFeatureModelSerializer):
         fields = ['user', 'picture', 'subscribe_date', 'pnt']
 
 
-class ConsumerSerializer(serializers.HyperlinkedModelSerializer):
+class ConsumerSerializer(serializers.ModelSerializer):
     class Meta:
+        depth = 2
         model = Consumer
-        fields = ['profile', 'experience', 'birth']
+        fields = ['profile', 'experience'] # , 'birth']
 
 
 class AnalystSerializer(serializers.HyperlinkedModelSerializer):

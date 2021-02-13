@@ -9,7 +9,6 @@ urlpatterns = [
     path('stores', views.RetrieveAllStoresAPI.as_view()),
     path('category/<int:pk>/products', views.RetrieveCategoryProductAPI.as_view()),
     path('categories/', views.RetrieveCategoriesAPI.as_view()),
-    path('store', views.RetrieveStoreAPI.as_view()),
     path('products/most_reported', views.RetrieveMostReportedProductAPI.as_view()),
 
     # Post

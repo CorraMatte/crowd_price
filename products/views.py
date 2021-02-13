@@ -21,13 +21,12 @@ class RetrieveAllStoresAPI(generics.ListAPIView):
     serializer_class = serial.StoreSerializer
 
 
-class RetrieveCategoryProductAPI(APIView):
-    def get(self, request, pk):
-        generics.get_object_or_404(Category.objects.all(), pk=pk)
-        return Response(
-            serial.ProductSerializer(Product.objects.filter(categories=pk), many=True).data,
-            status=status.HTTP_200_OK
-        )
+class RetrieveCategoryProductAPI(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = serial.ProductSerializer
+
+    def get_queryset(self):
+        return Product.objects.filter(categories=self.kwargs.get('pk'))
 
 
 # Would be cool to return also the count of the report for each prods
