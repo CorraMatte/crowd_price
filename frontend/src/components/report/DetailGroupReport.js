@@ -1,5 +1,6 @@
 import React from "react";
 import {PRODUCT_URL, REPORT_URL} from "../../urls/navigation";
+import {DetailProductItem} from "../product/DetailGroupProduct";
 
 
 class DetailReportItem extends React.Component {
@@ -12,16 +13,16 @@ class DetailReportItem extends React.Component {
 
         return (
             <div>
-                <img src={product.picture} alt="immagine"/>
-                <br/>
-                prod: <a href={`${PRODUCT_URL}/${product.id}`}>{product.name}</a>
-                <br/>
+                <DetailProductItem product={product} key={product.id}/>
                 price: {props.price} €
                 <br/>
                 reported by: {consumer.profile.user.email} with exp {consumer.experience ? consumer.experience : 0}
                 <br/>
                 {store}
                 <a href={`${REPORT_URL}/${this.props.report.id}`}>vai al dettaglio</a>
+                <br />
+                <br />
+                <br />
             </div>
         )
     }

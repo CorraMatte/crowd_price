@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
-import {MOST_REPORTED_PRODUCTS_API} from "../../urls/endpoints";
-import {DetailGroupProduct} from "../product/DetailGroupReport";
+import {PRODUCTS_MOST_REPORTED_API} from "../../urls/endpoints";
+import {DetailGroupProduct} from "./DetailGroupProduct";
 
 class MostReportedProducts extends React.Component {
     constructor(props) {
@@ -12,7 +12,7 @@ class MostReportedProducts extends React.Component {
     }
 
     componentDidMount() {
-        axios.get(MOST_REPORTED_PRODUCTS_API).then(res => {
+        axios.get(PRODUCTS_MOST_REPORTED_API).then(res => {
             this.setState({
                 products: res.data,
             });

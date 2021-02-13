@@ -4,6 +4,7 @@ import Home from "./components/Home";
 import {Stores} from "./components/store/Stores";
 import Profile from "./components/Profile";
 import DetailProduct from "./components/product/DetailProduct";
+import DetailCategory from "./components/product/DetailCategory";
 import Login from './components/Login';
 import DetailReport from './components/report/DetailReport';
 import DetailStore from './components/store/DetailStore';
@@ -23,6 +24,7 @@ export class BaseRouter extends React.Component {
                 <Route path="/product/:id" component={DetailProduct} />
                 <Route path="/report/:id" component={DetailReport} />
                 <Route path="/store/:id" component={DetailStore} />
+                <Route path="/category/:id" component={DetailCategory} />
                 <LoginRequiredRoute path='/profile/' component={Profile}/>
 
             </Router>

@@ -1,5 +1,6 @@
 import React from "react";
 import {PRODUCT_URL} from "../../urls/navigation";
+import CategoryItem from "./CategoryItem";
 
 
 class DetailProductItem extends React.Component {
@@ -11,7 +12,8 @@ class DetailProductItem extends React.Component {
                 <img src={props.picture} alt="immagine"/>
                 prod: <a href={`${PRODUCT_URL}/${props.id}`}>{props.name}</a>
                 <br/>
-                Has {props.count} review
+                {props.count ? `Has ${props.count} review` : ""}
+                {props.categories.map((cat) => <CategoryItem name={cat.name} key={cat.id} id={cat.id}/>)}
                 <br/>
             </div>
         )
