@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import {SEARCH_LATEST_API} from "../../endpoints";
+import {SEARCH_LATEST_API} from "../../urls/endpoints";
 
 class SavedSearch extends React.Component {
     constructor(props) {
@@ -14,7 +14,9 @@ class SavedSearch extends React.Component {
     }
 
     render () {
-        return <div></div>
+        return (
+            <h1>Your saved search results</h1>
+        )
     }
 }
 

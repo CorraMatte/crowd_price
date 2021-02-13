@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import {SEARCH_STARRED_API} from "../../endpoints";
+import {SEARCH_STARRED_API} from "../../urls/endpoints";
 
 class RecentSearch extends React.Component {
     constructor(props) {
@@ -13,7 +13,9 @@ class RecentSearch extends React.Component {
     }
 
     render () {
-        return <div></div>
+        return (
+            <h1>Your recent search results</h1>
+        )
     }
 }
 

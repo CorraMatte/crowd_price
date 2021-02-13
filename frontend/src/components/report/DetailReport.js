@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import {REPORT_URL} from "../../endpoints";
+import {REPORT_URL} from "../../urls/navigation";
 
 
 class DetailReport extends React.Component {

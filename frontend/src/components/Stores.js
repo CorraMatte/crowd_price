@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import {STORES_API, REPORTS_STORE_API} from "../endpoints";
+import {STORES_API, REPORTS_STORE_API} from "../urls/endpoints";
 
 class Stores extends React.Component{
     constructor(props) {

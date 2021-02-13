@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import {DetailGroupReport} from "./DetailGroupReport";
-import {REPORTS_NEWER_API} from "../../endpoints";
+import {REPORTS_NEWER_API} from "../../urls/endpoints";
 
 class NewerReports extends React.Component {
     constructor(props) {

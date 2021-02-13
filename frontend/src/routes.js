@@ -35,7 +35,7 @@ export class BaseRouter extends React.Component {
                 <Route path="/product/:id" component={Product} />
                 <Route path="/report/:id" component={DetailReport} />
                 <LoginRequiredRoute path='/profile/' component={Profile}/>
-                
+
             </Router>
         );
     }

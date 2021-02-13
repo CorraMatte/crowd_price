@@ -13,10 +13,3 @@ export const STORES_API = `${backend_url}/stores`
 export const REPORTS_STORE_API = `${backend_url}/reports/store/`
 export const PRODUCT_API = `${backend_url}/product`
 export const CONSUMER_API = `${backend_url}/consumer`
-
-// NAVIGATION
-let frontend_url = 'http://127.0.0.1:3000';
-export const REPORT_URL = `${frontend_url}/report`
-export const PRODUCT_URL = `${frontend_url}/product`
-
-// export const STORES_API = `${backend_url}/stores`

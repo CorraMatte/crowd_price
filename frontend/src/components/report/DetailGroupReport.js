@@ -1,5 +1,5 @@
 import React from "react";
-import {PRODUCT_URL, REPORT_URL} from "../../endpoints";
+import {PRODUCT_URL, REPORT_URL} from "../../urls/navigation";
 
 
 class DetailReportItem extends React.Component {

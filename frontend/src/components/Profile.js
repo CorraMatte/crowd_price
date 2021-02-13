@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import {CONSUMER_API} from "../endpoints";
+import {CONSUMER_API} from "../urls/endpoints";
 
 class Product extends React.Component {
     constructor(props) {
