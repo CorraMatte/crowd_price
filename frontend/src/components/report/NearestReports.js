@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import {REPORTS_NEAREST_API} from "../../urls/endpoints";
-import MostReportedProducts from "../MostReportedProducts";
+import MostReportedProducts from "../product/MostReportedProducts";
 
 class NearestReports extends React.Component {
     constructor(props) {
