@@ -17,6 +17,7 @@ import {
     faArrowCircleUp,
     faSignInAlt,
     faSignOutAlt,
+    faHome
 } from "@fortawesome/free-solid-svg-icons";
 
 
@@ -71,7 +72,10 @@ export class Header extends React.Component {
                     <Collapse isOpen={this.state.isOpen} navbar>
                             <Nav navbar className="mr-auto">
                                 <NavItem>
-                                    <NavLink href="/upload/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faArrowCircleUp} className={"small"}/>Upload elements</NavLink>
+                                    <NavLink href="/home/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faHome} className={"small"}/>Home</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink href="/upload/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faArrowCircleUp} className={"small"}/>Upload reports</NavLink>
                                 </NavItem>
                                 <NavItem>
                                     <NavLink href="/search/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faSearch} className={"small"}/>Search</NavLink>

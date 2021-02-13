@@ -10,7 +10,7 @@ class Home extends React.Component {
     render() {
         let only_log_features;
         if (this.props.isAuthenticated) {
-            only_log_features = [<SavedSearch/>, <RecentSerch/>, <NearestReports />,]
+            only_log_features = [<SavedSearch/>, <RecentSerch/>, <NearestReports />,];
         }
         return (
             <div>
