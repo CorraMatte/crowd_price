@@ -13,7 +13,9 @@ class MostReportedProducts extends React.Component {
     }
 
     render () {
-        return <div></div>
+        return (
+            <h1>The most rated products</h1>
+        )
     }
 }
 

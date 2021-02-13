@@ -5,8 +5,14 @@ import {PRODUCT_API} from "../endpoints";
 class Product extends React.Component {
     constructor(props) {
         super(props);
-        let pk = props.pk;
-        axios.get(`${PRODUCT_API}/${pk}`).then(
+        this.state = {
+            product: []
+        }
+    }
+
+    componentDidMount() {
+        let id = this.props.match.params.id;
+        axios.get(`${PRODUCT_API}/${id}`).then(
             res => { this.setState({
                 product: res.data.results
             })
@@ -14,7 +20,10 @@ class Product extends React.Component {
     }
 
     render () {
-        return <div></div>
+        return (
+            <div>
+            </div>
+        )
     }
 }
 
