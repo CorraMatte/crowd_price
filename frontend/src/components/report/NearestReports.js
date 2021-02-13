@@ -14,7 +14,9 @@ class NearestReports extends React.Component {
     }
 
     render () {
-        return <div></div>
+        return (
+            <h1>Near reports to you</h1>
+        )
     }
 }
 
