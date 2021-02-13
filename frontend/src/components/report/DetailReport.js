@@ -7,15 +7,15 @@ class DetailReport extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            report: []
+            reports: []
         }
     }
 
     componentDidMount() {
-        let id = this.props.match.params.id;
+        const id = this.props.match.params.id;
         axios.get(`${REPORT_URL}/${id}`).then(
             res => { this.setState({
-                report: res.data.results
+                reports: res.data.results
             })
         });
     }

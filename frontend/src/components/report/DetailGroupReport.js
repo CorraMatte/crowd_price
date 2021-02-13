@@ -7,7 +7,7 @@ class DetailReportItem extends React.Component {
         const props = this.props.report.properties;
         const product = props.product;
         const consumer = props.consumer;
-        let store = props.store ? "store" : "" ;
+        const store = props.store ? "store" : "" ;
 
 
         return (
@@ -42,4 +42,4 @@ class DetailGroupReport extends React.Component {
         }
     }
 }
-export {DetailGroupReport};
+export {DetailGroupReport, DetailReportItem};
