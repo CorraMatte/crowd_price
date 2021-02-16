@@ -1,6 +1,7 @@
 import React from "react";
 import {REPORT_URL} from "../../urls/navigation";
 import {DetailProductItem} from "../product/DetailGroupProduct";
+import Map from "../utils/Map";
 
 
 class DetailReportItem extends React.Component {
@@ -34,6 +35,18 @@ class DetailReportItem extends React.Component {
                 <br />
                 <br />
                 <span>MAP WITH THE COORDINATES {lon} {lat}</span>
+
+                {/*<Map
+                    center={this.state.center}
+                    zoom={this.state.zoom}
+                    radius={this.state.radius}
+                    places={places}
+                    googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaaGlEIvzfb6o5Gedv5pdltME1xzqlSbw"
+                    loadingElement={<div style={{height: `100%`}}/>}
+                    containerElement={<div style={{height: `800px`}}/>}
+                    mapElement={<div style={{height: `100%`}}/>}
+                />*/}
+
             </div>
         )
     }
