@@ -5,6 +5,7 @@ from capabilities import views
 urlpatterns = [
     # Get
     path('reports/search', views.RetrieveReportByNewSearchAPI.as_view()),
+    path('report/<int:pk>', views.RetrieveReportByIDAPI.as_view()),
     path('reports/user', views.RetrieveReportByUserAPI.as_view()),
     path('reports/product/<int:pk>', views.RetrieveReportByProductAPI.as_view()),
     path('reports/store/<int:pk>', views.RetrieveReportByStoreAPI.as_view()),

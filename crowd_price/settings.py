@@ -26,11 +26,11 @@ SECRET_KEY = '#+jd7&fdx#3$jf0ttsn)ir9i3!d#&((!t0373sg3@6jl(2@bc3'
 DEBUG = True
 
 # ALLOWED_HOSTS = []
-# ALLOWED_HOSTS = ['*']
-# CORS_ORIGIN_ALLOW_ALL = True
+ALLOWED_HOSTS = ['*']
+CORS_ORIGIN_ALLOW_ALL = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
-CORS_ORIGIN_ALLOW_ALL = False
+# ALLOWED_HOSTS = ['127.0.0.1']
+# CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Extension
+    'django_extensions',
 
     # Custom
     'products',

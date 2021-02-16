@@ -37,6 +37,11 @@ class RetrieveReportByUserAPI(generics.ListAPIView):
         )
 
 
+class RetrieveReportByIDAPI(generics.RetrieveAPIView):
+    queryset = Report.objects.all()
+    serializer_class = serial.ReportSerializer
+
+
 class RetrieveReportByStoreAPI(generics.ListAPIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer
