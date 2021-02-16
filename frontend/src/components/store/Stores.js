@@ -60,16 +60,16 @@ class Stores extends React.Component
 
     render () {
         const stores = this.state.stores;
-        if (stores.length > 0) {
-            return (
-                <div>
-                    There are: {stores.length} items
-                    {stores.map((store) => <DetailStoreItem store={store} key={store.id}/>)}
-                </div>
-            )
-        } else {
-            return <div></div>
+        if (stores.length === 0) {
+            return (<div></div>)
         }
+
+        return (
+            <div>
+                There are: {stores.length} items
+                {stores.map((store) => <DetailStoreItem store={store} key={store.id}/>)}
+            </div>
+        )
     }
 }
 

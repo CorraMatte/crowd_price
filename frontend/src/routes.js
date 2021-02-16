@@ -2,10 +2,10 @@ import React from "react";
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Home from "./components/Home";
 import {Stores} from "./components/store/Stores";
-import Profile from "./components/Profile";
+import MainProfile from "./components/profile/MainProfile";
 import MainProduct from "./components/product/MainProduct";
 import MainCategory from "./components/product/MainCategory";
-import Login from './components/Login';
+import Login from './components/profile/Login';
 import MainReport from './components/report/MainReport';
 import MainStore from './components/store/MainStore';
 import MainSearch from "./components/search/MainSearch";
@@ -28,7 +28,7 @@ export class BaseRouter extends React.Component {
                 <Route path="/report/:id" component={MainReport} />
                 <Route path="/store/:id" component={MainStore} />
                 <Route path="/category/:id" component={MainCategory} />
-                <LoginRequiredRoute path='/profile/' component={Profile}/>
+                <LoginRequiredRoute path='/profile/' component={MainProfile}/>
 
                 {/*<LoginRequiredRoute path='/upload/' component={Upload}/>*/}
                 {/*<LoginRequiredRoute path='/graph/' component={Profile}/>*/}

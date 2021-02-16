@@ -36,17 +36,18 @@ class MainStore extends React.Component {
         const store = this.state.store;
         const reports = this.state.reports;
 
-        if (reports.length > 0) {
-            return (
-                <div>
-                    <h1>There are {reports.length} reports</h1>
-                    {<DetailStoreItem store={store} />}
-                    {reports.map((report) => <DetailReportItem report={report} key={report.id}/>)}
-                </div>
-            )
-        } else {
-            return (<div></div>)
+        if (reports.length === 0) {
+            return (<div></div>);
         }
+
+        return (
+            <div>
+                <h1>There are {reports.length} reports</h1>
+                {<DetailStoreItem store={store} />}
+                {reports.map((report) => <DetailReportItem report={report} key={report.id}/>)}
+            </div>
+        )
+
     }
 }
 

@@ -36,16 +36,16 @@ class MainProduct extends React.Component {
         const prod = this.state.product;
         const reports = this.state.reports;
 
-        if (prod) {
-            return (
-                <div>
-                    <DetailProductItem product={prod} key={prod.id}/>
-                    {reports.map((report) => <DetailReportItem report={report} key={report.id}/>)}
-                </div>
-            )
-        } else {
+        if (!prod) {
             return (<div></div>)
         }
+
+        return (
+            <div>
+                <DetailProductItem product={prod} key={prod.id}/>
+                {reports.map((report) => <DetailReportItem report={report} key={report.id}/>)}
+            </div>
+        )
 
     }
 }

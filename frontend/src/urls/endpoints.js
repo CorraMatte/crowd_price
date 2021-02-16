@@ -9,6 +9,7 @@ export const REPORTS_NEAREST_API = `${backend_url}/reports/nearest`
 export const REPORTS_STORE_API = `${backend_url}/reports/store`
 export const REPORTS_PRODUCT_API = `${backend_url}/reports/product`
 export const REPORTS_SEARCH_API = `${backend_url}/reports/search`
+export const REPORTS_USER_API = `${backend_url}/reports/user`
 export const REPORT_API = `${backend_url}/report`
 
 export const PRODUCTS_MOST_REPORTED_API = `${backend_url}/products/most_reported`

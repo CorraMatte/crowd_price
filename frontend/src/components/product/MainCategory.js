@@ -25,17 +25,16 @@ class MainCategory extends React.Component {
 
     render () {
         const products = this.state.products;
-        if (products.length > 0){
-            return (
-                <div>
-                    <h1>There are {products.length} reports</h1>
-                    {products.map((product) => <DetailProductItem product={product} key={product.id}/>)}
-                </div>
-            )
-        } else {
+        if (products.length === 0) {
             return (<div></div>)
         }
 
+        return (
+            <div>
+                <h1>There are {products.length} reports</h1>
+                {products.map((product) => <DetailProductItem product={product} key={product.id}/>)}
+            </div>
+        )
     }
 }
 
