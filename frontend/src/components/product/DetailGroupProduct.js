@@ -23,16 +23,12 @@ class DetailProductItem extends React.Component {
 class DetailGroupProduct extends React.Component {
     render() {
         const res = this.props.products;
-        if (res) {
-            return (
-                <div>
-                    There are: {res.length} items
-                    {res.map((product) => <DetailProductItem product={product} key={product.id}/>)}
-                </div>
-            )
-        } else {
-            return (<div></div>)
-        }
+        return (
+            <div>
+                There are: {res.length} items
+                {res.map((product) => <DetailProductItem product={product} key={product.id}/>)}
+            </div>
+        )
     }
 }
 export {DetailProductItem, DetailGroupProduct};

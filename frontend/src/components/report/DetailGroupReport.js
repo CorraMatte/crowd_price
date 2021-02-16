@@ -1,15 +1,25 @@
 import React from "react";
-import {PRODUCT_URL, REPORT_URL} from "../../urls/navigation";
+import {REPORT_URL} from "../../urls/navigation";
 import {DetailProductItem} from "../product/DetailGroupProduct";
 
 
 class DetailReportItem extends React.Component {
     render() {
+        if (!this.props.report)  {
+            return (<div></div>);
+        }
+
         const props = this.props.report.properties;
         const product = props.product;
         const consumer = props.consumer;
+        const geo = this.props.report.geometry;
         const store = props.store ? "store" : "" ;
+        let lon = null; let lat = null;
 
+        if (geo) {
+            lon = geo.coordinates[0];
+            lat = geo.coordinates[1];
+        }
 
         return (
             <div>
@@ -23,6 +33,7 @@ class DetailReportItem extends React.Component {
                 <br />
                 <br />
                 <br />
+                <span>MAP WITH THE COORDINATES {lon} {lat}</span>
             </div>
         )
     }
@@ -31,16 +42,12 @@ class DetailReportItem extends React.Component {
 class DetailGroupReport extends React.Component {
     render() {
         const res = this.props.reports;
-        if (res) {
-            return (
-                <div>
-                    There are: {res.length} items
-                    {res.map((report) => <DetailReportItem report={report} key={report.id}/>)}
-                </div>
-            )
-        } else {
-            return (<div></div>)
-        }
+        return (
+            <div>
+                There are: {res.length} items
+                {res.map((report) => <DetailReportItem report={report} key={report.id}/>)}
+            </div>
+        )
     }
 }
 export {DetailGroupReport, DetailReportItem};

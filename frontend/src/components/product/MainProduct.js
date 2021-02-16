@@ -4,7 +4,7 @@ import {DetailProductItem} from "./DetailGroupProduct"
 import {DetailReportItem} from "../report/DetailGroupReport";
 import {PRODUCT_API, REPORTS_PRODUCT_API} from "../../urls/endpoints";
 
-class DetailProduct extends React.Component {
+class MainProduct extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -50,4 +50,4 @@ class DetailProduct extends React.Component {
     }
 }
 
-export default DetailProduct;
+export default MainProduct;

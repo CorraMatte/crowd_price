@@ -67,12 +67,12 @@ export class Header extends React.Component {
         return (
             <Navbar style={{backgroundColor: "#64c4ed"}} light expand="md">
                 <Container>
-                    <NavbarBrand href="/home" style={{color: "#fff"}}>Home</NavbarBrand>
+                    <NavbarBrand href="/" style={{color: "#fff"}}>Home</NavbarBrand>
                     <NavbarToggler onClick={this.toggle}/>
                     <Collapse isOpen={this.state.isOpen} navbar>
                             <Nav navbar className="mr-auto">
                                 <NavItem>
-                                    <NavLink href="/home/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faHome} className={"small"}/>Home</NavLink>
+                                    <NavLink href="/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faHome} className={"small"}/>Home</NavLink>
                                 </NavItem>
                                 <NavItem>
                                     <NavLink href="/upload/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faArrowCircleUp} className={"small"}/>Upload reports</NavLink>

@@ -1,7 +1,7 @@
 import React from "react";
 import NearestReports from "./report/NearestReports";
 import NewerReports from "./report/NewerReports";
-import MostReportedProducts from "./MostReportedProducts";
+import MostReportedProducts from "./product/MostReportedProducts";
 import SavedSearch from "./search/SavedSearch";
 import RecentSerch from "./search/RecentSearch";
 

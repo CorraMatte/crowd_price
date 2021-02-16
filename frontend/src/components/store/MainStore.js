@@ -5,7 +5,7 @@ import {DetailReportItem} from "../report/DetailGroupReport"
 import {DetailStoreItem} from "./Stores";
 
 
-class DetailStore extends React.Component {
+class MainStore extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -36,10 +36,10 @@ class DetailStore extends React.Component {
         const store = this.state.store;
         const reports = this.state.reports;
 
-        if (store) {
+        if (reports.length > 0) {
             return (
                 <div>
-                    <h1>There are {this.state.reports.length} reports</h1>
+                    <h1>There are {reports.length} reports</h1>
                     {<DetailStoreItem store={store} />}
                     {reports.map((report) => <DetailReportItem report={report} key={report.id}/>)}
                 </div>
@@ -47,8 +47,7 @@ class DetailStore extends React.Component {
         } else {
             return (<div></div>)
         }
-
     }
 }
 
-export default DetailStore;
+export default MainStore;
