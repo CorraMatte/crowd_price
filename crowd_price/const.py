@@ -1,8 +1,8 @@
 # 1 Million as maximum price
-MAX_PRICE = 999999.99
+MAX_PRICE = 1000000.00
 
 # 1 cent as minimum price
-MIN_PRICE = 0.01
+MIN_PRICE = 0.00
 
 # Max experience of a user
 MAX_EXPERIENCE = 1000

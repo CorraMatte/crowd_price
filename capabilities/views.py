@@ -10,8 +10,8 @@ import datetime
 
 
 class RetrieveReportByNewSearchAPI(APIView):
-    def get(self, request):
-        serial_search = serial.SearchSerializer(data=request.GET)
+    def post(self, request):
+        serial_search = serial.SearchSerializer(data=request.data)
         if not serial_search.is_valid():
             return Response(serial_search.errors, status.HTTP_400_BAD_REQUEST)
 
@@ -127,8 +127,8 @@ class DownloadDumpAPI(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     # Check if the user is an analyst
-    def get(self, request):
-        serial_dump = serial.DumpSerializer(data=request.GET)
+    def post(self, request):
+        serial_dump = serial.DumpSerializer(data=request.data)
         if not serial_dump.is_valid():
             return Response(serial_dump.errors, status.HTTP_400_BAD_REQUEST)
 

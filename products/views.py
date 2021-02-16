@@ -44,9 +44,9 @@ class RetrieveMostReportedProductAPI(APIView):
 class RetrieveCategoriesAPI(APIView):
     def get(self, request):
         categories = Category.objects.annotate(product_count=Count('product'))
-        res = []
+        res = {'results': []}
         for c in categories:
-            res.append({'id': c.pk, 'name': c.name, 'product_count': c.product_count})
+            res['results'].append({'id': c.pk, 'name': c.name, 'product_count': c.product_count})
 
         return Response(res, status.HTTP_200_OK)
 
