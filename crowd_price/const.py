@@ -7,7 +7,7 @@ MIN_PRICE = 0.00
 # Max experience of a user
 MAX_EXPERIENCE = 1000
 
-MAX_DIGITS = 8
+MAX_DIGITS = 9
 DECIMAL_PLACES = 2
 
 # Max distance in KM

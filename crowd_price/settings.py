@@ -64,23 +64,19 @@ INSTALLED_APPS = [
     # https://github.com/openwisp/django-rest-framework-gis#geofeaturemodelserializer
     'rest_framework_gis',
 
-    'rest_framework.authtoken',
-
-    # 'dj_rest_auth.jwt_auth',
     # https://django-rest-auth.readthedocs.io/en/latest/installation.html#social-authentication-optional
     'dj_rest_auth',
+    'rest_framework.authtoken',
 
     'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
-
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.twitter',
 
     'corsheaders',
-
     # Password validator https://pypi.org/project/django-password-validators/
     'django_password_validators',
     'django_password_validators.password_history',
@@ -127,18 +123,23 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
-
-    ## UGO
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
 }
+
+# Following is added to enable registration with email instead of username
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -192,16 +193,6 @@ AUTH_PASSWORD_VALIDATORS = [
         }
     },
 ]
-
-REST_USE_JWT = True
-JWT_AUTH_COOKIE = "profiles"
-JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
-    'JWT_ALLOW_REFRESH': False,
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
-}
-
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/

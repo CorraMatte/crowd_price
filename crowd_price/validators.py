@@ -15,6 +15,9 @@ utc = pytz.UTC
 
 
 def NotFuture(enroll_date):
-    # enroll_date.replace(tzinfo=utc)
-    if utc.localize(datetime.datetime.now()) < enroll_date:
-        raise ValidationError('Can enroll in the future')
+    if enroll_date.tzinfo:
+        if utc.localize(datetime.datetime.now()) < enroll_date:
+            raise ValidationError('Can enroll in the future')
+    else:
+        if datetime.datetime.now() < enroll_date:
+            raise ValidationError('Can enroll in the future')
