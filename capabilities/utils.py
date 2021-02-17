@@ -54,8 +54,8 @@ def cast_features_results(reports):
         else:
             r['store'] = Store.objects.get(pk=r['store']).name
 
-        r['product'] = Product.objects.get(pk=r['product']).name
-        r['consumer'] = Consumer.objects.get(pk=r['consumer']).profile.user.email
+        r['product'] = Product.objects.get(pk=r['product']['id']).name
+        r['consumer'] = Consumer.objects.get(pk=r['consumer']['id']).profile.user.email
 
         res.append(r)
     return res

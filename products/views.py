@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from products.models import Product, Store, Category
 import products.serializers as serial
-from rest_framework import status, generics
+from rest_framework import status, generics, permissions
 from django.db.models import Count
 
 
@@ -52,11 +52,22 @@ class RetrieveCategoriesAPI(APIView):
 
 
 # post: views that create objects
-class CreateProductAPI(generics.CreateAPIView):
+class CreateProductAPI(APIView):
     queryset = Product.objects.all()
     serializer_class = serial.ProductSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        serial_prod = serial.ProductSerializer(data=request.data)
+        if not serial_prod.is_valid():
+            return Response(serial_prod.errors, status.HTTP_400_BAD_REQUEST)
+
+        serial_prod.validated_data['categories'] = request.data['categories']
+        p = serial_prod.save()
+        return Response({"product": serial.ProductSerializer(p).data}, status.HTTP_201_CREATED)
 
 
 class CreateCategoryAPI(generics.CreateAPIView):
     queryset = Category.objects.all()
     serializer_class = serial.CategorySerializer
+    permission_classes = [permissions.IsAuthenticated]

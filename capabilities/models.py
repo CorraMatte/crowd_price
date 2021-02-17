@@ -19,7 +19,7 @@ class OrderBy(models.TextChoices):
 
 # Create your models here.
 class Search(models.Model):
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, null=True, on_delete=models.SET_NULL)
     product_query = models.CharField(max_length=100)
     is_starred = models.BooleanField(default=False)
     # is_monitoring = models.BooleanField(default=False)

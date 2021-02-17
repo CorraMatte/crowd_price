@@ -1,6 +1,9 @@
+from django.core.exceptions import ObjectDoesNotExist
+
 from capabilities.utils import *
 from rest_framework.views import APIView
 from capabilities.models import Report
+from profiles.models import Consumer, Analyst
 from capabilities import serializers as serial
 from rest_framework.response import Response
 from rest_framework import generics, status, permissions
@@ -14,6 +17,9 @@ class RetrieveReportByNewSearchAPI(APIView):
         serial_search = serial.SearchSerializer(data=request.data)
         if not serial_search.is_valid():
             return Response(serial_search.errors, status.HTTP_400_BAD_REQUEST)
+
+        if self.request.user.pk:
+            serial_search.validated_data['profile'] = Profile.objects.get(user=self.request.user.pk)
 
         search = serial_search.save()
         return Response(get_serial_reports_by_search(search.pk), status.HTTP_200_OK)
@@ -78,31 +84,43 @@ class RetrieveNewerReportAPI(generics.ListAPIView):
         return Report.objects.all().order_by('-created_time')[:10]
 
 
-class CreateReportAPI(generics.CreateAPIView):
+class CreateReportAPI(APIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+    def post(self, request):
+        store = None
+        try:
+            consumer = Consumer.objects.get(profile__user=request.user)
+            product = Product.objects.get(pk=request.data['product'])
+            if 'store' in request.data:
+                store = Store.objects.get(pk=request.data['store'])
+
+        except ObjectDoesNotExist:
+            return Response({'detail': 'user not allowed'}, status.HTTP_403_FORBIDDEN)
+
+        serializer = serial.ReportSerializer(data=request.data)
         if not serializer.is_valid():
             return Response({'detail': serializer.errors}, status.HTTP_400_BAD_REQUEST)
 
-        data = serializer.validated_data
-        if 'pnt' not in data and 'store' not in data:
+        if 'pnt' not in request.data and 'store' not in request.data:
             return Response({'detail': 'point or store must be provided'}, status.HTTP_400_BAD_REQUEST)
 
-        consumer = Consumer.objects.get(profile__user__email=data['consumer'])
         consumer.experience += 1
         consumer.save()
+
+        serializer.validated_data['consumer'] = consumer
+        serializer.validated_data['product'] = product
+        if store:
+            serializer.validated_data['store'] = store
 
         report = serializer.save()
         if not report.pnt:
             report.pnt = report.store.pnt
             report.save()
 
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class RetrieveLatestSearchAPI(generics.ListAPIView):
@@ -128,6 +146,10 @@ class DownloadDumpAPI(APIView):
 
     # Check if the user is an analyst
     def post(self, request):
+        analyst = Analyst.objects.filter(profile__user=request.user)
+        if not analyst:
+            Response({'detail': 'user not allowed'}, status.HTTP_403_FORBIDDEN)
+
         serial_dump = serial.DumpSerializer(data=request.data)
         if not serial_dump.is_valid():
             return Response(serial_dump.errors, status.HTTP_400_BAD_REQUEST)
