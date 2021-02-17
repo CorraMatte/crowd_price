@@ -41,11 +41,23 @@ class RetrieveAnalystAPI(generics.RetrieveAPIView):
     serializer_class = serial.AnalystSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        obj = queryset.get(profile__user=self.request.user.pk)
+        self.check_object_permissions(self.request, obj)
+        return obj
+
 
 class RetrieveConsumerAPI(generics.RetrieveAPIView):
     queryset = Consumer.objects.all()
     serializer_class = serial.ConsumerSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        obj = queryset.get(profile__user=self.request.user.pk)
+        self.check_object_permissions(self.request, obj)
+        return obj
 
 
 class RetrieveOrganizationAPI(generics.RetrieveAPIView):

@@ -37,10 +37,7 @@ class RetrieveReportByUserAPI(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Response(
-            serial.ReportSerializer(Report.objects.filter(consumer__profile__user=self.request.user), many=True).data,
-            status=status.HTTP_200_OK
-        )
+        return Report.objects.filter(consumer__profile__user=self.request.user.pk)
 
 
 class RetrieveReportByIDAPI(generics.RetrieveAPIView):
@@ -72,6 +69,8 @@ class RetrieveNearestReportAPI(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        return Report.objects.all()
+
         pnt = Profile.objects.get(user__pk=self.request.user.pk).pnt
         return Report.objects.all().annotate(distance=Distance("pnt", pnt)).order_by("distance")[:10]
 
