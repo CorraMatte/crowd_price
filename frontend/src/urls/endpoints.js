@@ -24,3 +24,4 @@ export const STORE_API = `${backend_url}/store`
 
 export const PRODUCT_API = `${backend_url}/product`
 export const CONSUMER_API = `${backend_url}/consumer`
+export const USER_LOGIN_API = `${backend_url}/user/login`

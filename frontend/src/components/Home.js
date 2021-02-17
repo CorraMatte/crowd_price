@@ -3,14 +3,15 @@ import NearestReports from "./report/NearestReports";
 import NewerReports from "./report/NewerReports";
 import MostReportedProducts from "./product/MostReportedProducts";
 import SavedSearch from "./search/SavedSearch";
-import RecentSerch from "./search/RecentSearch";
+import RecentSearch from "./search/RecentSearch";
+import {isLoggedIn} from "../auth";
 
 
 class Home extends React.Component {
     render() {
         let only_log_features;
-        if (this.props.isAuthenticated) {
-            only_log_features = [<SavedSearch/>, <RecentSerch/>, <NearestReports />,];
+        if (isLoggedIn()) {
+            only_log_features = [<SavedSearch />, <RecentSearch />, <NearestReports />,];
         }
         return (
             <div>

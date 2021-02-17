@@ -1,6 +1,5 @@
 import React from "react";
 import {
-    Collapse,
     Navbar,
     NavbarToggler,
     NavbarBrand,
@@ -19,49 +18,42 @@ import {
     faSignOutAlt,
     faHome
 } from "@fortawesome/free-solid-svg-icons";
+import {getUserType, isLoggedIn, logOut} from "../../auth";
 
 
 export class Header extends React.Component {
-
-    state = {
-        isOpen: false,
-    };
-
-    toggle = () => this.setIsOpen(!this.state.isOpen);
-
-    setIsOpen = (value) => {
-        this.setState({
-            isOpen: value
-        })
-    };
-
-    logout = () => {
-        // this.props.onAuth();
-    };
-
     render() {
-        let username = localStorage.getItem('user');
-        let action; let profile;
-        if (this.props.isAuthenticated) {
+        const user_type = getUserType();
+        let action;
+        if (isLoggedIn()) {
             action = (
-                <NavItem>
+                [<NavItem>
                     <NavLink href="/" style={{color: "#fffa", backgroundColor: "#64c4ed", border: "0"}}
-                         onClick={this.logout}><FontAwesomeIcon icon={faSignOutAlt}/> Logout</NavLink>
-                </NavItem>
-            )
-            profile =(
+                         onClick={logOut()}><FontAwesomeIcon icon={faSignOutAlt}/>Logout</NavLink>
+                </NavItem>,
                 <NavItem>
                     <NavLink href="/profile/" style={{color: "#fffa"}}><FontAwesomeIcon
-                        icon={faUser}/> {username}</NavLink>
-                </NavItem>
+                        icon={faUser}/>Profile</NavLink>
+                </NavItem>]
             )
         } else {
             action = (
                 <NavItem>
                     <NavLink href="/login/" style={{color: "#fffa"}}><FontAwesomeIcon
-                        icon={faSignInAlt}/> Login</NavLink>
+                        icon={faSignInAlt}/>Login</NavLink>
                 </NavItem>
             )
+        }
+
+        let feature;
+        if (user_type) {
+            feature = <NavItem>
+                        <NavLink href="/upload/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faArrowCircleUp} className={"small"}/>Upload reports</NavLink>
+                      </NavItem>
+        } else if (user_type) {
+            feature = <NavItem>
+                        <NavLink href="/graph/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faArrowCircleUp} className={"small"}/>Graph</NavLink>
+                      </NavItem>
         }
 
         return (
@@ -69,41 +61,23 @@ export class Header extends React.Component {
                 <Container>
                     <NavbarBrand href="/" style={{color: "#fff"}}>Home</NavbarBrand>
                     <NavbarToggler onClick={this.toggle}/>
-                    <Collapse isOpen={this.state.isOpen} navbar>
-                            <Nav navbar className="mr-auto">
-                                <NavItem>
-                                    <NavLink href="/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faHome} className={"small"}/>Home</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink href="/upload/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faArrowCircleUp} className={"small"}/>Upload reports</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink href="/search/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faSearch} className={"small"}/>Search</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink href="/stores/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faStore} className={"small"}/>Stores</NavLink>
-                                </NavItem>
-                                {profile}
-                                {action}
-                            </Nav>
-                    </Collapse>
+                        <Nav navbar className="mr-auto">
+                            <NavItem>
+                                <NavLink href="/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faHome} className={"small"}/>Home</NavLink>
+                            </NavItem>
+                            {feature}
+                            <NavItem>
+                                <NavLink href="/search/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faSearch} className={"small"}/>Search</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink href="/stores/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faStore} className={"small"}/>Stores</NavLink>
+                            </NavItem>
+                            {action}
+                        </Nav>
                 </Container>
             </Navbar>
         )
     };
 }
-
-
-const mapStateToProps = state => {
-    return {
-        isAuthenticated: state.token !== null
-    }
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        // onAuth: () => dispatch(actions.authLogout())
-    }
-};
 
 export default Header;
