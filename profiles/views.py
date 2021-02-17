@@ -2,7 +2,7 @@ from dj_rest_auth.registration.views import SocialLoginView
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from rest_framework.authtoken.models import Token
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from profiles.models import Consumer, Organization, Analyst
 from django.contrib.auth.models import User
 from profiles import serializers as serial
@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from profiles.utils import create_profile
 
 
-class CreateConsumerAPI(APIView):         # To test (password, dup user)
+class CreateConsumerAPI(APIView):
     def post(self, request):
         p = create_profile(request)
 
@@ -23,7 +23,7 @@ class CreateConsumerAPI(APIView):         # To test (password, dup user)
         return Response({"detail": serial.ConsumerSerializer(c).data}, status.HTTP_201_CREATED)
 
 
-class CreateAnalystAPI(APIView):         # To test (password, dup user)
+class CreateAnalystAPI(APIView):
     def post(self, request):
         p = create_profile(request)
 
@@ -39,16 +39,19 @@ class CreateAnalystAPI(APIView):         # To test (password, dup user)
 class RetrieveAnalystAPI(generics.RetrieveAPIView):
     queryset = Analyst.objects.all()
     serializer_class = serial.AnalystSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class RetrieveConsumerAPI(generics.RetrieveAPIView):
     queryset = Consumer.objects.all()
     serializer_class = serial.ConsumerSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class RetrieveOrganizationAPI(generics.RetrieveAPIView):
     queryset = Organization.objects.all()
     serializer_class = serial.ConsumerSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class LoginAPI(APIView):
@@ -65,7 +68,10 @@ class LoginAPI(APIView):
 
         token = Token.objects.get(user=User.objects.get(email=user.email))
 
-        return Response({'key': token.key})
+        return Response({
+            'key': token.key,
+            'type': 'consumer' if Consumer.objects.filter(profile__user=user) else 'analyst'
+        })
 
 
 # oAuth2 views

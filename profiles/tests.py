@@ -70,8 +70,29 @@ class UserTests(APITestCase):
         self.assertEqual(detail['id'], 1)
 
         url = '/user/login'
-        user = {
-            "password": "P4sswordVeryS€cure@", "email": "test.email@gmail.com",
-        }
+        user = {"password": "P4sswordVeryS€cure@", "email": "test.email@gmail.com",}
         resp = self.client.post(url, data=user)
         self.assertTrue('key' in resp.json().keys())
+
+    def test_login_type(self):
+        url = '/consumer/signup'
+        user = {
+            "username": "UserVerySecure", "password1": "P4sswordVeryS€cure@", "password2": "P4sswordVeryS€cure@",
+            "email": "test.consumer@gmail.com", "pnt": 'POINT(-100.0208 44.0489)'
+        }
+        self.client.post(url, data=user)
+
+        url = '/analyst/signup'
+        user = {
+            "username": "UserVerySecure", "password1": "P4sswordVeryS€cure@", "password2": "P4sswordVeryS€cure@",
+            "email": "test.analyst@gmail.com", "pnt": 'POINT(-100.0208 44.0489)'
+        }
+        self.client.post(url, data=user)
+        url = '/user/login'
+        user = {"password": "P4sswordVeryS€cure@", "email": "test.analyst@gmail.com"}
+        _type = self.client.post(url, data=user).json()['type']
+        self.assertEqual(_type, 'analyst')
+
+        user = {"password": "P4sswordVeryS€cure@", "email": "test.consumer@gmail.com"}
+        _type = self.client.post(url, data=user).json()['type']
+        self.assertEqual(_type, 'consumer')
