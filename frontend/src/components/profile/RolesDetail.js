@@ -10,7 +10,7 @@ class ProfileDetail extends React.Component {
 
         return (
             <div>
-                <img src={profile.picture} />
+                <img alt={'profile image'} src={profile.picture} />
                 email: {profile.user.email}
                 subcribe from: {profile.subscribe_date}
             </div>
