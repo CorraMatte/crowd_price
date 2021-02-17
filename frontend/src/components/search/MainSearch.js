@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import {CATEGORIES_API, REPORTS_SEARCH_API} from "../../urls/endpoints";
-import {Button, Form, FormCheck} from "react-bootstrap";
+import {Button, Form} from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import {MAX_DISTANCE, MAX_PRICE, MIN_PRICE} from "../utils/const"
 import {DetailGroupReport} from "../report/DetailGroupReport";

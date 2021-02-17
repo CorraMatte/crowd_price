@@ -37,9 +37,6 @@ class Login extends React.Component {
             res => {
                 if (res.status === 200) {
                     setToken(res.data.key, res.data.type);
-                    console.log(res.data.key)
-                    console.log(res.data.type)
-                    console.log(isLoggedIn())
                 } else {
                     this.setState({
                         'errors': res.data
@@ -58,7 +55,7 @@ class Login extends React.Component {
 
     render() {
         if (isLoggedIn()) {
-            return <Redirect to="/"/>
+            return <Redirect to="/" />
         }
 
         return (

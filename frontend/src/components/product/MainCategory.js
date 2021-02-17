@@ -1,8 +1,6 @@
 import React from "react";
 import axios from "axios";
 import {PRODUCTS_CATEGORY_API} from "../../urls/endpoints";
-import {DetailReportItem} from "../report/DetailGroupReport";
-import MainProduct from "./MainProduct";
 import {DetailProductItem} from "./DetailGroupProduct";
 
 

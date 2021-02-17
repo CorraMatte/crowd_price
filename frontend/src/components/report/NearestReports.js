@@ -1,20 +1,32 @@
 import React from "react";
 import axios from "axios";
 import {REPORTS_NEAREST_API} from "../../urls/endpoints";
+import {requestConfig} from "../../auth";
+import {DetailGroupReport} from "./DetailGroupReport";
 
 class NearestReports extends React.Component {
     constructor(props) {
         super(props);
-        axios.get(REPORTS_NEAREST_API).then(res => {
+        this.state = {
+            reports: []
+        }
+    }
+
+    componentDidMount() {
+        axios.get(REPORTS_NEAREST_API, requestConfig()).then(res => {
             this.setState({
-                reports: res.data.results,
+                reports: res.data.results.features,
             })
         });
     }
 
     render () {
+        console.log(this.state.reports)
         return (
-            <h1>Near reports to you</h1>
+            <div>
+                <h1>Near reports to you</h1>
+                <DetailGroupReport reports={this.state.reports} />
+            </div>
         )
     }
 }

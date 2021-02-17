@@ -2,23 +2,24 @@
 // Set the authentication token
 export const setToken = (token, type) => {
     sessionStorage.setItem("token", token);
-    sessionStorage.setItem("type", type);
+    localStorage.setItem("type", type);
     return JSON.parse(sessionStorage.getItem("token")) !== null
 }
 
 // Check if user is logged in and return the token if exists
 export const isLoggedIn = () => {
     return sessionStorage.getItem("token");
+    return true;
 }
 
 //
 export const getUserType = () => {
-    return sessionStorage.getItem("type");
+    return localStorage.getItem("type");
 }
 
 // Delete the token from the sessionStorage
 export const logOut = () => {
-    sessionStorage.removeItem("token");
+    // sessionStorage.removeItem("token");
 }
 
 // Create header for request

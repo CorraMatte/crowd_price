@@ -23,7 +23,7 @@ import {getUserType, isLoggedIn, logOut} from "../../auth";
 
 export class Header extends React.Component {
     render() {
-        const user_type = getUserType();
+
         let action;
         if (isLoggedIn()) {
             action = (
@@ -38,19 +38,25 @@ export class Header extends React.Component {
             )
         } else {
             action = (
-                <NavItem>
+                [<NavItem>
                     <NavLink href="/login/" style={{color: "#fffa"}}><FontAwesomeIcon
                         icon={faSignInAlt}/>Login</NavLink>
+                </NavItem>,
+                <NavItem>
+                    <NavLink href="/signup/" style={{color: "#fffa"}}><FontAwesomeIcon
+                        icon={faSignInAlt}/>Signup</NavLink>
                 </NavItem>
+                ]
             )
         }
 
         let feature;
-        if (user_type) {
+        const user_type = getUserType();
+        if (user_type === 'consumer') {
             feature = <NavItem>
                         <NavLink href="/upload/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faArrowCircleUp} className={"small"}/>Upload reports</NavLink>
                       </NavItem>
-        } else if (user_type) {
+        } else if (user_type === 'analyst') {
             feature = <NavItem>
                         <NavLink href="/graph/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faArrowCircleUp} className={"small"}/>Graph</NavLink>
                       </NavItem>
