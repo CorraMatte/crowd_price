@@ -1,56 +1,39 @@
 from dj_rest_auth.registration.views import SocialLoginView
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from django.contrib.gis.geos import GEOSGeometry
-from django.core.exceptions import ValidationError
+from rest_framework.authtoken.models import Token
 from rest_framework import generics, status
-from profiles.models import Consumer, Organization, Profile, Analyst
+from profiles.models import Consumer, Organization, Analyst
 from django.contrib.auth.models import User
 from profiles import serializers as serial
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.contrib.auth.password_validation import validate_password
-from django.db.utils import IntegrityError
+from profiles.utils import create_profile
 
 
 class CreateConsumerAPI(APIView):         # To test (password, dup user)
     def post(self, request):
-        # User validation
-        data = request.data
-        email = data.get('email')
-        password1, password2 = data.get('password1'), data.get('password2')
-        pnt = data.get('pnt')
-        if not email:
-            return Response({"detail": "email field is empty"}, status.HTTP_400_BAD_REQUEST)
+        p = create_profile(request)
 
-        if password1 != password2 or password1 is None:
-            return Response({"detail": "password not valid or doesn't match"}, status.HTTP_400_BAD_REQUEST)
+        if isinstance(p, Response):
+            return p
 
-        user = User(username=email, email=email, password=password1)
-        try:
-            validate_password(password1, user)
-        except ValidationError as e:
-            return Response({"detail": e}, status.HTTP_400_BAD_REQUEST)
+        c = Consumer(profile=p, experience=0)
+        c.save()
+        return Response({"detail": serial.ConsumerSerializer(c).data}, status.HTTP_201_CREATED)
 
-        try:
-            user.save()
-        except IntegrityError:
-            return Response({"detail": "email already presents in the database"}, status.HTTP_400_BAD_REQUEST)
 
-        # Check for location during the registration
-        profile = serial.ProfileSerializer(data={
-            'user': user.pk,
-            'pnt': pnt
-        })
+class CreateAnalystAPI(APIView):         # To test (password, dup user)
+    def post(self, request):
+        p = create_profile(request)
 
-        if not profile.is_valid():
-            user.delete()
-            return Response({"detail": profile.errors}, status.HTTP_400_BAD_REQUEST)
+        if isinstance(p, Response):
+            return p
 
-        p = profile.save()
-        consumer = Consumer(profile=p, experience=0)
-        consumer.save()
-        return Response({"detail": "consumer created"}, status.HTTP_201_CREATED)
+        org = generics.get_object_or_404(Organization.objects.all(), pk=request.data.get('organization'))
+        a = Analyst(profile=p, organization=org)
+        a.save()
+        return Response({"detail": serial.AnalystSerializer(a).data}, status.HTTP_201_CREATED)
 
 
 class RetrieveAnalystAPI(generics.RetrieveAPIView):
@@ -66,6 +49,23 @@ class RetrieveConsumerAPI(generics.RetrieveAPIView):
 class RetrieveOrganizationAPI(generics.RetrieveAPIView):
     queryset = Organization.objects.all()
     serializer_class = serial.ConsumerSerializer
+
+
+class LoginAPI(APIView):
+    """
+    Return user token after login
+    """
+    def post(self, request):
+        # Retrieve user
+        user = generics.get_object_or_404(User.objects.all(), email=request.data.get('email'))
+
+        # Check password
+        if not user.check_password(request.data.get('password')):
+            return Response({'detail': 'invalid email/password'}, status=status.HTTP_400_BAD_REQUEST)
+
+        token = Token.objects.get(user=User.objects.get(email=user.email))
+
+        return Response({'key': token.key})
 
 
 # oAuth2 views

@@ -1,7 +1,5 @@
-from django.test import TestCase
 from rest_framework import status
-
-from crowd_price.const import SRID
+from rest_framework.test import APITestCase
 from crowd_price.validators import NotFuture #,AgeValidator
 # from dateutil.relativedelta import relativedelta
 import datetime
@@ -9,36 +7,22 @@ from django.core.exceptions import ValidationError
 
 
 # Create your tests here.
-class ValidationTest(TestCase):
-#     """
-#         Check if the user is underage or too old
-#     """
-#     def test_if_the_user_is_underage_or_too_old(self):
-#         now = datetime.datetime.now()
-#         too_young = now - relativedelta(years=16)
-#         too_old = now - relativedelta(years=90)
-#
-#         with self.assertRaises(ValidationError):
-#             AgeValidator(too_young)
-#
-#         with self.assertRaises(ValidationError):
-#             AgeValidator(too_old)
-#
-#     """
-#         Check if the user is underage or too old
-#     """
-    def test_if_date_is_future(self):
+class ValidationTest(APITestCase):
+     """
+         Check if the user is underage or too old
+     """
+     def test_if_date_is_future(self):
         with self.assertRaises(ValidationError):
             NotFuture(datetime.datetime.now() + datetime.timedelta(days=1))
 
 
-class UserTests(TestCase):
+class UserTests(APITestCase):
     """
         Test error for duplicate users
-        path('consumer/add', views.CreateConsumerView.as_view()),
+        path('consumer/signup', views.CreateConsumerView.as_view()),
     """
     def test_duplicate_email_for_user(self):
-        url = '/consumer/add'
+        url = '/consumer/signup'
         user = {
             "username": "user", "password1": "P4sswordVeryS€cure@", "password2": "P4sswordVeryS€cure@",
             "email": "test.email@gmail.com", "pnt": 'POINT(-100.0208 44.0489)'
@@ -51,10 +35,10 @@ class UserTests(TestCase):
 
     """
         Test password strength
-        path('consumer/add', views.CreateConsumerView.as_view()),
+        path('consumer/signup', views.CreateConsumerView.as_view()),
     """
     def test_email_characters_validators(self):
-        url = '/consumer/add'
+        url = '/consumer/signup'
         user = {
             "username": "UserVerySecure", "password1": "test.email@gmail.com", "password2": "test.email@gmail.com",
             "email": "test.email@gmail.com", "pnt": 'POINT(-100.0208 44.0489)'
@@ -75,3 +59,19 @@ class UserTests(TestCase):
         user['password1'] = user['password2'] = 'S3cureenough!'
         response = self.client.post(url, data=user)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_login_signup(self):
+        url = '/consumer/signup'
+        user = {
+            "username": "UserVerySecure", "password1": "P4sswordVeryS€cure@", "password2": "P4sswordVeryS€cure@",
+            "email": "test.email@gmail.com", "pnt": 'POINT(-100.0208 44.0489)'
+        }
+        detail = self.client.post(url, data=user).json()['detail']
+        self.assertEqual(detail['id'], 1)
+
+        url = '/user/login'
+        user = {
+            "password": "P4sswordVeryS€cure@", "email": "test.email@gmail.com",
+        }
+        resp = self.client.post(url, data=user)
+        self.assertTrue('key' in resp.json().keys())

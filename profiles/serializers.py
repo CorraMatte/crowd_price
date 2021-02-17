@@ -23,7 +23,7 @@ class ConsumerSerializer(serializers.ModelSerializer):
         fields = ['id', 'profile', 'experience'] # , 'birth']
 
 
-class AnalystSerializer(serializers.HyperlinkedModelSerializer):
+class AnalystSerializer(serializers.ModelSerializer):
     class Meta:
         model = Analyst
         fields = ['id', 'profile', 'organization']

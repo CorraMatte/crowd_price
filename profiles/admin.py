@@ -5,3 +5,4 @@ from profiles.models import *
 admin.site.register(Profile)
 admin.site.register(Analyst)
 admin.site.register(Consumer)
+admin.site.register(Organization)

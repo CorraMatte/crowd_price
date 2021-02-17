@@ -4,13 +4,15 @@ from profiles import views
 
 urlpatterns = [
     # Custom
-    path('consumer/add', views.CreateConsumerAPI.as_view()),
+    path('consumer/signup', views.CreateConsumerAPI.as_view()),
+    path('analyst/signup', views.CreateAnalystAPI.as_view()),
     path('consumer/<int:pk>', views.RetrieveConsumerAPI.as_view()),
     path('analyst/<int:pk>', views.RetrieveAnalystAPI.as_view()),
     path('organization/<int:pk>', views.RetrieveOrganizationAPI.as_view()),
 
     # Auth
-    path('dj-rest-auth/', include('dj_rest_auth.urls')),
+    path('user/login', views.LoginAPI.as_view()),
+    # path('dj-rest-auth/', include('dj_rest_auth.urls')),
     # path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
     path('rest-auth/facebook/', views.FacebookLogin.as_view(), name="facebook_login"),
     path('rest-auth/google/', views.GoogleLogin.as_view(), name="google_login"),
