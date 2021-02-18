@@ -1,14 +1,15 @@
 import csv
 import json
-from django.http.response import HttpResponse
-from capabilities.models import Search, Report
-from decimal import Decimal
-from django.contrib.gis.measure import D
 from copy import copy
-from capabilities import serializers as serial
+from decimal import Decimal
+from django.contrib.gis.measure import Distance
+from django.contrib.postgres.search import TrigramSimilarity
+from django.http.response import HttpResponse
 from excel_response import ExcelResponse
-from profiles.models import Consumer
+from capabilities import serializers as serial
+from capabilities.models import Search, Report
 from products.models import Product, Store
+from profiles.models import Consumer
 
 
 def get_reports_by_search(search_pk):
@@ -16,16 +17,23 @@ def get_reports_by_search(search_pk):
     if not search:
         return []
 
+    products = (
+            Product.objects.filter(name__search=search.product_query) |
+            Product.objects.annotate(
+                similarity=TrigramSimilarity('name', search.product_query)
+            ).filter(similarity__gt=0.1)
+    ).distinct()
+
     reports = Report.objects.filter(
         price__gte=Decimal(search.price_min), price__lte=Decimal(search.price_max),
-        created_time__gte=search.after_date
+        created_time__gte=search.after_date, product__in=products
     )
 
     if search.categories.all():
         reports = reports.filter(product__categories__in=search.categories.all())
 
-    # if search.pnt:
-    #     reports = reports.filter(pnt__distance_lte=(search.pnt, D(km=search.distance)))
+    if search.pnt:
+        reports = reports.filter(pnt__distance_lte=(search.pnt, Distance(km=search.distance)))
 
     return reports.order_by(search.ordering_by)
 

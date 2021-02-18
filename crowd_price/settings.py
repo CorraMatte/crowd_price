@@ -80,6 +80,9 @@ INSTALLED_APPS = [
     # Password validator https://pypi.org/project/django-password-validators/
     'django_password_validators',
     'django_password_validators.password_history',
+
+
+    'django.contrib.postgres'
 ]
 
 MIDDLEWARE = [
@@ -145,20 +148,23 @@ ACCOUNT_USERNAME_REQUIRED = False
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.contrib.gis.db.backends.mysql',
-    #     'NAME': 'crowd_price',
-    #     'USER': 'root',
-    #     'PASSWORD': 'password',
-    #     'HOST': '0.0.0.0',   # Or an IP Address that your DB is hosted on
-    #     'PORT': '3306',
+    # 'defult': {
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        #'ENGINE': 'django.contrib.gis.db.backends.spatialite',
+        #          'NAME': 'db.sqlite3',
+        # This is where you put the name of the db file.
+        # If one doesn't exist, it will be created at migration time.
     # }
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
-                  'NAME': 'db.sqlite3',  # This is where you put the name of the db file.
-        # If one doesn't exist, it will be created at migration time.
+        #'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'example',
+        'HOST': '0.0.0.0',
+        'PORT': '5432',
     }
+
 }
 
 

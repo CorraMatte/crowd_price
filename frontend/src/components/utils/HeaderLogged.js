@@ -28,23 +28,19 @@ export class Header extends React.Component {
         if (isLoggedIn()) {
             action = (
                 [<NavItem>
-                    <NavLink href="/" style={{color: "#fffa", backgroundColor: "#64c4ed", border: "0"}}
-                         onClick={logOut()}><FontAwesomeIcon icon={faSignOutAlt}/>Logout</NavLink>
+                    <NavLink href="/" onClick={logOut()}><FontAwesomeIcon icon={faSignOutAlt}/>Logout</NavLink>
                 </NavItem>,
                 <NavItem>
-                    <NavLink href="/profile/" style={{color: "#fffa"}}><FontAwesomeIcon
-                        icon={faUser}/>Profile</NavLink>
+                    <NavLink href="/profile/" ><FontAwesomeIcon icon={faUser}/>Profile</NavLink>
                 </NavItem>]
             )
         } else {
             action = (
                 [<NavItem>
-                    <NavLink href="/login/" style={{color: "#fffa"}}><FontAwesomeIcon
-                        icon={faSignInAlt}/>Login</NavLink>
+                    <NavLink href="/login/" ><FontAwesomeIcon icon={faSignInAlt}/>Login</NavLink>
                 </NavItem>,
                 <NavItem>
-                    <NavLink href="/signup/" style={{color: "#fffa"}}><FontAwesomeIcon
-                        icon={faSignInAlt}/>Signup</NavLink>
+                    <NavLink href="/signup/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faSignInAlt}/>Signup</NavLink>
                 </NavItem>
                 ]
             )

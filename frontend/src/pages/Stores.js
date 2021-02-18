@@ -1,8 +1,8 @@
 import React from "react";
 import axios from "axios";
-import {DetailGroupReport} from "../report/DetailGroupReport"
-import {STORES_API, REPORTS_STORE_API} from "../../urls/endpoints";
-import {STORE_URL} from "../../urls/navigation";
+import {DetailGroupReport} from "../components/report/DetailGroupReport"
+import {STORES_API, REPORTS_STORE_API} from "../urls/endpoints";
+import {STORE_URL} from "../urls/navigation";
 
 
 class DetailStoreItem extends React.Component {

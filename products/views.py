@@ -55,12 +55,15 @@ class RetrieveCategoriesAPI(APIView):
 class CreateProductAPI(APIView):
     queryset = Product.objects.all()
     serializer_class = serial.ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
         serial_prod = serial.ProductSerializer(data=request.data)
         if not serial_prod.is_valid():
             return Response(serial_prod.errors, status.HTTP_400_BAD_REQUEST)
+
+        if 'categories' not in request.data:
+            return Response({'detail': 'categories field is missing'}, status.HTTP_400_BAD_REQUEST)
 
         serial_prod.validated_data['categories'] = request.data['categories']
         p = serial_prod.save()
