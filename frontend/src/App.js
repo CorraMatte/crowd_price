@@ -1,7 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import {Header} from "./components/utils/Header"
+import {HeaderUnLogged} from "./components/utils/HeaderUnLogged"
 import {BaseRouter} from "./routes"
+import {isLoggedIn} from "./auth";
+import HeaderLogged from "./components/utils/HeaderLogged";
 
 
 // Dispatch to each page
@@ -10,7 +12,7 @@ class App extends React.Component {
     render() {
         return (
             <Router>
-                <Header {...this.props}/>
+
                 <BaseRouter {...this.props}/>
             </Router>
         );

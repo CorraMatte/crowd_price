@@ -1,9 +1,11 @@
 import React from "react";
 import axios from "axios";
-import {ANALYST_API, CONSUMER_API, REPORTS_USER_API} from "../../urls/endpoints";
-import {AnalystDetail, ConsumerDetail} from "./RolesDetail";
-import {DetailGroupReport} from "../report/DetailGroupReport";
-import {getUserType, getAuthHeader} from "../../auth";
+import {ANALYST_API, CONSUMER_API, REPORTS_USER_API} from "../urls/endpoints";
+import {AnalystDetail, ConsumerDetail} from "../components/profile/RolesDetail";
+import {DetailGroupReport} from "../components/report/DetailGroupReport";
+import {getUserType, getAuthHeader, isLoggedIn} from "../auth";
+import HeaderLogged from "../components/utils/HeaderLogged";
+import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 
 
 class MainProfile extends React.Component {
@@ -48,6 +50,7 @@ class MainProfile extends React.Component {
         }
         return (
             <div>
+                <HeaderLogged />
                 {profile_type}
                 <DetailGroupReport reports={this.state.reports} />
             </div>

@@ -1,9 +1,11 @@
 import React from "react";
 import {Redirect} from "react-router-dom";
-import {isLoggedIn, setToken} from "../../auth";
+import {isLoggedIn, setToken} from "../auth";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
-import {CONSUMER_SIGNUP} from "../../urls/endpoints";
+import {CONSUMER_SIGNUP} from "../urls/endpoints";
+import HeaderLogged from "../components/utils/HeaderLogged";
+import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 
 
 class Login extends React.Component {
@@ -66,6 +68,7 @@ class Login extends React.Component {
 
         return (
             <div>
+                <HeaderUnLogged />
                 {this.state.errors}
                 <Form onSubmit={this.login}>
 

@@ -1,8 +1,11 @@
 import React from "react";
 import axios from "axios";
-import {STORE_API, REPORTS_STORE_API} from "../../urls/endpoints";
-import {DetailReportItem} from "../report/DetailGroupReport"
+import {STORE_API, REPORTS_STORE_API} from "../urls/endpoints";
+import {DetailReportItem} from "../components/report/DetailGroupReport"
 import {DetailStoreItem} from "./Stores";
+import {isLoggedIn} from "../auth";
+import HeaderLogged from "../components/utils/HeaderLogged";
+import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 
 
 class MainStore extends React.Component {
@@ -42,6 +45,7 @@ class MainStore extends React.Component {
 
         return (
             <div>
+                {isLoggedIn() ? <HeaderLogged /> : <HeaderUnLogged />}
                 <h1>There are {reports.length} reports</h1>
                 {<DetailStoreItem store={store} />}
                 {reports.map((report) => <DetailReportItem report={report} key={report.id}/>)}

@@ -1,10 +1,13 @@
 import React from "react";
 import axios from "axios";
-import {CATEGORIES_API, REPORTS_SEARCH_API} from "../../urls/endpoints";
+import {CATEGORIES_API, REPORTS_SEARCH_API} from "../urls/endpoints";
 import {Button, Form} from "react-bootstrap";
 import DatePicker from "react-datepicker";
-import {MAX_DISTANCE, MAX_PRICE, MIN_PRICE} from "../utils/const"
-import {DetailGroupReport} from "../report/DetailGroupReport";
+import {MAX_DISTANCE, MAX_PRICE, MIN_PRICE} from "../components/utils/const"
+import {DetailGroupReport} from "../components/report/DetailGroupReport";
+import {isLoggedIn} from "../auth";
+import HeaderLogged from "../components/utils/HeaderLogged";
+import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 
 
 class MainSearch extends React.Component {
@@ -48,8 +51,6 @@ class MainSearch extends React.Component {
             "distance": this.state.distance,
             "after_date": this.state.after_date,
             "is_starred": this.state.is_starred,
-
-            "profile": this.state.profile
         }
 
         axios.post(REPORTS_SEARCH_API, req).then(
@@ -121,6 +122,7 @@ class MainSearch extends React.Component {
 
         return (
             <div>
+                {isLoggedIn() ? <HeaderLogged /> : <HeaderUnLogged />}
                 <Form onSubmit={(event) => this.send_search(event)}>
                     <Form.Control
                         type="text"

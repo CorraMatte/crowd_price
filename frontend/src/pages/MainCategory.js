@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
-import {PRODUCTS_CATEGORY_API} from "../../urls/endpoints";
-import {DetailProductItem} from "./DetailGroupProduct";
+import {PRODUCTS_CATEGORY_API} from "../urls/endpoints";
+import {DetailProductItem} from "../components/product/DetailGroupProduct";
 
 
 class MainCategory extends React.Component {

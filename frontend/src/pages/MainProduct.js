@@ -1,8 +1,8 @@
 import React from "react";
 import axios from "axios";
-import {DetailProductItem} from "./DetailGroupProduct"
-import {DetailReportItem} from "../report/DetailGroupReport";
-import {PRODUCT_API, REPORTS_PRODUCT_API} from "../../urls/endpoints";
+import {DetailProductItem} from "../components/product/DetailGroupProduct"
+import {DetailReportItem} from "../components/report/DetailGroupReport";
+import {PRODUCT_API, REPORTS_PRODUCT_API} from "../urls/endpoints";
 
 class MainProduct extends React.Component {
     constructor(props) {

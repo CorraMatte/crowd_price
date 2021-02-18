@@ -1,9 +1,9 @@
 import React from "react";
 import {Redirect} from "react-router-dom";
-import {isLoggedIn, setToken} from "../../auth";
+import {isLoggedIn, setToken} from "../auth";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
-import {USER_LOGIN_API} from "../../urls/endpoints";
+import {USER_LOGIN_API} from "../urls/endpoints";
 
 
 class Login extends React.Component {
