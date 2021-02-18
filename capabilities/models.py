@@ -17,7 +17,6 @@ class OrderBy(models.TextChoices):
     DIST_DESC = '-distance', 'distance descending'
 
 
-# Create your models here.
 class Search(models.Model):
     profile = models.ForeignKey(Profile, null=True, on_delete=models.SET_NULL)
     product_query = models.CharField(max_length=100)

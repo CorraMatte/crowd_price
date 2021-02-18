@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     'products',
     'profiles',
     'capabilities',
-    'geofeatures',
 
     # Installed from Django
     'django.contrib.gis',
