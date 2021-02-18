@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import {REPORTS_NEAREST_API} from "../../urls/endpoints";
-import {requestConfig} from "../../auth";
+import {getAuthHeader} from "../../auth";
 import {DetailGroupReport} from "./DetailGroupReport";
 
 class NearestReports extends React.Component {
@@ -13,7 +13,7 @@ class NearestReports extends React.Component {
     }
 
     componentDidMount() {
-        axios.get(REPORTS_NEAREST_API, requestConfig()).then(res => {
+        axios.get(REPORTS_NEAREST_API, getAuthHeader()).then(res => {
             this.setState({
                 reports: res.data.results.features,
             })

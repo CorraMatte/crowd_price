@@ -14,38 +14,14 @@ import {
     faSearch,
     faStore,
     faArrowCircleUp,
-    faSignInAlt,
     faSignOutAlt,
     faHome
 } from "@fortawesome/free-solid-svg-icons";
-import {getUserType, isLoggedIn, logOut} from "../../auth";
+import {getUserType} from "../../auth";
 
 
-export class Header extends React.Component {
+export class HeaderLogged extends React.Component {
     render() {
-
-        let action;
-        if (isLoggedIn()) {
-            action = (
-                [<NavItem>
-                    <NavLink href="/" onClick={logOut()}><FontAwesomeIcon icon={faSignOutAlt}/>Logout</NavLink>
-                </NavItem>,
-                <NavItem>
-                    <NavLink href="/profile/" ><FontAwesomeIcon icon={faUser}/>Profile</NavLink>
-                </NavItem>]
-            )
-        } else {
-            action = (
-                [<NavItem>
-                    <NavLink href="/login/" ><FontAwesomeIcon icon={faSignInAlt}/>Login</NavLink>
-                </NavItem>,
-                <NavItem>
-                    <NavLink href="/signup/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faSignInAlt}/>Signup</NavLink>
-                </NavItem>
-                ]
-            )
-        }
-
         let feature;
         const user_type = getUserType();
         if (user_type === 'consumer') {
@@ -74,7 +50,12 @@ export class Header extends React.Component {
                             <NavItem>
                                 <NavLink href="/stores/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faStore} className={"small"}/>Stores</NavLink>
                             </NavItem>
-                            {action}
+                            <NavItem>
+                                <NavLink href="/logout/" ><FontAwesomeIcon icon={faSignOutAlt}/>Logout</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink href="/profile/" ><FontAwesomeIcon icon={faUser}/>Profile</NavLink>
+                            </NavItem>
                         </Nav>
                 </Container>
             </Navbar>
@@ -82,4 +63,4 @@ export class Header extends React.Component {
     };
 }
 
-export default Header;
+export default HeaderLogged;

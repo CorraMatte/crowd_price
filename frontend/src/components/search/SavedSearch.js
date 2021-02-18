@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import {SEARCH_LATEST_API} from "../../urls/endpoints";
+import {getAuthHeader} from "../../auth";
 
 class SavedSearch extends React.Component {
     constructor(props) {
@@ -11,7 +12,7 @@ class SavedSearch extends React.Component {
     }
 
     componentDidMount() {
-        axios.get(SEARCH_LATEST_API).then(
+        axios.get(SEARCH_LATEST_API, getAuthHeader()).then(
             res => { this.setState({
                 searches: res.data.results,
             })

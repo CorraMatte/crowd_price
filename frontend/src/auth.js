@@ -19,20 +19,11 @@ export const getUserType = () => {
 
 // Delete the token from the sessionStorage
 export const logOut = () => {
-    // sessionStorage.removeItem("token");
+    console.log("LOGGING OUT!")
+    sessionStorage.removeItem("token");
 }
 
 // Create header for request
-export const requestConfig = () => {
+export const getAuthHeader = () => {
     return { headers: { Authorization: `Token ${isLoggedIn()}` }};
 }
-
-// Build backend path
-export const backendPath = (path="/") => {
-    let proto = "http";
-    let address = "127.0.0.1";
-    let port = "8000";
-
-    return proto + "://" + address + ":" + port + path;
-}
-
