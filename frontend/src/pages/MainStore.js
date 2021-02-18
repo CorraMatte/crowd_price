@@ -21,15 +21,13 @@ class MainStore extends React.Component {
         const id = this.props.match.params.id;
 
         axios.get(`${STORE_API}/${id}`).then(
-            res => { this.setState({
-                store: res.data,
-                reports: this.state.reports
+            res => {console.log(res.data); this.setState({
+                store: res.data
             })
         });
 
         axios.get(`${REPORTS_STORE_API}/${id}`).then(
             res => { this.setState({
-                store: this.state.store,
                 reports: res.data.results.features
             })
         });
@@ -39,15 +37,10 @@ class MainStore extends React.Component {
         const store = this.state.store;
         const reports = this.state.reports;
 
-        if (reports.length === 0) {
-            return (<div></div>);
-        }
-
         return (
             <div>
                 {isLoggedIn() ? <HeaderLogged /> : <HeaderUnLogged />}
-                <h1>There are {reports.length} reports</h1>
-                {<DetailStoreItem store={store} />}
+                <DetailStoreItem store={store} />
                 {reports.map((report) => <DetailReportItem report={report} key={report.id}/>)}
             </div>
         )

@@ -24,11 +24,7 @@ export class HeaderLogged extends React.Component {
     render() {
         let feature;
         const user_type = getUserType();
-        if (user_type === 'consumer') {
-            feature = <NavItem>
-                        <NavLink href="/upload/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faArrowCircleUp} className={"small"}/>Upload reports</NavLink>
-                      </NavItem>
-        } else if (user_type === 'analyst') {
+        if (user_type === 'analyst') {
             feature = <NavItem>
                         <NavLink href="/graph/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faArrowCircleUp} className={"small"}/>Graph</NavLink>
                       </NavItem>
@@ -51,10 +47,10 @@ export class HeaderLogged extends React.Component {
                                 <NavLink href="/stores/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faStore} className={"small"}/>Stores</NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink href="/logout/" ><FontAwesomeIcon icon={faSignOutAlt}/>Logout</NavLink>
+                                <NavLink href="/profile/" ><FontAwesomeIcon icon={faUser}/>Profile</NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink href="/profile/" ><FontAwesomeIcon icon={faUser}/>Profile</NavLink>
+                                <NavLink href="/logout/" ><FontAwesomeIcon icon={faSignOutAlt}/>Logout</NavLink>
                             </NavItem>
                         </Nav>
                 </Container>

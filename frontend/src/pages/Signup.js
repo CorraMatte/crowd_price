@@ -4,7 +4,6 @@ import {isLoggedIn, setToken} from "../auth";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 import {CONSUMER_SIGNUP} from "../urls/endpoints";
-import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 
 
@@ -29,8 +28,23 @@ class Login extends React.Component {
         this.setState({[name]: value});
     }
 
+    getCoordinatesByIP() {
+        axios.get('https://api.ipify.org?format=json').then(
+            res => {
+                const ip = res.data.ip;
+                console.log(ip);
+                axios.get('https://www.iplocate.io/api/lookup/' + ip).then(
+                    res => {
+                        console.log(res.data.longitude)
+                        console.log(res.data.latitude)
+                    }
+                )
+            })
+    }
+
     login = (e) => {
         e.preventDefault();
+
         const req = {
             'email': this.state.email,
             'password1': this.state.password1,
@@ -62,6 +76,9 @@ class Login extends React.Component {
     }
 
     render() {
+
+        this.getCoordinatesByIP();
+
         if (isLoggedIn()) {
             return <Redirect to="/" />
         }

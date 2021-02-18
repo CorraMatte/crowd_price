@@ -2,6 +2,9 @@ import React from "react";
 import axios from "axios";
 import {PRODUCTS_CATEGORY_API} from "../urls/endpoints";
 import {DetailProductItem} from "../components/product/DetailGroupProduct";
+import {isLoggedIn} from "../auth";
+import HeaderLogged from "../components/utils/HeaderLogged";
+import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 
 
 class MainCategory extends React.Component {
@@ -29,6 +32,7 @@ class MainCategory extends React.Component {
 
         return (
             <div>
+                {isLoggedIn() ? <HeaderLogged /> : <HeaderUnLogged />}
                 <h1>There are {products.length} reports</h1>
                 {products.map((product) => <DetailProductItem product={product} key={product.id}/>)}
             </div>

@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import {DetailGroupReport} from "../components/report/DetailGroupReport"
 import {STORES_API, REPORTS_STORE_API} from "../urls/endpoints";
 import {STORE_URL} from "../urls/navigation";
 import {isLoggedIn} from "../auth";
@@ -11,20 +10,17 @@ import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 class DetailStoreItem extends React.Component {
     render() {
         const store = this.props.store;
-        const props = store.properties;
-        let reports;
-
-        if (store.reports) {
-            reports = <DetailGroupReport reports={store.reports}/>
-        } else {
-            reports = <div>No reports</div>
+        if (!store) {
+            return (<div></div>)
         }
+
+        const props = store.properties;
 
         return (
             <div>
                 <img src={props.picture} alt="immagine" />
-                {reports}
                 <a href={`${STORE_URL}/${store.id}`}>{props.name}</a>
+
             </div>
         )
     }

@@ -42,7 +42,8 @@ class MainProfile extends React.Component {
     }
 
     render () {
-        let profile_type
+        let profile_type;
+
         if (this.state.user_type === 'consumer') {
             profile_type = <ConsumerDetail consumer={this.state.user_profile} />
         } else if (this.state.user_type) {

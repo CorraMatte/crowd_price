@@ -3,6 +3,9 @@ import axios from "axios";
 import {DetailProductItem} from "../components/product/DetailGroupProduct"
 import {DetailReportItem} from "../components/report/DetailGroupReport";
 import {PRODUCT_API, REPORTS_PRODUCT_API} from "../urls/endpoints";
+import {isLoggedIn} from "../auth";
+import HeaderLogged from "../components/utils/HeaderLogged";
+import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 
 class MainProduct extends React.Component {
     constructor(props) {
@@ -42,6 +45,7 @@ class MainProduct extends React.Component {
 
         return (
             <div>
+                {isLoggedIn() ? <HeaderLogged /> : <HeaderUnLogged />}
                 <DetailProductItem product={prod} key={prod.id}/>
                 {reports.map((report) => <DetailReportItem report={report} key={report.id}/>)}
             </div>
