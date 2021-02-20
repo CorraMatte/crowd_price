@@ -6,6 +6,7 @@ import {PRODUCT_API, REPORTS_PRODUCT_API} from "../urls/endpoints";
 import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
+import DynMap from "../components/Map/DynMap";
 
 class MainProduct extends React.Component {
     constructor(props) {
@@ -48,6 +49,7 @@ class MainProduct extends React.Component {
                 {isLoggedIn() ? <HeaderLogged /> : <HeaderUnLogged />}
                 <DetailProductItem product={prod} key={prod.id}/>
                 {reports.map((report) => <DetailReportItem report={report} key={report.id}/>)}
+                <DynMap reports={reports} />
             </div>
         )
 

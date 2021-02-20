@@ -12,14 +12,7 @@ class DetailReportItem extends React.Component {
         const props = this.props.report.properties;
         const product = props.product;
         const consumer = props.consumer;
-        const geo = this.props.report.geometry;
         const store = props.store ? "store" : "" ;
-        let lon = null; let lat = null;
-
-        if (geo) {
-            lon = geo.coordinates[0];
-            lat = geo.coordinates[1];
-        }
 
         return (
             <div>
@@ -32,20 +25,6 @@ class DetailReportItem extends React.Component {
                 <a href={`${REPORT_URL}/${this.props.report.id}`}>vai al dettaglio</a>
                 <br />
                 <br />
-                <br />
-                <span>MAP WITH THE COORDINATES {lon} {lat}</span>
-
-                {/*<Map
-                    center={this.state.center}
-                    zoom={this.state.zoom}
-                    radius={this.state.radius}
-                    places={places}
-                    googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaaGlEIvzfb6o5Gedv5pdltME1xzqlSbw"
-                    loadingElement={<div style={{height: `100%`}}/>}
-                    containerElement={<div style={{height: `800px`}}/>}
-                    mapElement={<div style={{height: `100%`}}/>}
-                />*/}
-
             </div>
         )
     }

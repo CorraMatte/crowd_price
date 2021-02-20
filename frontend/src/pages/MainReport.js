@@ -32,7 +32,7 @@ class MainReport extends React.Component {
         if (this.state.report) {
             coords = this.state.report.geometry.coordinates.slice();
         }
-        
+
         return (
             <div>
             {isLoggedIn() ? <HeaderLogged /> : <HeaderUnLogged />}

@@ -8,6 +8,7 @@ import {DetailGroupReport} from "../components/report/DetailGroupReport";
 import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
+import DynMap from "../components/Map/DynMap";
 
 
 class MainSearch extends React.Component {
@@ -170,6 +171,7 @@ class MainSearch extends React.Component {
 
                 <h1>{result_header}</h1>
                 <DetailGroupReport reports={this.state.reports} />
+                <DynMap reports={this.state.reports} />
             </div>
         )
 

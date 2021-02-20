@@ -6,7 +6,6 @@ import CategoryItem from "./CategoryItem";
 class DetailProductItem extends React.Component {
     render() {
         const props = this.props.product;
-
         return (
             <div>
                 <img src={props.picture} alt="immagine"/>

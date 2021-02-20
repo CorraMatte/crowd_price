@@ -4,7 +4,6 @@ import {isLoggedIn, setToken} from "../auth";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 import {USER_LOGIN_API} from "../urls/endpoints";
-import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 
 
@@ -39,6 +38,9 @@ class Login extends React.Component {
             res => {
                 if (res.status === 200) {
                     setToken(res.data.key, res.data.type);
+                    this.setState({
+                        'errors': ''
+                    })
                 } else {
                     this.setState({
                         'errors': res.data

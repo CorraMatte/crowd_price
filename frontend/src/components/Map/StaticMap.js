@@ -3,14 +3,10 @@ import React from "react";
 // https://visgl.github.io/react-map-gl/docs/get-started/get-started
 // https://visgl.github.io/react-map-gl/docs/api-reference/popup
 import {Popup, StaticMap as ReactStaticMapGL} from 'react-map-gl';
-import {ACCESS_TOKEN, MAP_STYLE, MAP_ZOOM} from "../utils/const"
+import {ACCESS_TOKEN, MAP_STYLE, MAP_STATIC_ZOOM} from "../utils/const"
 
 
 export class StaticMap extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render () {
         let props;
         if (this.props) {
@@ -30,7 +26,7 @@ export class StaticMap extends React.Component {
                 height="50vh"
                 latitude={props.latitude}
                 longitude={props.longitude}
-                zoom={MAP_ZOOM}
+                zoom={MAP_STATIC_ZOOM}
                 mapStyle={MAP_STYLE}
                 mapboxApiAccessToken={ACCESS_TOKEN}
             >

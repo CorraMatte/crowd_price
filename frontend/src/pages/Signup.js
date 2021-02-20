@@ -5,6 +5,7 @@ import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 import {CONSUMER_SIGNUP} from "../urls/endpoints";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
+import {getCoordinatesByIP, getIP} from "../components/utils/utils";
 
 
 class Login extends React.Component {
@@ -30,23 +31,19 @@ class Login extends React.Component {
         this.setState({[name]: value});
     }
 
-    getCoordinatesByIP() {
-        axios.get('https://api.ipify.org?format=json').then(
+    componentDidMount() {
+        getIP().then(
             res => {
-                const ip = res.data.ip;
-                axios.get('https://www.iplocate.io/api/lookup/' + ip).then(
+                getCoordinatesByIP(res.data.ip).then(
                     res => {
                         this.setState({
-                            'longitude': res.data.longitude,
-                            'latitude': res.data.latitude,
+                            longitude: res.data.longitude,
+                            latitude: res.data.latitude,
                         })
                     }
                 )
-            })
-    }
-
-    componentDidMount() {
-        this.getCoordinatesByIP();
+            }
+        )
     }
 
     signup = (e) => {

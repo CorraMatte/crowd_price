@@ -6,7 +6,7 @@ class CategoryItem extends React.Component {
     render () {
         return (
             <div>
-                <a href={`${CATEGORY_URL}/${this.props.id}`} >{this.props.name}</a>
+                Category: <a href={`${CATEGORY_URL}/${this.props.id}`} >{this.props.name}</a>
             </div>
         )
     }
