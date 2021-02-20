@@ -12,7 +12,8 @@ import MainSearch from "./pages/MainSearch";
 import LoginRequiredRoute from './custom_routes/LoginRequiredRoute'
 import Signup from "./pages/Signup";
 import Logout from "./pages/Logout";
-
+import MainAddProduct from "./pages/MainAddProduct";
+import MainGraphs from "./pages/MainGraphs";
 
 
 export class BaseRouter extends React.Component {
@@ -25,16 +26,20 @@ export class BaseRouter extends React.Component {
                 <Route path="/stores/" component={Stores} />
                 <Route path="/login/" component={Login} />
                 <Route path="/signup/" component={Signup} />
-                <Route path="/logout/" component={Logout} />
                 <Route path="/search/" component={MainSearch} />
                 <Route path="/product/:id" component={MainProduct} />
                 <Route path="/report/:id" component={MainReport} />
                 <Route path="/store/:id" component={MainStore} />
                 <Route path="/category/:id" component={MainCategory} />
-                <LoginRequiredRoute path='/profile/' component={MainProfile}/>
 
+                <LoginRequiredRoute path="/logout/" component={Logout} />
+                <LoginRequiredRoute path='/profile/' component={MainProfile}/>
+                <LoginRequiredRoute path='/graph/' component={MainGraphs}/>
+
+                {/*Mobile features*/}
                 {/*<LoginRequiredRoute path='/upload/' component={Upload}/>}
-                {/*<LoginRequiredRoute path='/graph/' component={Profile}/>*/}
+                {/*<LoginRequiredRoute path='/add_product/' component={MainAddProduct}/>*/}
+                {/**/}
             </Router>
         );
     }

@@ -18,6 +18,11 @@ export const CATEGORIES_API = `${backend_url}/categories`;
 
 export const SEARCH_LATEST_API = `${backend_url}/search/latest`;
 export const SEARCH_STARRED_API = `${backend_url}/search/starred`;
+export const SEARCH_ADD_FAVORITE_API = `${backend_url}/search/favorite/add`;
+export const SEARCH_SORT_OPTIONS_API = `${backend_url}/search/sort/options`;
+
+export const REPORTS_DUMP_API = `${backend_url}/reports/dump`;
+export const DUMP_FORMAT_OPTIONS_API = `${backend_url}/dump/format/options`;
 
 export const STORES_API = `${backend_url}/stores`;
 export const STORE_API = `${backend_url}/store`;

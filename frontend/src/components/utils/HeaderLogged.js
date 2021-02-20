@@ -18,16 +18,21 @@ import {
     faHome
 } from "@fortawesome/free-solid-svg-icons";
 import {getUserType} from "../../auth";
+import {ANALYST_LABEL, CONSUMER_LABEL} from "./const";
 
 
 export class HeaderLogged extends React.Component {
     render() {
         let feature;
         const user_type = getUserType();
-        if (user_type === 'analyst') {
-            feature = <NavItem>
+        if (user_type === ANALYST_LABEL) {
+            feature = (<NavItem>
                         <NavLink href="/graph/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faArrowCircleUp} className={"small"}/>Graph</NavLink>
-                      </NavItem>
+                      </NavItem>)
+        } else if (user_type === CONSUMER_LABEL) {
+            feature = (<NavItem>
+                        <NavLink href="/add_product/" style={{color: "#fffa"}}><FontAwesomeIcon icon={faArrowCircleUp} className={"small"}/>Add product</NavLink>
+                      </NavItem>)
         }
 
         return (

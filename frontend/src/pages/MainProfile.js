@@ -8,6 +8,7 @@ import HeaderLogged from "../components/utils/HeaderLogged";
 import StaticMap from "../components/Map/StaticMap";
 import {Button} from "react-bootstrap";
 import {getCoordinatesByIP, getIP} from "../components/utils/utils";
+import {ANALYST_LABEL, CONSUMER_LABEL} from "../components/utils/const";
 
 
 class MainProfile extends React.Component {
@@ -35,13 +36,13 @@ class MainProfile extends React.Component {
 
     componentDidMount() {
         // const id = this.props.match.params.id;
-        if (this.state.user_type === 'consumer') {
+        if (this.state.user_type === CONSUMER_LABEL) {
             axios.get(`${CONSUMER_API}`, getAuthHeader()).then(
                 res => {this.setState({
                     user_profile: res.data
                 })
             });
-        } else if (this.state.user_type === 'analyst') {
+        } else if (this.state.user_type === ANALYST_LABEL) {
             axios.get(`${ANALYST_API}`, getAuthHeader()).then(
                 res => {
                     this.setState({
@@ -66,7 +67,7 @@ class MainProfile extends React.Component {
             coords = this.state.user_profile.profile.pnt.coordinates.slice();
         }
 
-        if (this.state.user_type === 'consumer') {
+        if (this.state.user_type === CONSUMER_LABEL) {
             profile_type = <ConsumerDetail consumer={this.state.user_profile} />
         } else if (this.state.user_type) {
             profile_type = <AnalystDetail analyst={this.state.user_profile} />
