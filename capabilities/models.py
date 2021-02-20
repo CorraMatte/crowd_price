@@ -9,10 +9,10 @@ import datetime
 
 
 class OrderBy(models.TextChoices):
+    TMP_DESC = '-created_time', 'created_time descending'
+    TMP_ASC = 'created_time', 'created_time ascending'
     PRC_ASC = 'price', 'price ascending'
     PRC_DESC = '-price', 'price descending'
-    TMP_ASC = 'created_time', 'created_time ascending'
-    TMP_DESC = '-created_time', 'created_time descending'
     DIST_ASC = 'distance', 'distance ascending'
     DIST_DESC = '-distance', 'distance descending'
 
@@ -50,7 +50,7 @@ class Search(models.Model):
 
 class Format(models.TextChoices):
     CSV = 'csv', 'CSV'
-    JSON = 'json', 'Json'
+    JSON = 'json', 'JSON'
     EXCEL = 'xls', 'Excel'
 
 

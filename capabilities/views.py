@@ -1,8 +1,8 @@
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-
 from capabilities.utils import *
 from rest_framework.views import APIView
-from capabilities.models import Report
+from capabilities.models import Report, OrderBy, Format
 from profiles.models import Consumer, Analyst
 from capabilities import serializers as serial
 from rest_framework.response import Response
@@ -69,8 +69,6 @@ class RetrieveNearestReportAPI(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Report.objects.all()
-
         pnt = Profile.objects.get(user__pk=self.request.user.pk).pnt
         return Report.objects.all().annotate(distance=Distance("pnt", pnt)).order_by("distance")[:10]
 
@@ -167,3 +165,26 @@ class DownloadDumpAPI(APIView):
 
         else:
             return Response({'detail': 'export type not supported'}, status.HTTP_400_BAD_REQUEST)
+
+
+class AddSearchToFavoriteAPI(APIView):
+    queryset = Search.objects.all()
+    serializer_class = serial.SearchSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        user = User.objects.get(pk=request.user.id)
+        s = Search.objects.filter(user=user).latest('created_time')
+        s.is_starred = True
+        s.save()
+        return Response({'detail': 'success'}, status.HTTP_201_CREATED)
+
+
+class GetSortingOptions(APIView):
+    def get(self, request):
+        return Response({'results': OrderBy.choices}, status.HTTP_200_OK)
+
+
+class GetDumpFormatOptions(APIView):
+    def get(self, request):
+        return Response({'results': Format.labels}, status.HTTP_200_OK)
