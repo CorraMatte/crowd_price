@@ -1,6 +1,6 @@
 import React from "react";
 import {Redirect} from "react-router-dom";
-import {doLogin, isLoggedIn, setToken} from "../auth";
+import {doLogin, isLoggedIn} from "../auth";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 import {CONSUMER_SIGNUP} from "../urls/endpoints";
@@ -34,7 +34,6 @@ class Login extends React.Component {
         axios.get('https://api.ipify.org?format=json').then(
             res => {
                 const ip = res.data.ip;
-                console.log(ip);
                 axios.get('https://www.iplocate.io/api/lookup/' + ip).then(
                     res => {
                         this.setState({
@@ -60,8 +59,6 @@ class Login extends React.Component {
             'pnt': `POINT(${this.state.longitude} ${this.state.latitude})`
         }
 
-        console.log(req)
-
         axios.post(CONSUMER_SIGNUP, req).then(
             res => {
                 if (res.status === 201) {
@@ -81,9 +78,6 @@ class Login extends React.Component {
         ).catch(
             err => {
                 let errors = 'Errors: '
-                console.log(err)
-                console.log(err.response)
-                console.log(err.response.data)
                 err.response.data.detail.map((msg_error) => errors += msg_error);
 
                 this.setState({

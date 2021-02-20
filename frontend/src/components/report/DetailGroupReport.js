@@ -1,7 +1,6 @@
 import React from "react";
 import {REPORT_URL} from "../../urls/navigation";
 import {DetailProductItem} from "../product/DetailGroupProduct";
-import Map from "../utils/Map";
 
 
 class DetailReportItem extends React.Component {
