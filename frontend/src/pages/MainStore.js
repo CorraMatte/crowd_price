@@ -6,6 +6,7 @@ import {DetailStoreItem} from "./Stores";
 import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
+import {StaticMap} from "../components/Map/StaticMap";
 
 
 class MainStore extends React.Component {
@@ -36,11 +37,17 @@ class MainStore extends React.Component {
     render () {
         const store = this.state.store;
         const reports = this.state.reports;
+        let coords = [0, 0];
+
+        if (this.state.store) {
+            coords = this.state.store.geometry.coordinates.slice();
+        }
 
         return (
             <div>
                 {isLoggedIn() ? <HeaderLogged /> : <HeaderUnLogged />}
                 <DetailStoreItem store={store} />
+                <StaticMap latitude={coords[1]} longitude={coords[0]} label={"Location :"} />
                 {reports.map((report) => <DetailReportItem report={report} key={report.id}/>)}
             </div>
         )

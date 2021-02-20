@@ -9,37 +9,38 @@ import {ACCESS_TOKEN, MAP_STYLE, MAP_ZOOM} from "../utils/const"
 export class StaticMap extends React.Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            latitude: 0,
-            longitude: 0,
-            label: '',
-            zoom: MAP_ZOOM
-        }
-    }
-
-    componentDidMount() {
-        // load correct coordinates and label from props
     }
 
     render () {
+        let props;
+        if (this.props) {
+            // City from lon lat https://docs.mapbox.com/api/search/geocoding/
+            props = {
+                latitude: this.props.latitude,
+                longitude: this.props.longitude,
+                label: `${this.props.label} lon:${this.props.longitude} lat: ${this.props.latitude}`
+            }
+        } else {
+            return (<div></div>)
+        }
+
         return (
             <ReactStaticMapGL
-                width="100vw"
-                height="100vh"
-                latitude={this.state.latitude}
-                longitude={this.state.latitude}
+                width="50vw"
+                height="50vh"
+                latitude={props.latitude}
+                longitude={props.longitude}
                 zoom={MAP_ZOOM}
                 mapStyle={MAP_STYLE}
                 mapboxApiAccessToken={ACCESS_TOKEN}
             >
                 <Popup
-                    latitude={this.state.latitude}
-                    longitude={this.state.latitude}
+                    latitude={props.latitude}
+                    longitude={props.longitude}
                     closeButton={false}
                     closeOnClick={false}
                     anchor="top" >
-                    <div>{this.state.label}</div>
+                    <div>{props.label}</div>
                 </Popup>
             </ReactStaticMapGL>
         )
