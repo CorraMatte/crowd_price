@@ -1,6 +1,6 @@
 import React from "react";
 import {Redirect} from "react-router-dom";
-import {isLoggedIn, setToken} from "../auth";
+import {doLogin, isLoggedIn, setToken} from "../auth";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 import {CONSUMER_SIGNUP} from "../urls/endpoints";
@@ -17,6 +17,8 @@ class Login extends React.Component {
             'email': '',
             'password1': '',
             'password2': '',
+            'longitude': '',
+            'latitude': '',
             'errors': ''
         }
     }
@@ -35,26 +37,41 @@ class Login extends React.Component {
                 console.log(ip);
                 axios.get('https://www.iplocate.io/api/lookup/' + ip).then(
                     res => {
-                        console.log(res.data.longitude)
-                        console.log(res.data.latitude)
+                        this.setState({
+                            'longitude': res.data.longitude,
+                            'latitude': res.data.latitude,
+                        })
                     }
                 )
             })
     }
 
-    login = (e) => {
+    componentDidMount() {
+        this.getCoordinatesByIP();
+    }
+
+    signup = (e) => {
         e.preventDefault();
 
         const req = {
             'email': this.state.email,
             'password1': this.state.password1,
             'password2': this.state.password2,
+            'pnt': `POINT(${this.state.longitude} ${this.state.latitude})`
         }
+
+        console.log(req)
 
         axios.post(CONSUMER_SIGNUP, req).then(
             res => {
-                if (res.status === 200) {
-                    setToken(res.data.key, res.data.type);
+                if (res.status === 201) {
+                    doLogin(this.state.email, this.state.password1).then(
+                        res => {
+                            this.setState({
+                                'errors': ''
+                            })
+                        }
+                    )
                 } else {
                     this.setState({
                         'errors': res.data
@@ -64,6 +81,8 @@ class Login extends React.Component {
         ).catch(
             err => {
                 let errors = 'Errors: '
+                console.log(err)
+                console.log(err.response)
                 console.log(err.response.data)
                 err.response.data.detail.map((msg_error) => errors += msg_error);
 
@@ -76,9 +95,6 @@ class Login extends React.Component {
     }
 
     render() {
-
-        this.getCoordinatesByIP();
-
         if (isLoggedIn()) {
             return <Redirect to="/" />
         }
@@ -87,7 +103,7 @@ class Login extends React.Component {
             <div>
                 <HeaderUnLogged />
                 {this.state.errors}
-                <Form onSubmit={this.login}>
+                <Form onSubmit={this.signup}>
 
                     <Form.Control
                         type="email"

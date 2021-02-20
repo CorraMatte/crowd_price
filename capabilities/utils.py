@@ -12,6 +12,8 @@ from products.models import Product, Store
 from profiles.models import Consumer
 
 
+# https://docs.djangoproject.com/en/3.1/ref/contrib/postgres/search/#trigramsimilarity
+# https://docs.djangoproject.com/en/3.1/ref/contrib/postgres/search/#the-search-lookup
 def get_reports_by_search(search_pk):
     search = Search.objects.get(pk=search_pk)
     if not search:
