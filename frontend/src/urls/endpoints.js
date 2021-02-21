@@ -30,5 +30,15 @@ export const STORE_API = `${backend_url}/store`;
 export const PRODUCT_API = `${backend_url}/product`;
 export const CONSUMER_API = `${backend_url}/consumer/detail`;
 export const ANALYST_API = `${backend_url}/analyst/detail`;
-export const CONSUMER_SIGNUP = `${backend_url}/consumer/signup`;
+export const CONSUMER_SIGNUP_API = `${backend_url}/consumer/signup`;
 export const USER_LOGIN_API = `${backend_url}/user/login`;
+
+export const GRAPH_REPORT_USER_MOST_ACTIVE_API = `${backend_url}/graph/report/user/most_active`;
+export const GRAPH_REPORT_PRODUCT_TOP_API = `${backend_url}/graph/report/product/top`;
+export const GRAPH_REPORT_CATEGORY_TOP_API = `${backend_url}/graph/report/category/top`;
+export const GRAPH_REPORT_STORE_TOP_API = `${backend_url}/graph/report/store/top`;
+export const GRAPH_SEARCH_PRODUCT_TOP_API = `${backend_url}/graph/search/product/top`;
+export const GRAPH_SEARCH_CATEGORY_TOP_API = `${backend_url}/graph/search/category/top`;
+
+export const GRAPH_REPORT_PRODUCT_TOP_PRICE_AVG_API = `${backend_url}/graph/report/product/top/price/avg`;
+export const GRAPH_REPORT_PRODUCT_TOP_PRICE_TREND_API = `${backend_url}/graph/report/product/top/price/trend`;

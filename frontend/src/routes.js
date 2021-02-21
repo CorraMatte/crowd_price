@@ -12,7 +12,6 @@ import MainSearch from "./pages/MainSearch";
 import LoginRequiredRoute from './custom_routes/LoginRequiredRoute'
 import Signup from "./pages/Signup";
 import Logout from "./pages/Logout";
-import MainAddProduct from "./pages/MainAddProduct";
 import MainGraphs from "./pages/MainGraphs";
 
 

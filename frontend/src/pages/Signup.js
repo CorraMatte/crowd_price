@@ -3,7 +3,7 @@ import {Redirect} from "react-router-dom";
 import {doLogin, isLoggedIn} from "../auth";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
-import {CONSUMER_SIGNUP} from "../urls/endpoints";
+import {CONSUMER_SIGNUP_API} from "../urls/endpoints";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 import {getCoordinatesByIP, getIP} from "../components/utils/utils";
 
@@ -56,7 +56,7 @@ class Login extends React.Component {
             'pnt': `POINT(${this.state.longitude} ${this.state.latitude})`
         }
 
-        axios.post(CONSUMER_SIGNUP, req).then(
+        axios.post(CONSUMER_SIGNUP_API, req).then(
             res => {
                 if (res.status === 201) {
                     doLogin(this.state.email, this.state.password1).then(

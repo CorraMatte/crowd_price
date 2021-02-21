@@ -96,7 +96,7 @@ class MainSearch extends React.Component {
             }
         )
     }
-    
+
     downloadDump = (e) => {
         console.log(this.state);
         e.preventDefault();
