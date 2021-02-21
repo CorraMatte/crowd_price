@@ -13,6 +13,8 @@ import datetime
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from corsheaders.defaults import default_headers
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -36,8 +38,15 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
 )
 
-# Application definition
+CORS_ALLOW_HEADERS = default_headers + (
+    "Content-Disposition",
+)
 
+CORS_EXPOSE_HEADERS = (
+    'Content-Disposition',
+)
+
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -53,6 +62,7 @@ INSTALLED_APPS = [
     'products',
     'profiles',
     'capabilities',
+    'graph',
 
     # Installed from Django
     'django.contrib.gis',
