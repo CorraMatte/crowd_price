@@ -55,7 +55,7 @@ class RetrieveCategoriesAPI(APIView):
 class CreateProductAPI(APIView):
     queryset = Product.objects.all()
     serializer_class = serial.ProductSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
         serial_prod = serial.ProductSerializer(data=request.data)

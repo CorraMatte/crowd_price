@@ -139,7 +139,7 @@ class RetrieveStarredSearchAPI(generics.ListAPIView):
 
 
 class DownloadDumpAPI(APIView):
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     # Check if the user is an analyst
     def post(self, request):
