@@ -139,18 +139,22 @@ class RetrieveStarredSearchAPI(generics.ListAPIView):
 
 
 class DownloadDumpAPI(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
     # Check if the user is an analyst
     def post(self, request):
-        analyst = Analyst.objects.filter(profile__user=request.user)
-        if not analyst:
-            Response({'detail': 'user not allowed'}, status.HTTP_403_FORBIDDEN)
+        try:
+            analyst = Analyst.objects.get(profile__user=request.user.pk)
+
+        except ObjectDoesNotExist:
+            return Response({'detail': 'user not allowed'}, status.HTTP_403_FORBIDDEN)
 
         serial_dump = serial.DumpSerializer(data=request.data)
         if not serial_dump.is_valid():
             return Response(serial_dump.errors, status.HTTP_400_BAD_REQUEST)
 
+        s = Search.objects.filter(profile__user=analyst.profile.user.id).latest('created_time')
+        serial_dump.validated_data['search'] = s
         dump = serial_dump.save()
         filename = f"report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.{dump.export_format}"
 
@@ -186,5 +190,7 @@ class GetSortingOptions(APIView):
 
 
 class GetDumpFormatOptions(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
     def get(self, request):
-        return Response({'results': Format.labels}, status.HTTP_200_OK)
+        return Response({'results': Format.choices}, status.HTTP_200_OK)

@@ -4,7 +4,7 @@ from copy import copy
 from decimal import Decimal
 from django.contrib.gis.measure import Distance
 from django.contrib.postgres.search import TrigramSimilarity
-from django.http.response import HttpResponse
+from django.http import HttpResponse
 from excel_response import ExcelResponse
 from capabilities import serializers as serial
 from capabilities.models import Search, Report

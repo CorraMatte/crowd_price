@@ -11,10 +11,11 @@ import {Button, Form} from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import {ANALYST_LABEL, MAX_DISTANCE, MAX_PRICE, MIN_PRICE} from "../components/utils/const"
 import {DetailGroupReport} from "../components/report/DetailGroupReport";
-import {getUserType, isLoggedIn} from "../auth";
+import {getAuthHeader, getUserType, isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 import DynMap from "../components/Map/DynMap";
+import { saveAs } from 'file-saver'
 
 
 class MainSearch extends React.Component {
@@ -50,13 +51,12 @@ class MainSearch extends React.Component {
             })
         });
         axios.get(SEARCH_SORT_OPTIONS_API).then(res => {
-            console.log(res.data.results)
             this.setState({
                 'sorting_options': res.data.results
             });
         });
         if (getUserType() === ANALYST_LABEL) {
-            axios.get(DUMP_FORMAT_OPTIONS_API).then(res => {
+            axios.get(DUMP_FORMAT_OPTIONS_API, getAuthHeader()).then(res => {
                 this.setState({
                     'dump_format_options': res.data.results
                 });
@@ -76,7 +76,7 @@ class MainSearch extends React.Component {
             'ordering_by': this.state.ordering_by
         }
 
-        axios.post(REPORTS_SEARCH_API, req).then(
+        axios.post(REPORTS_SEARCH_API, req, getAuthHeader()).then(
             res => {
                 this.setState({
                     'reports': res.data.features,
@@ -96,13 +96,23 @@ class MainSearch extends React.Component {
             }
         )
     }
-
-    downloadDump = () => {
-        axios.get(REPORTS_DUMP_API);
+    
+    downloadDump = (e) => {
+        console.log(this.state);
+        e.preventDefault();
+        const req = {"export_format": this.state.export_format}
+        axios.post(REPORTS_DUMP_API, req, {
+            headers: { Authorization: `Token ${isLoggedIn()}` },
+            responseType: 'blob'
+        }).then(response => {
+            let [ , filename] = response.headers['content-disposition'].split('filename=');
+            filename = filename.replaceAll('"', '');
+            saveAs(response.data, filename);
+        })
     }
 
     addToFavorite = () => {
-        axios.post(SEARCH_ADD_FAVORITE_API).then(
+        axios.post(SEARCH_ADD_FAVORITE_API, getAuthHeader()).then(
             res => {
                 this.setState({
                     'errors': ''
@@ -145,17 +155,15 @@ class MainSearch extends React.Component {
         if (getUserType() === ANALYST_LABEL) {
             dump_menu = (
                 <Form onSubmit={this.downloadDump}>
-                    <Form.Control as="select" name="export_format">
-                        {this.state.dump_format_options.map((opt) => <option value={opt[0]}>{opt[1]}</option>)}
+                    <Form.Control as="select" name="export_format" onChange={this.fieldChangeHandler}>
+                        {this.state.dump_format_options.map((opt) => <option value={opt[0]}
+                                                                             key={opt[0]}>{opt[1]}</option>)}
                     </Form.Control>
-                    <Button id={"submitDump"} color={"primary"} type="submit">search</Button>
+                    <Button id={"submitDump"} color={"primary"} type="submit">download</Button>
                 </Form>
 
             )
         }
-
-
-        console.log(this.state)
 
         if (!this.state.errors) {
             if (!this.state.has_search) {
@@ -214,7 +222,7 @@ class MainSearch extends React.Component {
                     <DatePicker selected={this.state.after_date} onChange={this.dateChangeHandler}/>
 
                     <Form.Control as="select" onChange={this.fieldChangeHandler} name={'ordering_by'}>
-                        {this.state.sorting_options.map((opt) => <option value={opt[0]}>{opt[1]}</option>)}
+                        {this.state.sorting_options.map((opt) => <option value={opt[0]} key={opt[0]}>{opt[1]}</option>)}
                     </Form.Control>
 
                     <Button id={"submit"} color={"primary"} type="submit">search</Button>
