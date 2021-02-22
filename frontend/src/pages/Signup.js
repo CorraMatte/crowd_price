@@ -8,12 +8,9 @@ import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 import {getCoordinatesByIP, getIP} from "../components/utils/utils";
 
 
-class Login extends React.Component {
+class Signup extends React.Component {
     constructor(props) {
         super(props);
-        let past_date = new Date()
-        past_date.setDate(past_date.getDate() - 30)
-
         this.state = {
             'email': '',
             'password1': '',
@@ -133,4 +130,4 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+export default Signup;

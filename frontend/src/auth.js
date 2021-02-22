@@ -7,9 +7,6 @@ import {USER_LOGIN_API} from "./urls/endpoints";
 export const setToken = (token, type) => {
     sessionStorage.setItem("token", token);
     localStorage.setItem("type", type);
-    console.log(token)
-    console.log(type)
-    console.log(sessionStorage.getItem("token"));
     return sessionStorage.getItem("token") !== null
 }
 
@@ -40,7 +37,6 @@ export const getUserType = () => {
 
 // Delete the token from the sessionStorage
 export const logOut = () => {
-    console.log("LOGGING OUT!")
     sessionStorage.removeItem("token");
     localStorage.removeItem("user");
 }

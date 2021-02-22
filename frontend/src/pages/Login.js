@@ -10,9 +10,6 @@ import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 class Login extends React.Component {
     constructor(props) {
         super(props);
-        let past_date = new Date()
-        past_date.setDate(past_date.getDate() - 30)
-
         this.state = {
             'email': '',
             'password': '',
