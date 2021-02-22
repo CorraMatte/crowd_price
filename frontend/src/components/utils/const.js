@@ -15,4 +15,19 @@ export const SRID = 4326;
 
 // Access Token for MAP-GL
 export const MAP_STYLE = "mapbox://styles/mapbox/streets-v11";
-export const MAP_ZOOM = 15;
+export const MAP_STATIC_ZOOM = 12;
+export const MAP_DYN_ZOOM = 8;
+
+// Labels for user types
+export const ANALYST_LABEL = 'analyst'
+export const CONSUMER_LABEL = 'consumer'
+
+// GRAPH TITLES
+export const GRAPH_REPORT_USER_MOST_ACTIVE_TITLE = 'Users with most reports';
+export const GRAPH_REPORT_PRODUCT_TOP_TITLE = 'Product with most reports';
+export const GRAPH_REPORT_CATEGORY_TOP_TITLE = 'Category with most reports';
+
+export const GRAPH_REPORT_STORE_TOP_TITLE = 'Store with most reports';
+export const GRAPH_SEARCH_CATEGORY_TOP_TITLE = 'Category most searched by the user';
+export const GRAPH_SEARCH_PRODUCT_TOP_TITLE = 'Product most searched by the user';
+export const GRAPH_REPORT_PRODUCT_TOP_PRICE_AVG_TITLE = 'Average price of most reported products';

@@ -5,7 +5,7 @@ import {DetailReportItem} from "../components/report/DetailGroupReport";
 import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
-import {StaticMap} from "../components/Map/StaticMap";
+import {StaticMap} from "../components/map/StaticMap";
 
 
 class MainReport extends React.Component {

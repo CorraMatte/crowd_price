@@ -14,7 +14,7 @@ import {DetailGroupReport} from "../components/report/DetailGroupReport";
 import {getAuthHeader, getUserType, isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
-import DynMap from "../components/Map/DynMap";
+import DynMap from "../components/map/DynMap";
 import { saveAs } from 'file-saver'
 
 

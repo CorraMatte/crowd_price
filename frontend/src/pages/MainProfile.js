@@ -5,7 +5,7 @@ import {AnalystDetail, ConsumerDetail} from "../components/profile/RolesDetail";
 import {DetailGroupReport} from "../components/report/DetailGroupReport";
 import {getUserType, getAuthHeader} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
-import StaticMap from "../components/Map/StaticMap";
+import StaticMap from "../components/map/StaticMap";
 import {Button} from "react-bootstrap";
 import {getCoordinatesByIP, getIP} from "../components/utils/utils";
 import {ANALYST_LABEL, CONSUMER_LABEL} from "../components/utils/const";

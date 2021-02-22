@@ -1,39 +1,17 @@
 import React from "react";
-import {Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis} from "recharts";
+import {Bar, Label, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis} from "recharts";
 
 
-export class GraphItem extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: ''
-        }
-    }
-
-
-    componentDidMount() {
-        /*        let data = {...this.props.data};
-
-        if (!data.data) {
-            return <div></div>
-        }
-
-        data.dataset = [];
-        data.data.forEach(
-            entry => {
-                data.dataset.push({label: entry[0], value: entry[1]});
-            }
-        )
-*/
-
-    }
+export class BarChartItem extends React.Component {
 
     render() {
         return (
             <div>
-                <BarChart width={500} height={500} data={this.state.data.dataset}>
+                <BarChart width={500} height={500} data={this.props.data}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
+                    <XAxis dataKey="name">
+                        <Label value={this.props.title} position={"bottom"} />
+                    </XAxis>
                     <YAxis />
                     <Tooltip />
                     <Legend />
@@ -44,4 +22,4 @@ export class GraphItem extends React.Component {
     }
 }
 
-export default GraphItem
+export default BarChartItem

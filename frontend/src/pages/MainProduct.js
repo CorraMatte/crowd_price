@@ -6,7 +6,7 @@ import {PRODUCT_API, REPORTS_PRODUCT_API} from "../urls/endpoints";
 import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
-import DynMap from "../components/Map/DynMap";
+import DynMap from "../components/map/DynMap";
 
 class MainProduct extends React.Component {
     constructor(props) {
