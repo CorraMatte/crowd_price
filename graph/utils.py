@@ -19,6 +19,6 @@ def get_serial_response_by_name(res):
     serial_res = []
 
     for r in res:
-        serial_res.append([r.name, r.count])
+        serial_res.append({"name": r.name, "value": r.count})
 
     return Response({'results': serial_res}, status.HTTP_200_OK)

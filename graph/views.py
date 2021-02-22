@@ -17,7 +17,7 @@ class GetMostActiveConsumers(APIView):
         serial_res = []
 
         for r in res:
-            serial_res.append([r.profile.user.email, r.count])
+            serial_res.append({"name": r.profile.user.email, "value": r.count})
 
         return Response({'results': serial_res}, status.HTTP_200_OK)
 
@@ -58,7 +58,7 @@ class GetMostSearchedProducts(APIView):
         serial_res = []
 
         for r in res:
-            serial_res.append([r['product_query'], r['count']])
+            serial_res.append({"name": r['product_query'], "value": r['count']})
 
         return Response({'results': serial_res}, status.HTTP_200_OK)
 
@@ -81,7 +81,7 @@ class GetAvgMostRatedProductPrices(APIView):
         serial_res = []
 
         for r in res:
-            serial_res.append([r.name, r.avg])
+            serial_res.append({"name": r.name, "value": r.avg})
 
         return Response({'results': serial_res}, status.HTTP_200_OK)
 
