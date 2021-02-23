@@ -50,7 +50,7 @@ class MainProfile extends React.Component {
 
         // GET COORDINATES FROM BROWSER OR IP
         if (this.state.user_profile) {
-            coords = this.state.user_profile.profile.pnt.coordinates.slice();
+            // coords = this.state.user_profile.profile.pnt.coordinates.slice();
         }
 
         if (this.state.user_type === CONSUMER_LABEL) {

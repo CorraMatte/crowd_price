@@ -1,12 +1,9 @@
 import React from "react";
-
 import axios from "react-native-axios";
 import {Text, TextInput, Alert, View, StyleSheet} from "react-native";
 import {Button} from "react-native-elements";
 import {CONSUMER_SIGNUP_API} from "../urls/endpoints";
-import {getCoordinatesByIP, getIP} from "../utils/utils";
-import {SIGNUP_BUTTON, SIGNUP_MESSAGE_STR} from "../utils/strings";
-import Geolocation from 'react-native-geolocation-service';
+import {SIGNUP_BUTTON, SIGNUP_MESSAGE_STR, SIGNUP_TO_LOGIN_STR} from "../utils/strings";
 
 
 const styles = StyleSheet.create({
@@ -58,14 +55,10 @@ export class Signup extends React.Component {
 
     signup = (e) => {
         e.preventDefault();
-        // Read longitude and latitude from GEO
-
-
         const req = {
             'email': this.state.email,
             'password1': this.state.password1,
-            'password2': this.state.password2,
-            'pnt': `POINT(${this.state.longitude} ${this.state.latitude})`
+            'password2': this.state.password2
         }
 
         axios.post(CONSUMER_SIGNUP_API, req).then(
@@ -88,7 +81,6 @@ export class Signup extends React.Component {
                 })
             }
         )
-
     }
 
     render() {
@@ -97,7 +89,7 @@ export class Signup extends React.Component {
                 <Text style={styles.inputext}>{SIGNUP_MESSAGE_STR}</Text>
                 <TextInput
                     value={this.state.email}
-                    onChangeText={this.fieldChangeHandler}
+                    onChangeText={(text) => {this.setState({email: text})}}
                     keyboardType="email-address"
                     autoCompleteType="email"
                     label="Email"
@@ -106,7 +98,7 @@ export class Signup extends React.Component {
                 />
                 <TextInput
                     value={this.state.password1}
-                    onChangeText={this.fieldChangeHandler}
+                    onChangeText={(text) => {this.setState({password1: text})}}
                     label="Password"
                     placeholder="Password"
                     secureTextEntry={true}
@@ -114,7 +106,7 @@ export class Signup extends React.Component {
                 />
                 <TextInput
                     value={this.state.password2}
-                    onChangeText={this.fieldChangeHandler}
+                    onChangeText={(text) => {this.setState({password2: text})}}
                     label="ConfirmPassword"
                     placeholder="Confirm password"
                     secureTextEntry={true}
@@ -123,7 +115,7 @@ export class Signup extends React.Component {
                 <Text
                     onPress={() => this.props.navigation.navigate("Login")}
                     style={{fontWeight: "bold", color: "#50A5D0", margin: 10}}
-                >Already have an account? Log in! </Text>
+                >{SIGNUP_TO_LOGIN_STR}</Text>
                 <Button
                     title={SIGNUP_BUTTON}
                     style={styles.input}

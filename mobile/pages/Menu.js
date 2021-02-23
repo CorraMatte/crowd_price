@@ -11,9 +11,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: "#E5EAF5"
     },
-    inputext: {
-
-    }
 });
 
 export class Menu extends React.Component {
@@ -25,15 +22,19 @@ export class Menu extends React.Component {
                 <Button
                     title={SEARCH_BUTTON}
                     style={styles.input}
-                    onPress={this.props.navigation.navigate("Search")}
+                    onPress={() => {
+                        this.props.navigation.navigate("Search")
+                    }}
                 />
                 <Button
                     title={UPLOAD_BUTTON}
                     style={styles.input}
-                    onPress={this.props.navigation.navigate("Upload")}
+                    onPress={() => {
+                        this.props.navigation.navigate("Upload")
+                    }}
                 />
             </View>
-        );
+        )
     }
 }
 

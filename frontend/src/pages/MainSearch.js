@@ -25,22 +25,22 @@ class MainSearch extends React.Component {
         past_date.setDate(past_date.getDate() - 30)
 
         this.state = {
-            'price_min': 0.01,
-            'price_max': 999999.99,
-            'product_query': '',
-            'categories': [],
-            'distance': 100,
-            'after_date': past_date,
-            'ordering_by': '-created_time',
-            'reports': [],
+            price_min: MIN_PRICE,
+            price_max: MAX_PRICE,
+            product_query: '',
+            categories: [],
+            distance: 100,
+            after_date: past_date,
+            ordering_by: '-created_time',
+            reports: [],
 
-            'export_format': 'csv',
+            export_format: 'csv',
 
-            'all_categories': [],
-            'sorting_options': [],
-            'dump_format_options': [],
-            'has_search': false,
-            'errors': ''
+            all_categories: [],
+            sorting_options: [],
+            dump_format_options: [],
+            has_results: false,
+            errors: ''
         }
     }
 
@@ -67,21 +67,21 @@ class MainSearch extends React.Component {
     send_search = (e) => {
         e.preventDefault();
         const req = {
-            "price_min": this.state.price_min,
-            "price_max": this.state.price_max,
-            "categories": this.state.categories,
-            "product_query": this.state.product_query,
-            "distance": this.state.distance,
-            "after_date": this.state.after_date,
-            'ordering_by': this.state.ordering_by
+            price_min: this.state.price_min,
+            price_max: this.state.price_max,
+            categories: this.state.categories,
+            product_query: this.state.product_query,
+            distance: this.state.distance,
+            after_date: this.state.after_date,
+            ordering_by: this.state.ordering_by
         }
 
         axios.post(REPORTS_SEARCH_API, req, getAuthHeader()).then(
             res => {
                 this.setState({
-                    'reports': res.data.features,
-                    'has_search': true,
-                    'errors': ''
+                    reports: res.data.features,
+                    has_search: true,
+                    errors: ''
                 })
             }).catch(
             err => {
@@ -115,7 +115,7 @@ class MainSearch extends React.Component {
         axios.post(SEARCH_ADD_FAVORITE_API, getAuthHeader()).then(
             res => {
                 this.setState({
-                    'errors': ''
+                    errors: ''
                 })
             }
         )

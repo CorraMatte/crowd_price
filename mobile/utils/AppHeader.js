@@ -9,11 +9,13 @@ export class AppHeader extends React.Component {
     render () {
         return (
             <Header
-                leftComponent={ this.props.addHandle ?
+                leftComponent={ this.props.leftOption ?
                     <Icon
-                        name="add"
+                        name="home"
                         color='#FFF'
-                        onPress={ this.props.addHandle }
+                        onPress={() => {
+                            this.props.navigation.navigate(this.props.leftOption)
+                        }}
                         underlayColor={ "#64B5F6" }
                     /> :
                     <div></div>
