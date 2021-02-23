@@ -16,7 +16,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     picture = models.ImageField(upload_to='img/profile/%Y', default="img/blank_profile.png")
     subscribe_date = models.DateTimeField(validators=[NotFuture], auto_now_add=True)
-    pnt = models.PointField(srid=SRID)
+    # pnt = models.PointField(srid=SRID)
 
     def __str__(self):
         return self.user.email

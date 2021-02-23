@@ -41,6 +41,11 @@ class Signup extends React.Component {
                 )
             }
         )
+        // navigator.geolocation.getCurrentPosition(function(position) {
+        //       console.log("Latitude is :", position.coords.latitude);
+        //       console.log("Longitude is :", position.coords.longitude);
+        //     });
+
     }
 
     signup = (e) => {
@@ -49,8 +54,7 @@ class Signup extends React.Component {
         const req = {
             'email': this.state.email,
             'password1': this.state.password1,
-            'password2': this.state.password2,
-            'pnt': `POINT(${this.state.longitude} ${this.state.latitude})`
+            'password2': this.state.password2
         }
 
         axios.post(CONSUMER_SIGNUP_API, req).then(

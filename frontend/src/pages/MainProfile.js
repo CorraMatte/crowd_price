@@ -6,8 +6,6 @@ import {DetailGroupReport} from "../components/report/DetailGroupReport";
 import {getUserType, getAuthHeader} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import StaticMap from "../components/map/StaticMap";
-import {Button} from "react-bootstrap";
-import {getCoordinatesByIP, getIP} from "../components/utils/utils";
 import {ANALYST_LABEL, CONSUMER_LABEL} from "../components/utils/const";
 
 
@@ -19,19 +17,6 @@ class MainProfile extends React.Component {
             'user_type': getUserType(),
             'reports': []
         }
-    }
-
-    updateProfileLocation () {
-        getIP().then(
-            res => {
-                getCoordinatesByIP(res.data.ip).then(
-                    res => {
-                        console.log('update location profile')
-                        // console.log(res)
-                    }
-                )
-            }
-        )
     }
 
     componentDidMount() {
@@ -63,6 +48,7 @@ class MainProfile extends React.Component {
         let profile_type;
         let coords = [0, 0];
 
+        // GET COORDINATES FROM BROWSER OR IP
         if (this.state.user_profile) {
             coords = this.state.user_profile.profile.pnt.coordinates.slice();
         }
@@ -79,7 +65,6 @@ class MainProfile extends React.Component {
                 {profile_type}
                 <StaticMap latitude={coords[1]} longitude={coords[0]} label={"Your location"} />
                 <DetailGroupReport reports={this.state.reports} />
-                <Button id={"submit"} color={"primary"} onClick={this.updateProfileLocation}>update my location</Button>
             </div>
         )
     }
