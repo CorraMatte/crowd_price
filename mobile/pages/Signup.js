@@ -40,8 +40,7 @@ export class Signup extends React.Component {
             'password1': '',
             'password2': '',
             'longitude': '',
-            'latitude': '',
-            'errors': ''
+            'latitude': ''
         }
     }
 
@@ -65,8 +64,10 @@ export class Signup extends React.Component {
             res => {
                 if (res.status === 201) {
                     Alert.alert("Account created!\n\nNow you can log in...");
+                    console.log("Account created!\n\nNow you can log in...")
                     this.props.navigation.navigate("Login");
                 } else {
+                    Alert.alert(res.data);
                     this.setState({
                         'errors': res.data
                     })
@@ -76,9 +77,7 @@ export class Signup extends React.Component {
             err => {
                 let errors = 'Errors: '
                 err.response.data.detail.map((msg_error) => errors += msg_error);
-                this.setState({
-                    'errors': errors
-                })
+                Alert.alert(errors);
             }
         )
     }

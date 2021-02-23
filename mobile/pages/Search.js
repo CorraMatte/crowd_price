@@ -1,11 +1,15 @@
 import React from "react";
-import {StyleSheet, Text, TextInput, View} from "react-native";
-import {SEARCH_BUTTON, SEARCH_MESSAGE_STR, SIGNUP_BUTTON, SIGNUP_MESSAGE_STR} from "../utils/strings";
+import axios from "react-native-axios";
+import {Alert, StyleSheet, Text, TextInput, View} from "react-native";
+import {SEARCH_BUTTON, SEARCH_MESSAGE_STR} from "../utils/strings";
 import {Button} from "react-native-elements";
-import {MAX_PRICE, MIN_PRICE} from "../utils/utils";
+import {getCoordinatesByIP, getIP, MAX_PRICE, MIN_PRICE} from "../utils/utils";
 import {REPORTS_SEARCH_API} from "../urls/endpoints";
-import {getAuthHeader} from "../utils/auth";
+import {getAuthHeader, getToken} from "../utils/auth";
 import AppHeader from "../utils/AppHeader";
+import Geolocation from 'react-native-geolocation-service';
+
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -42,57 +46,85 @@ export class Search extends React.Component {
             categories: [],
             distance: 100,
             ordering_by: '-created_time',
-            reports: [],
+            pnt: 'POINT(0 0)',
 
             all_categories: [],
-            sorting_options: [],
-            has_search: false,
-            errors: ''
+            sorting_options: []
         }
     }
 
+    componentDidMount() {
+        Geolocation.getCurrentPosition(
+            (position) => {
+                console.log(`POINT(${position.coords.longitude} ${position.coords.latitude})`);
+                this.setState({
+                    'pnt': `POINT(${position.coords.longitude} ${position.coords.latitude})`
+                })
+            },
+            (error) => {
+                // See error code charts below.
+                console.log(error.code, error.message);
+                Alert.alert("Activate geo localization for a better service");
+                getIP().then(
+                    res => {
+                        getCoordinatesByIP(res.data.ip).then(
+                            res => {
+                                this.setState({
+                                    longitude: res.data.longitude,
+                                    latitude: res.data.latitude,
+                                })
+                            }
+                        )
+                    }
+                )
+            },
+            { enableHighAccuracy: true, timeout: 5000 }
+        );
+    }
+
+
     send_search = (e) => {
         e.preventDefault();
+
         const req = {
             price_min: this.state.price_min,
             price_max: this.state.price_max,
             categories: this.state.categories,
             product_query: this.state.product_query,
             distance: this.state.distance,
-            ordering_by: this.state.ordering_by
+            ordering_by: this.state.ordering_by,
+            pnt: this.state.pnt
         }
 
-        axios.post(REPORTS_SEARCH_API, req, getAuthHeader()).then(
-            res => {
-                this.setState({
-                    reports: res.data.features,
-                    has_search: true,
-                    errors: ''
-                })
-            }).catch(
-            err => {
-                let errors = []
-                for (const [field, error_message] of Object.entries(err.response.data)) {
-                    errors.push(`Error in field "${field}": ${error_message}`)
-                }
+        getToken().then(
+            token => {
+                axios.post(REPORTS_SEARCH_API, req, getAuthHeader(token)).then(
+                    res => {
+                        console.log(res.data.features)
+                        this.props.navigation.navigate("SearchResults", {results: res.data.features});
+                    }).catch(
+                    err => {
+                        let errors = []
+                        for (const [field, error_message] of Object.entries(err.response.data)) {
+                            errors.push(`Error in field "${field}": ${error_message}`)
+                        }
 
-                this.setState({
-                    'errors': errors
-                })
+                        Alert.alert(errors);
+                    })
             }
         )
     }
 
     render() {
-        const results = "";
-
         return (
             <View style={styles.container}>
                 <AppHeader title={"Search"} navigation={this.props.navigation} leftOption={"Menu"}/>
                 <Text style={styles.inputext}>{SEARCH_MESSAGE_STR}</Text>
                 <TextInput
                     value={this.state.product_query}
-                    onChangeText={(text => {this.setState({product_query: text})})}
+                    onChangeText={(text => {
+                        this.setState({product_query: text})
+                    })}
                     keyboardType="email-address"
                     autoCompleteType="email"
                     label="Email"
@@ -102,7 +134,9 @@ export class Search extends React.Component {
 
                 <TextInput
                     value={this.state.price_min}
-                    onChangeText={(text => {this.setState({price_min: text})})}
+                    onChangeText={(text => {
+                        this.setState({price_min: text})
+                    })}
                     keyboardType="number-pad"
                     label="minimum price"
                     placeholder="0"
@@ -111,7 +145,9 @@ export class Search extends React.Component {
 
                 <TextInput
                     value={this.state.price_max}
-                    onChangeText={(text => {this.setState({price_max: text})})}
+                    onChangeText={(text => {
+                        this.setState({price_max: text})
+                    })}
                     keyboardType="number-pad"
                     label="maximum price"
                     placeholder="0"
@@ -120,7 +156,9 @@ export class Search extends React.Component {
 
                 <TextInput
                     value={this.state.distance}
-                    onChangeText={(text => {this.setState({distance: text})})}
+                    onChangeText={(text => {
+                        this.setState({distance: text})
+                    })}
                     keyboardType="number-pad"
                     label="distance"
                     placeholder="100"
@@ -135,7 +173,7 @@ export class Search extends React.Component {
                 <Button
                     title={SEARCH_BUTTON}
                     style={styles.input}
-                    onPress={this.search}
+                    onPress={this.send_search}
                 />
 
             </View>

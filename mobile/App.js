@@ -8,6 +8,7 @@ import { Signup } from "./pages/Signup";
 import { Menu } from "./pages/Menu";
 import { Search } from "./pages/Search";
 import { Upload } from "./pages/Upload";
+import { SearchResults } from "./pages/SearchResults";
 
 
 const Stack = createStackNavigator();
@@ -22,6 +23,7 @@ export default function App() {
             <Stack.Screen name="Menu" component={ Menu } options={ { headerShown: false } } />
             <Stack.Screen name="Search" component={ Search } options={ { headerShown: false } } />
             <Stack.Screen name="Upload" component={ Upload } options={ { headerShown: false } } />
+            <Stack.Screen name="SearchResults" component={ SearchResults } options={ { headerShown: false } } />
         </Stack.Navigator>
       </NavigationContainer>
   );
