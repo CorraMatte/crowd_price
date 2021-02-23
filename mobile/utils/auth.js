@@ -15,6 +15,6 @@ export const logOut = () => {
 }
 
 // Create header for request
-export const getAuthHeader = () => {
-    return { headers: { Authorization: "Token " + getToken() }};
+export const getAuthHeader = (token) => {
+    return { headers: { Authorization: "Token " + token }};
 }

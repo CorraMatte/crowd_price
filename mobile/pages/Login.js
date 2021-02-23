@@ -36,8 +36,7 @@ export class Login extends React.Component {
         super(props);
         this.state = {
             'email': '',
-            'password': '',
-            'errors': ''
+            'password': ''
         }
     }
 
@@ -63,7 +62,8 @@ export class Login extends React.Component {
         getToken().then(
             res => {
                 if (res !== null) {
-                    this.props.navigation.navigate("Menu");
+                    // this.props.navigation.navigate("Menu");
+                    this.props.navigation.navigate("Search");
                 }
             }
         )

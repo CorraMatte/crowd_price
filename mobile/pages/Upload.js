@@ -36,8 +36,7 @@ export class Upload extends React.Component {
             price: 0,
             product_name: '',
             categories: [],
-            all_categories: [],
-            errors: ''
+            all_categories: []
         }
     }
 
