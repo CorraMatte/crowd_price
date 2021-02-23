@@ -13,7 +13,6 @@ def create_profile(request):
     data = request.data
     email = data.get('email')
     password1, password2 = data.get('password1'), data.get('password2')
-    pnt = data.get('pnt')
     if not email:
         return Response({"detail": ["email field is empty"]}, status.HTTP_400_BAD_REQUEST)
 
@@ -37,8 +36,7 @@ def create_profile(request):
 
     # Check for location during the registration
     profile = serial.ProfileSerializer(data={
-        'user': user.pk,
-        'pnt': pnt
+        'user': user.pk
     })
 
     if not profile.is_valid():

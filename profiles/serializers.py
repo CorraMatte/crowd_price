@@ -9,18 +9,17 @@ class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['id', 'name']
 
 
-class ProfileSerializer(geo_serializers.GeoFeatureModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        geo_field = 'pnt'
-        fields = ['id', 'user', 'picture', 'subscribe_date', 'pnt']
+        fields = ['id', 'user', 'picture', 'subscribe_date']
 
 
 class ConsumerSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 2
         model = Consumer
-        fields = ['id', 'profile', 'experience'] # , 'birth']
+        fields = ['id', 'profile', 'experience']
 
 
 class AnalystSerializer(serializers.ModelSerializer):
