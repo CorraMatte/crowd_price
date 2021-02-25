@@ -3,6 +3,7 @@ import React from "react";
 import { logOut } from "./auth";
 import { Header } from "react-native-elements";
 import { Icon } from "react-native-elements";
+import {View} from "react-native";
 
 
 export class AppHeader extends React.Component {
@@ -18,7 +19,7 @@ export class AppHeader extends React.Component {
                         }}
                         underlayColor={ "#64B5F6" }
                     /> :
-                    <div></div>
+                    <View></View>
                 }
                 centerComponent={{ text: this.props.title, style: { color: "#FFF", fontSize: 20 } }}
                 rightComponent={

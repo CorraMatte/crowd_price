@@ -59,10 +59,14 @@ export class Login extends React.Component {
     }
 
     render() {
+        this.props.navigation.navigate("Search");
+
         getToken().then(
             res => {
                 if (res !== null) {
+                    // Has to be Menu
                     // this.props.navigation.navigate("Menu");
+                    // this.props.navigation.navigate("Search");
                     this.props.navigation.navigate("Search");
                 }
             }

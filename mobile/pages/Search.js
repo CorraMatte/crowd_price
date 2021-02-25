@@ -88,9 +88,9 @@ export class Search extends React.Component {
             price_min: this.state.price_min,
             price_max: this.state.price_max,
             product_query: this.state.product_query,
-            distance: this.state.distance,
+            // distance: this.state.distance,
             ordering_by: this.state.ordering_by,
-            pnt: this.state.pnt
+            // pnt: this.state.pnt
         }
 
         getToken().then(
