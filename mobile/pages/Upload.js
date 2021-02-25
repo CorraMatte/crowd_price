@@ -1,8 +1,14 @@
 import React from "react";
-import {StyleSheet, Text, TextInput, View} from "react-native";
+import axios from "react-native-axios";
+import {Alert, StyleSheet, Text, TextInput, View} from "react-native";
 import {UPLOAD_BUTTON, UPLOAD_MESSAGE_STR} from "../utils/strings";
 import {Button} from "react-native-elements";
 import AppHeader from "../utils/AppHeader";
+import {getCoordinatesByIP, getIP} from "../utils/utils";
+import Geolocation from "react-native-geolocation-service";
+import {Picker} from '@react-native-picker/picker';
+import {PRODUCTS_API, STORES_API} from "../urls/endpoints";
+import * as ImagePicker from "react-native-image-picker";
 
 
 const styles = StyleSheet.create({
@@ -33,11 +39,75 @@ export class Upload extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            price: 0,
-            product_name: '',
-            categories: [],
-            all_categories: []
+            product_id: 0,
+            store_id: 0,
+            price: 0.01,
+            pnt: 'POINT(0 0)',
+
+            products: [],
+            stores: [],
+            store_selected: 0,
+            product_selected: 0
         }
+    }
+
+    // https://github.com/Agontuk/react-native-geolocation-service
+    componentDidMount() {
+        axios.get(STORES_API).then( res => {
+            this.setState({
+                stores: res.data.results.features
+            })
+        })
+
+        axios.get(PRODUCTS_API).then( res => {
+            this.setState({
+                products: res.data.results
+            })
+        })
+
+        Geolocation.getCurrentPosition(
+            (position) => {
+                console.log(`POINT(${position.coords.longitude} ${position.coords.latitude})`);
+                this.setState({
+                    'pnt': `POINT(${position.coords.longitude} ${position.coords.latitude})`
+                })
+            },
+            (error) => {
+                Alert.alert("Activate geo localization for a better service");
+                getIP().then(
+                    res => {
+                        getCoordinatesByIP(res.data.ip).then(
+                            res => {
+                                this.setState({
+                                    longitude: res.data.longitude,
+                                    latitude: res.data.latitude,
+                                })
+                            }
+                        )
+                    }
+                )
+            },
+            { enableHighAccuracy: true, timeout: 5000 }
+        );
+    }
+
+    add_report = () => {
+        let req = {
+            price: this.state.price,
+            product: this.state.product_id,
+            pnt: this.state.pnt
+        }
+
+        if (this.state.store_id !== 0) {
+            req.store = this.state.store_id
+        }
+
+        if (req.product === 0) {
+            Alert.alert("Select at least a product");
+            return
+        }
+
+        console.log(req);
     }
 
     render() {
@@ -45,15 +115,32 @@ export class Upload extends React.Component {
             <View style={styles.container}>
                 <AppHeader title={"Upload"} navigation={this.props.navigation} leftOption={"Menu"}/>
                 <Text style={styles.inputext}>{UPLOAD_MESSAGE_STR}</Text>
-                <TextInput
-                    value={this.state.product_name}
-                    onChangeText={(text => {this.setState({product_name: text})})}
-                    keyboardType="email-address"
-                    autoCompleteType="email"
-                    label="Email"
-                    placeholder="Email"
-                    style={styles.input}
-                />
+
+                // https://github.com/react-native-picker/picker
+                <Picker
+                    selectedValue={this.state.product_selected}
+                    onValueChange={(itemValue, itemIndex) =>
+                    this.setState({
+                        product_id: itemIndex,
+                        product_selected: itemValue
+                    })}
+                >
+                    <Picker.Item label={"Select an item"} value={0} key={0} />
+                    {this.state.products.map((prod) =>  <Picker.Item label={prod.name} value={prod.id} key={prod.id}/>)}
+                </Picker>
+
+                <Picker
+                    selectedValue={this.state.store_selected}
+                    onValueChange={(itemValue, itemIndex) =>
+                        this.setState({
+                            store_id: itemIndex,
+                            store_selected: itemValue
+                        })
+                    }
+                >
+                    <Picker.Item label={"Store not present"} value={0} key={0} />
+                    {this.state.stores.map((store) =>  <Picker.Item label={store.properties.name} value={store.id} key={store.id}/>)}
+                </Picker>
 
                 <TextInput
                     value={this.state.price}
@@ -64,15 +151,44 @@ export class Upload extends React.Component {
                     style={styles.input}
                 />
 
-                {this.state.all_categories.map(
-                    (cat) => <Form.Check type='checkbox' id={cat.id} name={cat.name} label={cat.name} key={cat.id}
-                                         onChange={this.fieldChangeHandler}/>
-                )}
+                <Button
+                    title="Take image"
+                    onPress={() =>
+                        ImagePicker.launchCamera(
+                            {
+                                mediaType: 'photo',
+                                includeBase64: false,
+                                maxHeight: 200,
+                                maxWidth: 200,
+                            },
+                            (response) => {
+                                setResponse(response);
+                            },
+                        )
+                    }
+                />
+
+                <Button
+                    title="Select image"
+                    onPress={() =>
+                        ImagePicker.launchImageLibrary(
+                            {
+                                mediaType: 'photo',
+                                includeBase64: false,
+                                maxHeight: 200,
+                                maxWidth: 200,
+                            },
+                            (response) => {
+                                setResponse(response);
+                            },
+                        )
+                    }
+                />
 
                 <Button
                     title={UPLOAD_BUTTON}
                     style={styles.input}
-                    onPress={this.search}
+                    onPress={this.add_report}
                 />
 
             </View>

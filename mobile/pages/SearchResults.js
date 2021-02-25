@@ -1,15 +1,6 @@
 import React from "react";
 import {Button, FlatList, StyleSheet, Text, View} from "react-native";
 import AppHeader from "../utils/AppHeader";
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-        backgroundColor: "#E5EAF5"
-    },
-})
 
 class Item extends React.Component {
     render () {
@@ -27,7 +18,7 @@ class Item extends React.Component {
     }
 }
 
-// https://reactnative.dev/docs/textinput
+// https://reactnative.dev/docs/flatlist
 export class SearchResults extends React.Component {
 
     render() {

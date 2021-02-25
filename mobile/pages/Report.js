@@ -18,6 +18,7 @@ export class Report extends React.Component {
         Linking.openURL(url).then(r => console.log(r));
     }
 
+    // https://stackoverflow.com/questions/43214062/open-maps-google-maps-in-react-native
     render() {
         const data = this.props.route.params.data;
         console.log(data)

@@ -51,6 +51,7 @@ export class Search extends React.Component {
         }
     }
 
+    // https://github.com/Agontuk/react-native-geolocation-service
     componentDidMount() {
         Geolocation.getCurrentPosition(
             (position) => {
@@ -60,7 +61,6 @@ export class Search extends React.Component {
                 })
             },
             (error) => {
-                // See error code charts below.
                 console.log(error.code, error.message);
                 Alert.alert("Activate geo localization for a better service");
                 getIP().then(
@@ -88,9 +88,9 @@ export class Search extends React.Component {
             price_min: this.state.price_min,
             price_max: this.state.price_max,
             product_query: this.state.product_query,
-            // distance: this.state.distance,
+            distance: this.state.distance,
             ordering_by: this.state.ordering_by,
-            // pnt: this.state.pnt
+            pnt: this.state.pnt
         }
 
         getToken().then(
