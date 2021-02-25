@@ -3,7 +3,7 @@ import axios from "react-native-axios";
 import {Alert, StyleSheet, Text, TextInput, View} from "react-native";
 import {SEARCH_BUTTON, SEARCH_MESSAGE_STR} from "../utils/strings";
 import {Button} from "react-native-elements";
-import {getCoordinatesByIP, getIP, MAX_PRICE, MIN_PRICE} from "../utils/utils";
+import {getCoordinatesByIP, getIP, MAX_DISTANCE, MAX_PRICE, MIN_PRICE} from "../utils/utils";
 import {REPORTS_SEARCH_API} from "../urls/endpoints";
 import {getAuthHeader, getToken} from "../utils/auth";
 import AppHeader from "../utils/AppHeader";
@@ -43,12 +43,10 @@ export class Search extends React.Component {
             price_min: MIN_PRICE,
             price_max: MAX_PRICE,
             product_query: '',
-            categories: [],
-            distance: 100,
+            distance: MAX_DISTANCE,
             ordering_by: '-created_time',
             pnt: 'POINT(0 0)',
 
-            all_categories: [],
             sorting_options: []
         }
     }
@@ -89,7 +87,6 @@ export class Search extends React.Component {
         const req = {
             price_min: this.state.price_min,
             price_max: this.state.price_max,
-            categories: this.state.categories,
             product_query: this.state.product_query,
             distance: this.state.distance,
             ordering_by: this.state.ordering_by,
@@ -125,10 +122,8 @@ export class Search extends React.Component {
                     onChangeText={(text => {
                         this.setState({product_query: text})
                     })}
-                    keyboardType="email-address"
-                    autoCompleteType="email"
-                    label="Email"
-                    placeholder="Email"
+                    label="product_query"
+                    placeholder="Search a product"
                     style={styles.input}
                 />
 
@@ -164,11 +159,6 @@ export class Search extends React.Component {
                     placeholder="100"
                     style={styles.input}
                 />
-
-                {this.state.all_categories.map(
-                    (cat) => <Form.Check type='checkbox' id={cat.id} name={cat.name} label={cat.name} key={cat.id}
-                                         onChange={this.fieldChangeHandler}/>
-                )}
 
                 <Button
                     title={SEARCH_BUTTON}

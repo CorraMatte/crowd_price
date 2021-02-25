@@ -1,28 +1,33 @@
 import React from "react";
-import {FlatList, Text, View} from "react-native";
-
+import {FlatList, StyleSheet, Text, View} from "react-native";
+import AppHeader from "../utils/AppHeader";
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column",
+        backgroundColor: "#E5EAF5"
+    },
+})
 
 class Item extends React.Component {
     render () {
-        console.log(this.props.data)
+        const data = this.props.data;
         return (
-            <View>
-                <Text>{this.props.product}</Text>
-                <Text>{this.props.store}</Text>
-                <Text>{this.props.price}</Text>
+            <View style={styles.container}>
+                <Text>{data.product}</Text>
+                <Text>{data.store}</Text>
+                <Text>{data.price}</Text>
             </View>
         )
     }
 }
 
-
+// https://reactnative.dev/docs/textinput
 export class SearchResults extends React.Component {
-    renderItem = (item) => (
-        <Item data={item.item} />
-    );
 
     render() {
-        console.log(this.props.route.params.results);
         let new_data = [];
         this.props.route.params.results.forEach(
             (value) => new_data.push({
@@ -38,9 +43,12 @@ export class SearchResults extends React.Component {
 
         return (
             <View>
+                <AppHeader />
                 <FlatList
                     data={new_data}
-                    renderItem={this.renderItem}
+                    renderItem={({item}) => (
+                        <Item data={item} />
+                    )}
                 />
             </View>
         )

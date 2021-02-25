@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
+// https://www.javatpoint.com/react-native-asyncstorage
 export const setToken = (token) => {
     AsyncStorage.setItem("token", token).then(() => {});
 }

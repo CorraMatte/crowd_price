@@ -14,3 +14,6 @@ export const MAX_PRICE = 1000000.00;
 
 // 1 cent as minimum price
 export const MIN_PRICE = 0.00;
+
+// Max distance in KM
+export const MAX_DISTANCE = 100;
