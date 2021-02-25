@@ -7,6 +7,7 @@ urlpatterns = [
     path('product/<int:pk>', views.RetrieveProductAPI.as_view()),
     path('store/<int:pk>', views.RetrieveStoreAPI.as_view()),
     path('stores', views.RetrieveAllStoresAPI.as_view()),
+    path('products', views.RetrieveAllProductsAPI.as_view()),
     path('products/category/<int:pk>', views.RetrieveCategoryProductAPI.as_view()),
     path('categories/', views.RetrieveCategoriesAPI.as_view()),
     path('products/most_reported', views.RetrieveMostReportedProductAPI.as_view()),

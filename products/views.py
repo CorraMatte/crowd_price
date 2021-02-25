@@ -21,6 +21,11 @@ class RetrieveAllStoresAPI(generics.ListAPIView):
     serializer_class = serial.StoreSerializer
 
 
+class RetrieveAllProductsAPI(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = serial.ProductSerializer
+
+
 class RetrieveCategoryProductAPI(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = serial.ProductSerializer
