@@ -1,6 +1,7 @@
 import React from "react";
 import {Button, FlatList, StyleSheet, Text, View} from "react-native";
 import AppHeader from "../utils/AppHeader";
+import {SEARCH_RESULTS_TITLE_STR} from "../utils/strings";
 
 class Item extends React.Component {
     render () {
@@ -39,7 +40,7 @@ export class SearchResults extends React.Component {
 
         return (
             <View>
-                <AppHeader title={"Results"} />
+                <AppHeader title={SEARCH_RESULTS_TITLE_STR} />
                 <FlatList
                     data={new_data}
                     renderItem={({item}) => (

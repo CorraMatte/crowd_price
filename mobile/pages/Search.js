@@ -4,10 +4,11 @@ import {Alert, StyleSheet, Text, TextInput, View} from "react-native";
 import {SEARCH_BUTTON, SEARCH_MESSAGE_STR} from "../utils/strings";
 import {Button} from "react-native-elements";
 import {getCoordinatesByIP, getIP, MAX_DISTANCE, MAX_PRICE, MIN_PRICE} from "../utils/utils";
-import {REPORTS_SEARCH_API} from "../urls/endpoints";
+import {REPORTS_SEARCH_API, SEARCH_SORT_OPTIONS_API} from "../urls/endpoints";
 import {getAuthHeader, getToken} from "../utils/auth";
 import AppHeader from "../utils/AppHeader";
 import Geolocation from 'react-native-geolocation-service';
+import {Picker} from "@react-native-picker/picker";
 
 
 const styles = StyleSheet.create({
@@ -44,7 +45,8 @@ export class Search extends React.Component {
             price_max: MAX_PRICE,
             product_query: '',
             distance: MAX_DISTANCE,
-            ordering_by: '-created_time',
+            ordering_by_index: 0,
+            ordering_by_value: '',
             pnt: 'POINT(0 0)',
 
             sorting_options: []
@@ -53,11 +55,17 @@ export class Search extends React.Component {
 
     // https://github.com/Agontuk/react-native-geolocation-service
     componentDidMount() {
+        axios.get(SEARCH_SORT_OPTIONS_API).then(res => {
+            this.setState({
+                sorting_options: res.data.results
+            });
+        });
+
         Geolocation.getCurrentPosition(
             (position) => {
                 console.log(`POINT(${position.coords.longitude} ${position.coords.latitude})`);
                 this.setState({
-                    'pnt': `POINT(${position.coords.longitude} ${position.coords.latitude})`
+                    pnt: `POINT(${position.coords.longitude} ${position.coords.latitude})`
                 })
             },
             (error) => {
@@ -83,15 +91,19 @@ export class Search extends React.Component {
 
     send_search = (e) => {
         e.preventDefault();
+        console.log(this.state.ordering_by_index)
+        console.log(this.state.sorting_options)
 
         const req = {
             price_min: this.state.price_min,
             price_max: this.state.price_max,
             product_query: this.state.product_query,
             distance: this.state.distance,
-            ordering_by: this.state.ordering_by,
+            ordering_by: this.state.sorting_options[this.state.ordering_by_index][0],
             pnt: this.state.pnt
         }
+
+        console.log(req)
 
         getToken().then(
             token => {
@@ -159,6 +171,18 @@ export class Search extends React.Component {
                     placeholder="100"
                     style={styles.input}
                 />
+
+                <Picker
+                    selectedValue={this.state.ordering_by_value}
+                    onValueChange={(itemValue, itemIndex) =>
+                        this.setState({
+                            ordering_by_index: itemIndex,
+                            ordering_by_value: itemValue
+                        })
+                    }
+                >
+                    {this.state.sorting_options.map((opt) =>  <Picker.Item label={opt[1]} value={opt[0]} key={opt[0]}/>)}
+                </Picker>
 
                 <Button
                     title={SEARCH_BUTTON}

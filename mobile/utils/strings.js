@@ -13,3 +13,7 @@ export const UPLOAD_BUTTON = "Upload";
 
 export const SEARCH_MESSAGE_STR = "Search reports near to you!"
 export const UPLOAD_MESSAGE_STR = "Upload price report for a product!"
+
+export const SEARCH_RESULTS_TITLE_STR = "Results";
+export const REPORT_TITLE_STR = "Report";
+export const REPORT_OPEN_IN_MAP_BUTTON = "open in Maps";
