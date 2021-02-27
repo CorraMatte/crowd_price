@@ -70,8 +70,13 @@ class CreateProductAPI(APIView):
         if 'categories' not in request.data:
             return Response({'detail': 'categories field is missing'}, status.HTTP_400_BAD_REQUEST)
 
-        serial_prod.validated_data['categories'] = request.data['categories']
         p = serial_prod.save()
+        if isinstance(request.data['categories'], list):
+            p.categories.set(request.data['categories'])
+        else:
+            p.categories.set([request.data['categories']])
+
+        p.save()
         return Response({"product": serial.ProductSerializer(p).data}, status.HTTP_201_CREATED)
 
 

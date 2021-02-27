@@ -1,6 +1,6 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
-from products.models import Category
+from products.models import Category, Product
 
 
 # Create your tests here.
@@ -40,17 +40,26 @@ class ProductTests(APITestCase):
             '/user/login', data={'email': 'test.email@gmail.com', 'password': 'P4sswordVeryS€cure@'}
         ).json()['key']
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token)
-        response_cat = self.client.post('/category/add', data={'name': 'category'})
+        cat = Category(name='category3')
+        cat.save()
+        p = Product(name='new_product')
+        p.save()
+        p.categories.set([Category.objects.all()[0]])
+        p.save()
 
-    """201
+    """
         Check if it gives an error for a duplicate product
         path('product/add', views.CreateCategoryView.as_view()),
     """
     def test_product_duplicate_name(self):
         url = '/product/add'
-        response = self.client.post(url, data={'name': 'product', 'categories': [Category.objects.get().pk]})
+        cat = Category(name='new_category')
+        cat.save()
+        print(Category.objects.all()[0])
+        print(Category.objects.all())
+        response = self.client.post(url, data={'name': 'product', 'categories': [Category.objects.all()[0].pk]})
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        response = self.client.post(url, data={'name': 'product', 'categories': [Category.objects.get().pk]})
+        response = self.client.post(url, data={'name': 'product', 'categories': [Category.objects.all()[0].pk]})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     """
@@ -59,9 +68,7 @@ class ProductTests(APITestCase):
     """
     def test_retrieve_products_by_category(self):
         url = '/products/category/{}'
-        self.client.post('/product/add', data={'name': 'product', 'categories': [Category.objects.get().pk]})
-
-        response = self.client.get(url.format(Category.objects.get().pk))
+        response = self.client.get(url.format(Category.objects.all()[0].pk))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         response = self.client.get(url.format('not_existing_cat'))

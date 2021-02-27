@@ -6,7 +6,7 @@ from rest_framework_gis import serializers as geo_serializers
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name', 'created_by', 'created_time']
+        fields = ['id', 'name', 'created_time']
 
 
 class ProductSerializer(serializers.ModelSerializer):

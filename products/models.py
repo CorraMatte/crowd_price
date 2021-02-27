@@ -5,7 +5,6 @@ from crowd_price.const import *
 
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    created_by = models.ForeignKey(Consumer, null=True, on_delete=models.SET_NULL)
     created_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
