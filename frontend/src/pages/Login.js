@@ -1,7 +1,7 @@
 import React from "react";
 import {Redirect} from "react-router-dom";
 import {isLoggedIn, setToken} from "../auth";
-import {Button, Form} from "react-bootstrap";
+import {Alert, Button, Card, Col, Form} from "react-bootstrap";
 import axios from "axios";
 import {USER_LOGIN_API} from "../urls/endpoints";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
@@ -56,37 +56,59 @@ class Login extends React.Component {
 
     render() {
         if (isLoggedIn()) {
-            return <Redirect to="/" />
+            return <Redirect to="/"/>
+        }
+
+        let error_box;
+        if (this.state.errors) {
+            error_box = (
+                <Card.Body>
+                    <Alert variant={"danger"}>{this.state.errors}</Alert>
+                </Card.Body>
+            )
         }
 
         return (
             <div>
-                <HeaderUnLogged />
-                {this.state.errors}
-                <Form onSubmit={this.login}>
-
-                    <Form.Control
-                        type="email"
-                        name="email"
-                        id="email"
-                        placeholder="Enter email"
-                        value={this.state.email}
-                        required={true}
-                        onChange={this.fieldChangeHandler}
-                    />
-
-                    <Form.Control
-                        type="password"
-                        placeholder="Password"
-                        name="password"
-                        id="password"
-                        value={this.state.password}
-                        required={true}
-                        onChange={this.fieldChangeHandler}
-                    />
-
-                    <Button type="submit">Sign in!</Button>
-                </Form>
+                <HeaderUnLogged/>
+                <Card bg={"dark"} className={"col-md-4 mx-auto mt-3"}>
+                    <Card.Header className={"text-light"}>Welcome on Crowd Price!</Card.Header>
+                    <Card.Body className={"text-light"}>
+                        <Form onSubmit={this.login}>
+                            <Col className={"mt-3"}>
+                                Email address
+                                <Form.Control
+                                    type="email"
+                                    name="email"
+                                    id="email"
+                                    placeholder="Enter email"
+                                    value={this.state.email}
+                                    required={true}
+                                    onChange={this.fieldChangeHandler}
+                                />
+                            </Col>
+                            <Col className={"mt-3"}>
+                                Password
+                                <Form.Control
+                                    type="password"
+                                    placeholder="Password"
+                                    name="password"
+                                    id="password"
+                                    value={this.state.password}
+                                    required={true}
+                                    onChange={this.fieldChangeHandler}
+                                />
+                            </Col>
+                            <Col className={"mt-3"}>
+                                <Button type="submit" className={"btn-block btn-primary"}>Login</Button>
+                            </Col>
+                        </Form>
+                    </Card.Body>
+                    {error_box}
+                    <Card.Body>
+                        <Card.Link href="/signup/" className={"text-light"}>Don't have an account? Signup</Card.Link>
+                    </Card.Body>
+                </Card>
             </div>
         )
     }
