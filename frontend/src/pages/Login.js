@@ -106,7 +106,7 @@ class Login extends React.Component {
                     </Card.Body>
                     {error_box}
                     <Card.Body>
-                        <Card.Link href="/signup/" className={"text-light"}>Don't have an account? Signup</Card.Link>
+                        <Card.Link href="/signup/" className={"text-light"}>Don't have an account? Signup!</Card.Link>
                     </Card.Body>
                 </Card>
             </div>
