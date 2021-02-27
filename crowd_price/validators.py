@@ -1,23 +1,8 @@
 import datetime
-from dateutil.relativedelta import relativedelta
 from django.core.exceptions import ValidationError
-import pytz
-
-
-utc = pytz.UTC
-
-# def AgeValidator(birth):
-#     age = relativedelta(datetime.datetime.now(), birth).years
-#     if age < 18:
-#         raise ValidationError('User is underage')
-#     if age > 80:
-#         raise ValidationError('User is too old')
+from pytz import timezone
 
 
 def NotFuture(enroll_date):
-    if enroll_date.tzinfo:
-        if utc.localize(datetime.datetime.now()) < enroll_date:
-            raise ValidationError('Can enroll in the future')
-    else:
-        if datetime.datetime.now() < enroll_date:
-            raise ValidationError('Can enroll in the future')
+    if timezone('Europe/Rome').localize(datetime.datetime.now()) < enroll_date:
+        raise ValidationError('Can enroll in the future')

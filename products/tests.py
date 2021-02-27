@@ -55,8 +55,6 @@ class ProductTests(APITestCase):
         url = '/product/add'
         cat = Category(name='new_category')
         cat.save()
-        print(Category.objects.all()[0])
-        print(Category.objects.all())
         response = self.client.post(url, data={'name': 'product', 'categories': [Category.objects.all()[0].pk]})
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         response = self.client.post(url, data={'name': 'product', 'categories': [Category.objects.all()[0].pk]})

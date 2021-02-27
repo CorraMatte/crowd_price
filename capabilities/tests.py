@@ -9,6 +9,7 @@ from products.models import Store, Product, Category
 from profiles.models import Consumer, Organization
 from django.contrib.gis.geos import GEOSGeometry
 from crowd_price.const import SRID
+from pytz import timezone
 
 
 # Create your tests here.
@@ -144,15 +145,17 @@ class SearchTest(APITestCase):
         self.assertEqual(len(response['features']), len(Report.objects.filter(price__lte=100)))
 
     def test_after_date_search_api_result(self):
-        now = datetime.datetime.now()
-        str_now = now.strftime("%Y-%m-%dT%H:%M:%S")
+        now = timezone('Europe/Rome').localize(datetime.datetime.now())
+        str_now = now.strftime("%Y-%m-%dT%H:%M:%S%z")
         for rep in Report.objects.all():
-            rep.created_time = now - datetime.timedelta(seconds=1)
+            rep.created_time = now - datetime.timedelta(minutes=1)
             rep.save()
 
         search = {"product_query": "product", 'after_date': str_now}
         response = self.client.post('/reports/search', data=search).json()
-        self.assertEqual(len(response['features']), len(Report.objects.filter(created_time__gte=now)))
+        self.assertEqual(len(response['features']), len(Report.objects.filter(
+            created_time__gte=now
+        )))
 
         str_now_minus_30 = (now - datetime.timedelta(days=30)).strftime("%Y-%m-%dT%H:%M:%S")
         search = {"product_query": "product", 'after_date': str_now_minus_30}

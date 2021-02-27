@@ -1,3 +1,5 @@
+from pytz import timezone
+from django.utils import timezone as django_timezone
 from django.contrib.gis.db import models
 from crowd_price.const import *
 from crowd_price.validators import NotFuture
@@ -6,6 +8,8 @@ from products.models import Product, Store, Category
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.forms.models import model_to_dict
 import datetime
+
+italy_timezone = timezone('Europe/Rome')
 
 
 class OrderBy(models.TextChoices):
@@ -21,8 +25,7 @@ class Search(models.Model):
     profile = models.ForeignKey(Profile, null=True, on_delete=models.SET_NULL)
     product_query = models.CharField(max_length=100)
     is_starred = models.BooleanField(default=False)
-    # is_monitoring = models.BooleanField(default=False)
-    created_time = models.DateTimeField(auto_now_add=True)
+    created_time = models.DateTimeField(default=django_timezone.now)
 
     # Filters
     price_min = models.DecimalField(
@@ -35,7 +38,10 @@ class Search(models.Model):
         validators=[MinValueValidator(MIN_PRICE), MaxValueValidator(MAX_PRICE)]
     )
 
-    after_date = models.DateTimeField(validators=[NotFuture], default=(datetime.datetime.now() - datetime.timedelta(days=30)))
+    after_date = models.DateTimeField(
+        validators=[NotFuture],
+        default=italy_timezone.localize(datetime.datetime.now() - datetime.timedelta(days=30))
+    )
     distance = models.PositiveIntegerField(default=MAX_DISTANCE, validators=[MaxValueValidator(MAX_DISTANCE)])
     pnt = models.PointField(srid=SRID, null=True)
     ordering_by = models.CharField(max_length=13, choices=OrderBy.choices, default=OrderBy.TMP_DESC)
@@ -71,7 +77,7 @@ class Report(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     consumer = models.ForeignKey(Consumer, on_delete=models.CASCADE)
     store = models.ForeignKey(Store, null=True, on_delete=models.SET_NULL)
-    created_time = models.DateTimeField(auto_now_add=True)
+    created_time = models.DateTimeField(default=django_timezone.now)
     picture = models.ImageField(upload_to='img/report/%Y', default="img/blank_profile.png")
 
     price = models.DecimalField(

@@ -1,3 +1,4 @@
+from pytz import timezone
 from rest_framework import status
 from rest_framework.test import APITestCase
 from crowd_price.validators import NotFuture
@@ -12,7 +13,7 @@ class ValidationTest(APITestCase):
      """
      def test_if_date_is_future(self):
         with self.assertRaises(ValidationError):
-            NotFuture(datetime.datetime.now() + datetime.timedelta(days=1))
+            NotFuture(timezone('Europe/Rome').localize(datetime.datetime.now() + datetime.timedelta(days=1)))
 
 
 class UserTests(APITestCase):
