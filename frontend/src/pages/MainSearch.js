@@ -67,7 +67,6 @@ class MainSearch extends React.Component {
 
         navigator.geolocation.getCurrentPosition(
             position =>  {
-                console.log(`POINT(${position.coords.longitude} ${position.coords.latitude})`)
                 this.setState({
                     pnt: `POINT(${position.coords.longitude} ${position.coords.latitude})`
                 });
@@ -102,7 +101,8 @@ class MainSearch extends React.Component {
             pnt: this.state.pnt,
         }
 
-        axios.post(REPORTS_SEARCH_API, req, getAuthHeader()).then(
+        const opt = isLoggedIn() ? getAuthHeader() : {};
+        axios.post(REPORTS_SEARCH_API, req, opt).then(
             res => {
                 this.setState({
                     reports: res.data.features,

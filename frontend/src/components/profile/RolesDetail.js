@@ -1,4 +1,5 @@
 import React from "react";
+import {get_day_month_year_from_date} from "../utils/utils";
 
 class ProfileDetail extends React.Component {
     render () {
@@ -12,7 +13,7 @@ class ProfileDetail extends React.Component {
             <div>
                 <img alt={'profile image'} src={profile.picture} />
                 email: {profile.user.email}
-                subcribe from: {profile.subscribe_date}
+                subcribe from: {get_day_month_year_from_date(profile.subscribe_date)}
             </div>
         )
     }

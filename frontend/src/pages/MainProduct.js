@@ -7,6 +7,7 @@ import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 import DynMap from "../components/map/DynMap";
+import {aggregate_report_by_coords} from "../components/utils/utils";
 
 class MainProduct extends React.Component {
     constructor(props) {
@@ -22,15 +23,13 @@ class MainProduct extends React.Component {
         axios.get(`${PRODUCT_API}/${id}`).then(
             res => {
                 this.setState({
-                    product: res.data,
-                    reports: this.state.reports
+                    product: res.data
                 })
             });
 
         axios.get(`${REPORTS_PRODUCT_API}/${id}`).then(
             res => {
                 this.setState({
-                    product: this.state.product,
                     reports: res.data.results.features
                 })
             });

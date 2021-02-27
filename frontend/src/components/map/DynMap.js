@@ -3,12 +3,17 @@ import React from "react";
 // https://visgl.github.io/react-map-gl/docs/get-started/get-started
 // https://visgl.github.io/react-map-gl/docs/api-reference/popup
 import ReactMapGL, {Popup} from 'react-map-gl';
-import {ACCESS_TOKEN, MAP_DYN_ZOOM} from "../utils/const"
-import {getLatFromReport, getLongFromReport} from "../utils/utils";
+import {ACCESS_TOKEN, MAP_DYN_ZOOM, MAX_RESULTS_IN_LABEL} from "../utils/const"
+import {
+    aggregate_report_by_coords,
+    get_day_month_year_from_date,
+    getLatFromReport,
+    getLongFromReport
+} from "../utils/utils";
 
 
 export class DynMap extends React.Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
             latitude: 0,
@@ -25,19 +30,30 @@ export class DynMap extends React.Component {
         })
     }
 
-    render () {
+    render() {
         let popups = [];
 
         if (this.props && this.props.reports.length !== 0) {
             // City from lon lat https://docs.mapbox.com/api/search/geocoding/
-            // TODO: geocoding: lat, log -> city
-            this.props.reports.map((report) => (
+            const aggr_reports = aggregate_report_by_coords(this.props.reports);
+            for (const [key, reports] of Object.entries(aggr_reports)) {
+                const labels = [];
+                reports.slice(0, MAX_RESULTS_IN_LABEL).forEach((report) => {
+                    labels.push(`${report.properties.price} on ${get_day_month_year_from_date(report.properties.created_time)}€`);
+                })
+
+                if (reports.length > MAX_RESULTS_IN_LABEL) {
+                    labels.push('..and more');
+                }
+
                 popups.push({
-                latitude: getLatFromReport(report),
-                longitude: getLongFromReport(report),
-                    // TODO: Eventually also the date
-                label: `${report.properties.price}€`
-            })));
+                    latitude: getLatFromReport(reports[0]),
+                    longitude: getLongFromReport(reports[0]),
+                    labels: labels,
+                    key: key
+                });
+            }
+
         } else {
             return (<div></div>)
         }
@@ -54,16 +70,22 @@ export class DynMap extends React.Component {
                 mapboxApiAccessToken={ACCESS_TOKEN}
             >
                 {
-                    popups.map((popup) => <Popup
-                        latitude={popup.latitude}
-                        longitude={popup.longitude}
-                        closeButton={true}
-                        >
-                        <div>{popup.label}</div>
-                    </Popup>
+                    popups.map(
+                        (popup) =>
+                            <Popup
+                                latitude={popup.latitude}
+                                longitude={popup.longitude}
+                                closeButton={true}
+                                key={popup.key}
+                            >
+                                {
+                                    popup.labels.map((label) =>
+                                        <div>{label}</div>
+                                    )
+                                }
+                            </Popup>
                     )
                 }
-
             </ReactMapGL>
         )
     }
