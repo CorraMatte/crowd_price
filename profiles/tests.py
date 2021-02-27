@@ -65,12 +65,12 @@ class UserTests(APITestCase):
     def test_login_signup_check_response_token(self):
         url = '/consumer/signup'
         user = {
-            "username": "UserVerySecure", "password1": "P4sswordVeryS€cure@", "password2": "P4sswordVeryS€cure@",
+            "username": "UserVerySecure", "password1": "P3sswordVeryS€cure@", "password2": "P3sswordVeryS€cure@",
             "email": "test.email@gmail.com"
         }
         self.client.post(url, data=user)
         url = '/user/login'
-        user = {"password": "P4sswordVeryS€cure@", "email": "test.email@gmail.com"}
+        user = {"password": "P3sswordVeryS€cure@", "email": "test.email@gmail.com"}
         resp = self.client.post(url, data=user)
         self.assertTrue('key' in resp.json().keys())
 
@@ -81,22 +81,22 @@ class UserTests(APITestCase):
     def test_login_type(self):
         url = '/consumer/signup'
         user = {
-            "username": "UserVerySecure", "password1": "P4sswordVeryS€cure@", "password2": "P4sswordVeryS€cure@",
+            "username": "UserVerySecure", "password1": "P2sswordVeryS€cure@", "password2": "P2sswordVeryS€cure@",
             "email": "test.consumer@gmail.com"
         }
         self.client.post(url, data=user)
 
         url = '/analyst/signup'
         user = {
-            "username": "UserVerySecure", "password1": "P4sswordVeryS€cure@", "password2": "P4sswordVeryS€cure@",
+            "username": "UserVerySecure", "password1": "P1sswordVeryS€cure@", "password2": "P1sswordVeryS€cure@",
             "email": "test.analyst@gmail.com"
         }
         self.client.post(url, data=user)
         url = '/user/login'
-        user = {"password": "P4sswordVeryS€cure@", "email": "test.analyst@gmail.com"}
+        user = {"password": "P1sswordVeryS€cure@", "email": "test.analyst@gmail.com"}
         _type = self.client.post(url, data=user).json()['type']
         self.assertEqual(_type, 'analyst')
 
-        user = {"password": "P4sswordVeryS€cure@", "email": "test.consumer@gmail.com"}
+        user = {"password": "P2sswordVeryS€cure@", "email": "test.consumer@gmail.com"}
         _type = self.client.post(url, data=user).json()['type']
         self.assertEqual(_type, 'consumer')

@@ -20,16 +20,18 @@ def create_profile(request):
         return Response({"detail": ["password not valid or doesn't match"]}, status.HTTP_400_BAD_REQUEST)
 
     user = User(username=email, email=email, password=password1)
-    try:
-        validate_password(password1, user)
-    except ValidationError as e:
-        return Response({"detail": e}, status.HTTP_400_BAD_REQUEST)
 
     try:
         user.set_password(password1)
         user.save()
     except IntegrityError:
         return Response({"detail": ["email already presents in the database"]}, status.HTTP_400_BAD_REQUEST)
+
+    try:
+        validate_password(password1, user)
+    except ValidationError as e:
+        user.delete()
+        return Response({"detail": e}, status.HTTP_400_BAD_REQUEST)
 
     # Create user Token
     Token.objects.create(user=user)
