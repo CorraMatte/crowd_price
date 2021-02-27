@@ -1,7 +1,6 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
-from crowd_price.validators import NotFuture #,AgeValidator
-# from dateutil.relativedelta import relativedelta
+from crowd_price.validators import NotFuture
 import datetime
 from django.core.exceptions import ValidationError
 
@@ -9,7 +8,7 @@ from django.core.exceptions import ValidationError
 # Create your tests here.
 class ValidationTest(APITestCase):
      """
-         Check if the user is underage or too old
+         Check if the date is from future
      """
      def test_if_date_is_future(self):
         with self.assertRaises(ValidationError):
@@ -18,14 +17,14 @@ class ValidationTest(APITestCase):
 
 class UserTests(APITestCase):
     """
-        Test error for duplicate users
+        Test error for duplicate users, no need a test for the analyst part
         path('consumer/signup', views.CreateConsumerView.as_view()),
     """
     def test_duplicate_email_for_user(self):
         url = '/consumer/signup'
         user = {
             "username": "user", "password1": "P4sswordVeryS€cure@", "password2": "P4sswordVeryS€cure@",
-            "email": "test.email@gmail.com", "pnt": 'POINT(-100.0208 44.0489)'
+            "email": "test.email@gmail.com"
         }
         response = self.client.post(url, data=user)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -34,15 +33,14 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     """
-        Test password strength
+        Test password strength and the validators, no need a test for the analyst part
         path('consumer/signup', views.CreateConsumerView.as_view()),
     """
-    def test_email_characters_validators(self):
+    def test_email_password_characters_validators(self):
         url = '/consumer/signup'
         user = {
             "username": "UserVerySecure", "password1": "test.email@gmail.com", "password2": "test.email@gmail.com",
-            "email": "test.email@gmail.com", "pnt": 'POINT(-100.0208 44.0489)'
-            # {"type": "Point", "coordinates": [-100.0208, 44.0489]}
+            "email": "test.email@gmail.com"
         }
 
         response = self.client.post(url, data=user)
@@ -60,32 +58,38 @@ class UserTests(APITestCase):
         response = self.client.post(url, data=user)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_login_signup(self):
+    """
+        Test login of the user, in order to check for a valid token
+        path('user/login', views.LoginAPI.as_view()),
+    """
+    def test_login_signup_check_response_token(self):
         url = '/consumer/signup'
         user = {
             "username": "UserVerySecure", "password1": "P4sswordVeryS€cure@", "password2": "P4sswordVeryS€cure@",
-            "email": "test.email@gmail.com", "pnt": 'POINT(-100.0208 44.0489)'
+            "email": "test.email@gmail.com"
         }
-        detail = self.client.post(url, data=user).json()['detail']
-        self.assertEqual(detail['id'], 1)
-
+        self.client.post(url, data=user)
         url = '/user/login'
-        user = {"password": "P4sswordVeryS€cure@", "email": "test.email@gmail.com",}
+        user = {"password": "P4sswordVeryS€cure@", "email": "test.email@gmail.com"}
         resp = self.client.post(url, data=user)
         self.assertTrue('key' in resp.json().keys())
 
+    """
+        Test return value for the user, if it is an analyst or a consumer
+        path('user/login', views.LoginAPI.as_view()),
+    """
     def test_login_type(self):
         url = '/consumer/signup'
         user = {
             "username": "UserVerySecure", "password1": "P4sswordVeryS€cure@", "password2": "P4sswordVeryS€cure@",
-            "email": "test.consumer@gmail.com", "pnt": 'POINT(-100.0208 44.0489)'
+            "email": "test.consumer@gmail.com"
         }
         self.client.post(url, data=user)
 
         url = '/analyst/signup'
         user = {
             "username": "UserVerySecure", "password1": "P4sswordVeryS€cure@", "password2": "P4sswordVeryS€cure@",
-            "email": "test.analyst@gmail.com", "pnt": 'POINT(-100.0208 44.0489)'
+            "email": "test.analyst@gmail.com"
         }
         self.client.post(url, data=user)
         url = '/user/login'

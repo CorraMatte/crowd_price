@@ -1,6 +1,3 @@
-from dj_rest_auth.registration.views import SocialLoginView
-from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
-from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from rest_framework.authtoken.models import Token
 from rest_framework import generics, status, permissions
 from profiles.models import Consumer, Organization, Analyst
@@ -84,12 +81,3 @@ class LoginAPI(APIView):
             'key': token.key,
             'type': 'consumer' if Consumer.objects.filter(profile__user=user) else 'analyst'
         })
-
-
-# oAuth2 views
-class FacebookLogin(SocialLoginView):
-    adapter_class = FacebookOAuth2Adapter
-
-
-class GoogleLogin(SocialLoginView):
-    adapter_class = GoogleOAuth2Adapter

@@ -12,8 +12,4 @@ urlpatterns = [
 
     # Auth
     path('user/login', views.LoginAPI.as_view()),
-    # path('dj-rest-auth/', include('dj_rest_auth.urls')),
-    # path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
-    path('rest-auth/facebook/', views.FacebookLogin.as_view(), name="facebook_login"),
-    path('rest-auth/google/', views.GoogleLogin.as_view(), name="google_login"),
 ]
