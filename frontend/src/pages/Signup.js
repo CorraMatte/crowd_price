@@ -12,12 +12,12 @@ class Signup extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            'email': '',
-            'password1': '',
-            'password2': '',
-            'longitude': '',
-            'latitude': '',
-            'errors': ''
+            email: '',
+            password1: '',
+            password2: '',
+            longitude: '',
+            latitude: '',
+            errors: ''
         }
     }
 
@@ -41,20 +41,15 @@ class Signup extends React.Component {
                 )
             }
         )
-        // navigator.geolocation.getCurrentPosition(function(position) {
-        //       console.log("Latitude is :", position.coords.latitude);
-        //       console.log("Longitude is :", position.coords.longitude);
-        //     });
-
     }
 
     signup = (e) => {
         e.preventDefault();
 
         const req = {
-            'email': this.state.email,
-            'password1': this.state.password1,
-            'password2': this.state.password2
+            email: this.state.email,
+            password1: this.state.password1,
+            password2: this.state.password2
         }
 
         axios.post(CONSUMER_SIGNUP_API, req).then(
@@ -63,13 +58,13 @@ class Signup extends React.Component {
                     doLogin(this.state.email, this.state.password1).then(
                         res => {
                             this.setState({
-                                'errors': ''
+                                errors: ''
                             })
                         }
                     )
                 } else {
                     this.setState({
-                        'errors': res.data
+                        errors: res.data
                     })
                 }
             }
@@ -79,7 +74,7 @@ class Signup extends React.Component {
                 err.response.data.detail.map((msg_error) => errors += msg_error);
 
                 this.setState({
-                    'errors': errors
+                    errors: errors
                 })
             }
         )

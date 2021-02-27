@@ -7,15 +7,18 @@ import {getUserType, getAuthHeader} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import StaticMap from "../components/map/StaticMap";
 import {ANALYST_LABEL, CONSUMER_LABEL} from "../components/utils/const";
+import {getCoordinatesByIP, getIP} from "../components/utils/utils";
 
 
 class MainProfile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            'user_profile': null,
-            'user_type': getUserType(),
-            'reports': []
+            user_profile: null,
+            user_type: getUserType(),
+            reports: [],
+            coords: [0, 0],
+            errors: ''
         }
     }
 
@@ -42,17 +45,32 @@ class MainProfile extends React.Component {
                     reports: res.data.results.features
                 })
         });
+
+        navigator.geolocation.getCurrentPosition(
+            position =>  {
+                this.setState({
+                    coords: [position.coords.longitude, position.coords.latitude]
+                });
+            },
+            err => {
+                getIP().then(
+                    res => {
+                        getCoordinatesByIP(res.data.ip).then(
+                            res_coords => {
+                                this.setState({
+                                    errors: err.message,
+                                    coords: [res_coords.data.longitude, res_coords.data.latitude]
+                                })
+                            }
+                        )
+                    }
+                )
+            }
+        );
     }
 
     render () {
         let profile_type;
-        let coords = [0, 0];
-
-        // GET COORDINATES FROM BROWSER OR IP
-        if (this.state.user_profile) {
-            // coords = this.state.user_profile.profile.pnt.coordinates.slice();
-        }
-
         if (this.state.user_type === CONSUMER_LABEL) {
             profile_type = <ConsumerDetail consumer={this.state.user_profile} />
         } else if (this.state.user_type) {
@@ -63,7 +81,8 @@ class MainProfile extends React.Component {
             <div>
                 <HeaderLogged />
                 {profile_type}
-                <StaticMap latitude={coords[1]} longitude={coords[0]} label={"Your location"} />
+                <StaticMap latitude={this.state.coords[1]} longitude={this.state.coords[0]} label={"Your location"} />
+                <h5>{this.state.errors}</h5>
                 <DetailGroupReport reports={this.state.reports} />
             </div>
         )

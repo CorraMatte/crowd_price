@@ -16,6 +16,7 @@ import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 import DynMap from "../components/map/DynMap";
 import { saveAs } from 'file-saver'
+import {getCoordinatesByIP, getIP} from "../components/utils/utils";
 
 
 class MainSearch extends React.Component {
@@ -33,6 +34,7 @@ class MainSearch extends React.Component {
             after_date: past_date,
             ordering_by: '-created_time',
             reports: [],
+            pnt: 'POINT(0 0)',
 
             export_format: 'csv',
 
@@ -47,21 +49,44 @@ class MainSearch extends React.Component {
     componentDidMount() {
         axios.get(CATEGORIES_API).then(res => {
             this.setState({
-                'all_categories': res.data.results
+                all_categories: res.data.results
             })
         });
         axios.get(SEARCH_SORT_OPTIONS_API).then(res => {
             this.setState({
-                'sorting_options': res.data.results
+                sorting_options: res.data.results
             });
         });
         if (getUserType() === ANALYST_LABEL) {
             axios.get(DUMP_FORMAT_OPTIONS_API, getAuthHeader()).then(res => {
                 this.setState({
-                    'dump_format_options': res.data.results
+                    dump_format_options: res.data.results
                 });
             });
         }
+
+        navigator.geolocation.getCurrentPosition(
+            position =>  {
+                console.log(`POINT(${position.coords.longitude} ${position.coords.latitude})`)
+                this.setState({
+                    pnt: `POINT(${position.coords.longitude} ${position.coords.latitude})`
+                });
+            },
+            err => {
+                getIP().then(
+                    res => {
+                        getCoordinatesByIP(res.data.ip).then(
+                            res_coords => {
+                                this.setState({
+                                    errors: [err.message],
+                                    pnt: `POINT(${res_coords.data.longitude} ${res_coords.data.latitude})`
+                                })
+                            }
+                        )
+                    }
+                )
+            }
+        );
     }
 
     send_search = (e) => {
@@ -73,7 +98,8 @@ class MainSearch extends React.Component {
             product_query: this.state.product_query,
             distance: this.state.distance,
             after_date: this.state.after_date,
-            ordering_by: this.state.ordering_by
+            ordering_by: this.state.ordering_by,
+            pnt: this.state.pnt,
         }
 
         axios.post(REPORTS_SEARCH_API, req, getAuthHeader()).then(
@@ -91,14 +117,13 @@ class MainSearch extends React.Component {
                 }
 
                 this.setState({
-                    'errors': errors
+                    errors: errors
                 })
             }
         )
     }
 
     downloadDump = (e) => {
-        console.log(this.state);
         e.preventDefault();
         const req = {"export_format": this.state.export_format}
         axios.post(REPORTS_DUMP_API, req, {
@@ -145,7 +170,7 @@ class MainSearch extends React.Component {
 
     dateChangeHandler = (date) => {
         this.setState({
-            'after_date': date
+            after_date: date
         })
     }
 

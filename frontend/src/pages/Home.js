@@ -11,8 +11,6 @@ import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 
 class Home extends React.Component {
     render() {
-        console.log(isLoggedIn());
-
         let only_log_features;
         if (isLoggedIn()) {
             only_log_features = [<SavedSearch />, <RecentSearch />, <NearestReports />,];

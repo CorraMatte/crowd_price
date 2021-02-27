@@ -11,9 +11,9 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            'email': '',
-            'password': '',
-            'errors': ''
+            email: '',
+            password: '',
+            errors: ''
         }
     }
 
@@ -27,8 +27,8 @@ class Login extends React.Component {
     login = (e) => {
         e.preventDefault();
         const req = {
-            'email': this.state.email,
-            'password': this.state.password,
+            email: this.state.email,
+            password: this.state.password,
         }
 
         axios.post(USER_LOGIN_API, req).then(
@@ -36,18 +36,18 @@ class Login extends React.Component {
                 if (res.status === 200) {
                     setToken(res.data.key, res.data.type);
                     this.setState({
-                        'errors': ''
+                        errors: ''
                     })
                 } else {
                     this.setState({
-                        'errors': res.data
+                        errors: res.data
                     })
                 }
             }
         ).catch(
             err => {
                 this.setState({
-                    'errors': 'invalid email/password'
+                    errors: 'invalid email/password'
                 })
             }
         )

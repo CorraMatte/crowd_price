@@ -22,7 +22,8 @@ class MainStore extends React.Component {
         const id = this.props.match.params.id;
 
         axios.get(`${STORE_API}/${id}`).then(
-            res => {console.log(res.data); this.setState({
+            res => {
+                this.setState({
                 store: res.data
             })
         });
