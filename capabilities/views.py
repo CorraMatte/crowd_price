@@ -153,7 +153,7 @@ class DownloadDumpAPI(APIView):
         if not serial_dump.is_valid():
             return Response(serial_dump.errors, status.HTTP_400_BAD_REQUEST)
 
-        s = Search.objects.filter(profile__user=analyst.profile.user.id).latest('created_time')
+        s = Search.objects.filter(profile_id=analyst.profile.id).latest('created_time')
         serial_dump.validated_data['search'] = s
         dump = serial_dump.save()
         filename = f"report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.{dump.export_format}"
