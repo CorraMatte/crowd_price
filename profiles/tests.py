@@ -6,12 +6,12 @@ import datetime
 from django.core.exceptions import ValidationError
 
 
-# Create your tests here.
 class ValidationTest(APITestCase):
-     """
+    """
          Check if the date is from future
-     """
-     def test_if_date_is_future(self):
+    """
+
+    def test_if_date_is_future(self):
         with self.assertRaises(ValidationError):
             NotFuture(timezone('Europe/Rome').localize(datetime.datetime.now() + datetime.timedelta(days=1)))
 
@@ -21,6 +21,7 @@ class UserTests(APITestCase):
         Test error for duplicate users, no need a test for the analyst part
         path('consumer/signup', views.CreateConsumerView.as_view()),
     """
+
     def test_duplicate_email_for_user(self):
         url = '/consumer/signup'
         user = {
@@ -37,6 +38,7 @@ class UserTests(APITestCase):
         Test password strength and the validators, no need a test for the analyst part
         path('consumer/signup', views.CreateConsumerView.as_view()),
     """
+
     def test_email_password_characters_validators(self):
         url = '/consumer/signup'
         user = {
@@ -63,6 +65,7 @@ class UserTests(APITestCase):
         Test login of the user, in order to check for a valid token
         path('user/login', views.LoginAPI.as_view()),
     """
+
     def test_login_signup_check_response_token(self):
         url = '/consumer/signup'
         user = {
@@ -79,6 +82,7 @@ class UserTests(APITestCase):
         Test return value for the user, if it is an analyst or a consumer
         path('user/login', views.LoginAPI.as_view()),
     """
+
     def test_login_type(self):
         url = '/consumer/signup'
         user = {

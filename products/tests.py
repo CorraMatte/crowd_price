@@ -3,7 +3,6 @@ from rest_framework.test import APITestCase
 from products.models import Category, Product
 
 
-# Create your tests here.
 class CategoryTests(APITestCase):
     def setUp(self):
         super().setUp()
@@ -21,6 +20,7 @@ class CategoryTests(APITestCase):
         Check if it gives an error for a duplicate category
         path('category/add', views.CreateCategoryView.as_view()),
     """
+
     def test_category_duplicate_name(self):
         url = '/category/add'
         response = self.client.post(url, data={'name': 'category'})
@@ -51,6 +51,7 @@ class ProductTests(APITestCase):
         Check if it gives an error for a duplicate product
         path('product/add', views.CreateCategoryView.as_view()),
     """
+
     def test_product_duplicate_name(self):
         url = '/product/add'
         cat = Category(name='new_category')
@@ -64,6 +65,7 @@ class ProductTests(APITestCase):
         Check if it gives for a not existing category
         path('category/<int:pk>/products', views.RetrieveCategoryProductView.as_view()),
     """
+
     def test_retrieve_products_by_category(self):
         url = '/products/category/{}'
         response = self.client.get(url.format(Category.objects.all()[0].pk))
