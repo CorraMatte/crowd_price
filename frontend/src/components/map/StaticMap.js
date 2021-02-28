@@ -14,7 +14,7 @@ export class StaticMap extends React.Component {
             props = {
                 latitude: this.props.latitude,
                 longitude: this.props.longitude,
-                label: `${this.props.label} lon:${this.props.longitude} lat: ${this.props.latitude}`
+                label: `${this.props.label}`
             }
         } else {
             return (<div></div>)

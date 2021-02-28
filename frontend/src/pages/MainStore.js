@@ -1,12 +1,12 @@
 import React from "react";
 import axios from "axios";
 import {STORE_API, REPORTS_STORE_API} from "../urls/endpoints";
-import {DetailReportItem} from "../components/report/DetailGroupReport"
-import {DetailStoreItem} from "./Stores";
+import {DetailGroupReport} from "../components/report/DetailGroupReport"
 import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 import {StaticMap} from "../components/map/StaticMap";
+import {Card, Col, Container, Row} from "react-bootstrap";
 
 
 class MainStore extends React.Component {
@@ -23,8 +23,9 @@ class MainStore extends React.Component {
 
         axios.get(`${STORE_API}/${id}`).then(
             res => {
+                console.log(res)
                 this.setState({
-                store: res.data
+                    store: res.data
             })
         });
 
@@ -36,20 +37,47 @@ class MainStore extends React.Component {
     }
 
     render () {
-        const store = this.state.store;
-        const reports = this.state.reports;
         let coords = [0, 0];
 
         if (this.state.store) {
             coords = this.state.store.geometry.coordinates.slice();
         }
 
+        if (!this.state.store || !this.state.reports) {
+            return (<Container></Container>)
+        }
+
+
+        const store = this.state.store.properties;
+        const reports = this.state.reports;
+        console.log(store);
+
         return (
             <div>
                 {isLoggedIn() ? <HeaderLogged /> : <HeaderUnLogged />}
-                <DetailStoreItem store={store} />
-                <StaticMap latitude={coords[1]} longitude={coords[0]} label={"Location :"} />
-                {reports.map((report) => <DetailReportItem report={report} key={report.id}/>)}
+                <Container className={"float-left my-md-3"}>
+                    <Row>
+                        <Col className={"col-md-4 ml-md-1"}>
+                            <Card bg={"dark"} className={"text-light"}>
+                                <Card.Img variant={"top"} src={store.picture} />
+                                <Card.Header>{store.name}</Card.Header>
+                                <Card.Body>
+                                    There are {reports.length} reports in this store
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                        <Col className={"col-md-1"}></Col>
+                        <Col className={"col-md-6"}>
+                            <h3>Location of the store on the map</h3>
+                            <StaticMap latitude={coords[1]} longitude={coords[0]} label={store.name} />
+                        </Col>
+                    </Row>
+                </Container>
+                <Container className={"container-fluid col-md-12 my-5"}>
+                    <h3>Reports in this store</h3>
+                    <DetailGroupReport reports={reports} />
+                </Container>
+
             </div>
         )
 

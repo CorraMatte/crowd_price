@@ -1,6 +1,6 @@
 import React from "react";
 import {PRODUCT_URL, REPORT_URL, STORE_URL} from "../../urls/navigation";
-import {Card, CardDeck, Container, Row} from "react-bootstrap";
+import {Card, Row} from "react-bootstrap";
 import {get_day_month_year_from_date} from "../utils/utils";
 
 

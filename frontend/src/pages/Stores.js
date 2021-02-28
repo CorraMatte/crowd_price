@@ -5,6 +5,7 @@ import {STORE_URL} from "../urls/navigation";
 import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
+import {Card, Row} from "react-bootstrap";
 
 
 class DetailStoreItem extends React.Component {
@@ -17,11 +18,17 @@ class DetailStoreItem extends React.Component {
         const props = store.properties;
 
         return (
-            <div>
-                <img src={props.picture} alt="immagine" />
-                <a href={`${STORE_URL}/${store.id}`}>{props.name}</a>
-
-            </div>
+            <Card bg={"dark"} className={"text-light col-md-3 ml-md-2 my-md-1"}>
+                <Card.Header>
+                    <img src={props.picture} alt="immagine" />
+                </Card.Header>
+                <Card.Body>
+                    {props.name}
+                </Card.Body>
+                <Card.Footer>
+                    <a className={"text-light"} href={`${STORE_URL}/${store.id}`}>more details..</a>
+                </Card.Footer>
+            </Card>
         )
     }
 }
@@ -66,8 +73,10 @@ class Stores extends React.Component
         return (
             <div>
                 {isLoggedIn() ? <HeaderLogged /> : <HeaderUnLogged />}
-                There are: {stores.length} items
-                {stores.map((store) => <DetailStoreItem store={store} key={store.id}/>)}
+                <h3>There are {stores.length} stores</h3>
+                <Row className={"ml-md-2"}>
+                    {stores.map((store) => <DetailStoreItem store={store} key={store.id}/>)}
+                </Row>
             </div>
         )
     }

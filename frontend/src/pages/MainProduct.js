@@ -7,7 +7,6 @@ import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 import DynMap from "../components/map/DynMap";
-import {aggregate_report_by_coords} from "../components/utils/utils";
 
 class MainProduct extends React.Component {
     constructor(props) {
