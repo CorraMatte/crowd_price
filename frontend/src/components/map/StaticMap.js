@@ -22,7 +22,7 @@ export class StaticMap extends React.Component {
 
         return (
             <ReactStaticMapGL
-                width="50vw"
+                width="100%"
                 height="50vh"
                 latitude={props.latitude}
                 longitude={props.longitude}

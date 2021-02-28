@@ -48,7 +48,7 @@ class MainStore extends React.Component {
         return (
             <div>
                 {isLoggedIn() ? <HeaderLogged /> : <HeaderUnLogged />}
-                <Container className={"float-left my-md-3"}>
+                <Container className={"float-left my-md-3"} fluid>
                     <Row>
                         <Col className={"col-md-4 ml-md-1"}>
                             <Card bg={"dark"} className={"text-light"}>
@@ -66,7 +66,7 @@ class MainStore extends React.Component {
                         </Col>
                     </Row>
                 </Container>
-                <Container className={"container-fluid col-md-12 my-5"}>
+                <Container className={"col-md-12 my-md-5"} fluid>
                     <h3>Reports in this store</h3>
                     <DetailGroupReport reports={reports} />
                 </Container>

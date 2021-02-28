@@ -22,7 +22,7 @@ class NewerReports extends React.Component {
 
     render () {
         return (
-            <Container className={"container-fluid col-md-12 my-5"}>
+            <Container className={"col-md-12 my-5"} fluid>
                 <h3>New reports in the Crowd Price</h3>
                 <DetailGroupReport reports={this.state.reports} />
             </Container>

@@ -60,8 +60,8 @@ export class DynMap extends React.Component {
 
         return (
             <ReactMapGL
-                width="100vw"
-                height="100vh"
+                width="100%"
+                height="50vh"
                 zoom={this.state.zoom}
                 latitude={this.state.latitude || popups.length === 0 ? this.state.latitude : popups[0].latitude}
                 longitude={this.state.longitude || popups.length === 0 ? this.state.longitude : popups[0].longitude}

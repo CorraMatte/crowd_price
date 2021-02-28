@@ -14,7 +14,7 @@ class DetailReportItem extends React.Component {
         const product = props.product;
         const consumer = props.consumer;
         const store = !props.store ? "Not located in a store" :
-            <a href={`${STORE_URL}/${props.store.id}`} className={"text-light"}>Located in: {props.store.name}</a>
+            <a href={`${STORE_URL}/${props.store.id}`} className={"text-light"}>Reported in the store <b>"{props.store.name}"</b></a>
 
         return (
             <Card bg={"dark"} className={"text-light col-md-3 ml-md-2 mb-md-2"}>

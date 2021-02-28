@@ -21,13 +21,14 @@ class MainReport extends React.Component {
     componentDidMount() {
         const id = this.props.match.params.id;
         axios.get(`${REPORT_API}/${id}`).then(
-            res => { this.setState({
-                report: res.data
-            })
-        });
+            res => {
+                this.setState({
+                    report: res.data
+                })
+            });
     }
 
-    render () {
+    render() {
         if (!this.state.report) {
             return (<Container></Container>)
         }
@@ -41,16 +42,17 @@ class MainReport extends React.Component {
 
         return (
             <div>
-                {isLoggedIn() ? <HeaderLogged /> : <HeaderUnLogged />}
-                <Container className={"float-left my-md-3"}>
+                {isLoggedIn() ? <HeaderLogged/> : <HeaderUnLogged/>}
+                <Container className={"float-left my-md-3 "} fluid>
                     <Row>
                         <Col className={"col-md-4 ml-md-1"}>
                             <Card bg={"dark"} className={"text-light ml-md-1"}>
-                                <Card.Img variant={"top"} src={props.picture} />
-                                <Card.Header><a className={"text-light"} href={`${PRODUCT_URL}/${product.id}`}>{product.name}</a></Card.Header>
+                                <Card.Img variant={"top"} src={props.picture}/>
+                                <Card.Header><a className={"text-light"}
+                                                href={`${PRODUCT_URL}/${product.id}`}>{product.name}</a></Card.Header>
                                 <Card.Body>
-                                    price: {props.price}€ <br />
-                                    by {consumer.profile.user.email} <br />
+                                    price: {props.price}€ <br/>
+                                    by {consumer.profile.user.email} <br/>
                                 </Card.Body>
                                 <Card.Body>
                                     {store}
@@ -63,7 +65,7 @@ class MainReport extends React.Component {
                         <Col className={"col-md-1"}></Col>
                         <Col className={"col-md-6"}>
                             <h3>Location of the report on the map</h3>
-                            <StaticMap latitude={coords[1]} longitude={coords[0]} label={"Was reported here"} />
+                            <StaticMap latitude={coords[1]} longitude={coords[0]} label={"Was reported here"}/>
                         </Col>
                     </Row>
                 </Container>
