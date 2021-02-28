@@ -19,7 +19,7 @@ class DetailReportItem extends React.Component {
         return (
             <Card bg={"dark"} className={"text-light col-md-3 ml-md-2 mb-md-2"}>
                 <Card.Img variant={"top"} src={props.picture} />
-                <Card.Header><a className={"text-light"} href={`${PRODUCT_URL}/${product.id}`}>{product.name}</a></Card.Header>
+                <Card.Header><h4><a className={"text-light"} href={`${PRODUCT_URL}/${product.id}`}>{product.name}</a></h4></Card.Header>
                 <Card.Body>
                     price: {props.price}€ <br />
                     by {consumer.profile.user.email} <br />

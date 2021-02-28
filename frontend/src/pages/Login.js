@@ -72,7 +72,7 @@ class Login extends React.Component {
             <div>
                 <HeaderUnLogged/>
                 <Card bg={"dark"} className={"col-md-4 mx-auto mt-3"}>
-                    <Card.Header className={"text-light"}>Welcome on Crowd Price!</Card.Header>
+                    <Card.Header className={"text-light"}><h4>Welcome on Crowd Price!</h4></Card.Header>
                     <Card.Body className={"text-light"}>
                         <Form onSubmit={this.login}>
                             <Col className={"mt-3"}>

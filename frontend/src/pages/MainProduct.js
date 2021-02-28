@@ -1,14 +1,12 @@
 import React from "react";
 import axios from "axios";
-import {DetailProductItem} from "../components/product/DetailGroupProduct"
-import {DetailGroupReport, DetailReportItem} from "../components/report/DetailGroupReport";
+import {DetailGroupReport} from "../components/report/DetailGroupReport";
 import {PRODUCT_API, REPORTS_PRODUCT_API} from "../urls/endpoints";
 import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 import DynMap from "../components/map/DynMap";
 import {Card, Col, Container, Row} from "react-bootstrap";
-import {PRODUCT_URL} from "../urls/navigation";
 import CategoryItem from "../components/product/CategoryItem";
 
 class MainProduct extends React.Component {
@@ -52,8 +50,7 @@ class MainProduct extends React.Component {
                     <Row>
                         <Col className={"col-md-3"}>
                             <Card bg={"dark"} className={"text-light"}>
-                                <Card.Header><a className={"text-light"}
-                                                href={`${PRODUCT_URL}/${prod.id}`}>{prod.name}</a></Card.Header>
+                                <Card.Header><h4>{prod.name}</h4></Card.Header>
                                 {/* TODO: Show the last report date for this product (?)*/}
                                 <Card.Body>
                                     Categories <br/>
@@ -72,10 +69,13 @@ class MainProduct extends React.Component {
                         </Col>
                     </Row>
                 </Container>
-                <Container className={"col-md-12 my-5"} fluid>
-                    <h3>Reports for this product</h3>
-                    <DetailGroupReport reports={this.state.reports}/>
-                </Container>
+                {this.state.reports.length > 0 ? (
+                    <Container className={"col-md-12 my-5"} fluid>
+                        <h3>Reports for this product</h3>
+                        <DetailGroupReport reports={this.state.reports}/>
+                    </Container>
+                ) : <h3 className={"my-5 mx-5"}>There no reports for this product</h3>}
+
 
             </div>
         )

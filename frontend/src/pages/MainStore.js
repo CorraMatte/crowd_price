@@ -53,7 +53,7 @@ class MainStore extends React.Component {
                         <Col className={"col-md-4 ml-md-1"}>
                             <Card bg={"dark"} className={"text-light"}>
                                 <Card.Img variant={"top"} src={store.picture} />
-                                <Card.Header>{store.name}</Card.Header>
+                                <Card.Header><h4>{store.name}</h4></Card.Header>
                                 <Card.Body>
                                     There are {reports.length} reports in this store
                                 </Card.Body>
