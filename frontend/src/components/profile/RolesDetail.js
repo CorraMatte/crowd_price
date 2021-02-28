@@ -1,5 +1,6 @@
 import React from "react";
-import {get_day_month_year_from_date} from "../utils/utils";
+import {get_badge_from_experience, get_day_month_year_from_date} from "../utils/utils";
+import {Card} from "react-bootstrap";
 
 class ProfileDetail extends React.Component {
     render () {
@@ -11,9 +12,10 @@ class ProfileDetail extends React.Component {
 
         return (
             <div>
-                <img alt={'profile image'} src={profile.picture} />
-                email: {profile.user.email}
-                subcribe from: {get_day_month_year_from_date(profile.subscribe_date)}
+                <Card.Img alt={'profile image'} src={profile.picture} variant={"top"} />
+                <Card.Body>
+                    Hello <b>{profile.user.email}</b>  <br />
+                </Card.Body>
             </div>
         )
     }
@@ -28,10 +30,19 @@ class ConsumerDetail extends React.Component {
         const consumer = this.props.consumer;
 
         return (
-            <div>
+            <Card bg={"dark"} className={"text-light"}>
                 <ProfileDetail profile={consumer.profile} />
-                experience: {consumer.experience}
-            </div>
+                <Card.Body>
+                    Your current level is <br/>
+                    <h2>{get_badge_from_experience(consumer.experience)}</h2>
+                </Card.Body>
+                <Card.Body>
+                    You created {consumer.experience} reports
+                </Card.Body>
+                <Card.Footer>
+                    <small>subscribe from {get_day_month_year_from_date(consumer.profile.subscribe_date)}</small>
+                </Card.Footer>
+            </Card>
         )
     }
 }
@@ -44,10 +55,12 @@ class AnalystDetail extends React.Component {
 
         const analyst = this.props.analyst;
         return (
-            <div>
+            <Card bg={"dark"} className={"text-light col-md-3"}>
                 <ProfileDetail profile={analyst.profile} />
-                experience: {analyst.organization}
-            </div>
+                <Card.Footer>
+                    <small>Your organization is <b>{analyst.organization}</b></small>
+                </Card.Footer>
+            </Card>
         )
     }
 }

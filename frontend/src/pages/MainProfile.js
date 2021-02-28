@@ -8,7 +8,7 @@ import HeaderLogged from "../components/utils/HeaderLogged";
 import StaticMap from "../components/map/StaticMap";
 import {ANALYST_LABEL, CONSUMER_LABEL} from "../components/utils/const";
 import {getCoordinatesByIP, getIP} from "../components/utils/utils";
-import {Card, Col, Container, Row} from "react-bootstrap";
+import {Col, Container, Row} from "react-bootstrap";
 
 
 class MainProfile extends React.Component {
@@ -81,22 +81,15 @@ class MainProfile extends React.Component {
         return (
             <div>
                 <HeaderLogged />
-                <Container className={"float-left my-md-3"}>
+                <Container className={"my-md-5"} fluid>
                     <Row>
                         <Col className={"col-md-4 ml-md-1"}>
                             {profile_type}
-                            {/*<Card bg={"dark"} className={"text-light"}>
-                                <Card.Img variant={"top"} src={store.picture} />
-                                <Card.Header>{store.name}</Card.Header>
-                                <Card.Body>
-                                    There are {reports.length} reports in this store
-                                </Card.Body>
-                            </Card>*/}
                         </Col>
                         <Col className={"col-md-1"}></Col>
                         <Col className={"col-md-6"}>
                             <h3>Location of the store on the map</h3>
-                            <StaticMap latitude={this.state.coords[1]} longitude={this.state.coords[0]} label={"Current location"} />
+                            <StaticMap latitude={this.state.coords[1]} longitude={this.state.coords[0]} label={"Your current location"} />
                         </Col>
                     </Row>
                 </Container>

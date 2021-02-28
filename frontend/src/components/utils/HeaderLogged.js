@@ -32,6 +32,7 @@ export class HeaderLogged extends React.Component {
                         <Nav.Link href="/logout/">Logout</Nav.Link>
                     </Nav>
                 </Navbar>
+                <br /><br /><br />
             </div>
         )
     };
