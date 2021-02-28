@@ -24,4 +24,4 @@ class ReportSerializer(geo_serializers.GeoFeatureModelSerializer):
         model = Report
         geo_field = 'pnt'
         depth = 3
-        fields = ['id', 'product', 'consumer', 'store', 'created_time', 'price', 'pnt']
+        fields = ['id', 'product', 'consumer', 'store', 'created_time', 'price', 'pnt', 'picture']

@@ -9,6 +9,9 @@ from rest_framework.response import Response
 from rest_framework import generics, status, permissions
 from profiles.models import Profile
 from django.contrib.gis.db.models.functions import Distance
+from django.contrib.gis.geos import GEOSGeometry
+from crowd_price.const import SRID
+from django.contrib.gis.geos.error import GEOSException
 import datetime
 
 
@@ -63,14 +66,21 @@ class RetrieveReportByProductAPI(generics.ListAPIView):
         return Report.objects.filter(product=product)
 
 
-class RetrieveNearestReportAPI(generics.ListAPIView):
-    queryset = Report.objects.all()
-    serializer_class = serial.ReportSerializer
+class RetrieveNearestReportAPI(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        pnt = Profile.objects.get(user__pk=self.request.user.pk).pnt
-        return Report.objects.all().annotate(distance=Distance("pnt", pnt)).order_by("distance")[:10]
+    def post(self, request):
+        try:
+            pnt = GEOSGeometry(request.data['pnt'], srid=SRID)
+        except (GEOSException, ValueError) as e:
+            return Response({"detail": f"position not in a valid format: {e}"}, status.HTTP_400_BAD_REQUEST)
+
+        return Response(
+            {"results": serial.ReportSerializer(
+                Report.objects.all().annotate(distance=Distance("pnt", pnt)).order_by("distance")[:10], many=True
+            ).data},
+            status.HTTP_200_OK
+        )
 
 
 class RetrieveNewerReportAPI(generics.ListAPIView):
@@ -126,7 +136,7 @@ class RetrieveLatestSearchAPI(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Search.objects.filter(profile__user=self.request.user.pk).order_by('-created_time')[:3]
+        return [Search.objects.filter(profile__user=self.request.user.pk).order_by('-created_time')[0]]
 
 
 class RetrieveStarredSearchAPI(generics.ListAPIView):
