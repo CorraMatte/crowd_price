@@ -7,24 +7,23 @@ import {get_day_month_year_from_date} from "../utils/utils";
 class DetailReportItem extends React.Component {
     render() {
         if (!this.props.report)  {
-            return (<div></div>);
+            return (<Card></Card>);
         }
 
         const props = this.props.report.properties;
         const product = props.product;
         const consumer = props.consumer;
-        console.log(props.store)
         const store = !props.store ? "Not located in a store" :
             <a href={`${STORE_URL}/${props.store.id}`} className={"text-light"}>Located in: {props.store.name}</a>
-        ;
 
         return (
             <Card bg={"dark"} className={"text-light col-md-3 ml-md-2 mb-md-2"}>
+                <Card.Img variant={"top"} src={props.picture} />
                 <Card.Header><a className={"text-light"} href={`${PRODUCT_URL}/${product.id}`}>{product.name}</a></Card.Header>
                 <Card.Body>
                     price: {props.price}€ <br />
                     by {consumer.profile.user.email} <br />
-                    on the {get_day_month_year_from_date(props.created_time)} <br />
+                    on the {get_day_month_year_from_date(props.created_time)}
                 </Card.Body>
                 <Card.Body>
                     {store}

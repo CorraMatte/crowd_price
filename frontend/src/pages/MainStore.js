@@ -37,20 +37,13 @@ class MainStore extends React.Component {
     }
 
     render () {
-        let coords = [0, 0];
-
-        if (this.state.store) {
-            coords = this.state.store.geometry.coordinates.slice();
-        }
-
         if (!this.state.store || !this.state.reports) {
             return (<Container></Container>)
         }
 
-
+        const coords = this.state.store.geometry.coordinates.slice();
         const store = this.state.store.properties;
         const reports = this.state.reports;
-        console.log(store);
 
         return (
             <div>
@@ -77,7 +70,6 @@ class MainStore extends React.Component {
                     <h3>Reports in this store</h3>
                     <DetailGroupReport reports={reports} />
                 </Container>
-
             </div>
         )
 

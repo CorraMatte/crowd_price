@@ -1,11 +1,13 @@
 import React from "react";
 import axios from "axios";
 import {REPORT_API} from "../urls/endpoints";
-import {DetailReportItem} from "../components/report/DetailGroupReport";
 import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 import {StaticMap} from "../components/map/StaticMap";
+import {Card, Col, Container, Row} from "react-bootstrap";
+import {PRODUCT_URL, STORE_URL} from "../urls/navigation";
+import {get_day_month_year_from_date} from "../components/utils/utils";
 
 
 class MainReport extends React.Component {
@@ -26,18 +28,45 @@ class MainReport extends React.Component {
     }
 
     render () {
-        const report = this.state.report;
-        let coords = [0, 0];
-
-        if (this.state.report) {
-            coords = this.state.report.geometry.coordinates.slice();
+        if (!this.state.report) {
+            return (<Container></Container>)
         }
+
+        const coords = this.state.report.geometry.coordinates.slice();
+        const props = this.state.report.properties;
+        const product = props.product;
+        const consumer = props.consumer;
+        const store = !props.store ? "Not located in a store" :
+            <a href={`${STORE_URL}/${props.store.id}`} className={"text-light"}>Located in: {props.store.name}</a>
 
         return (
             <div>
-            {isLoggedIn() ? <HeaderLogged /> : <HeaderUnLogged />}
-            <DetailReportItem report={report} />
-            <StaticMap latitude={coords[1]} longitude={coords[0]} label={"Location :"} />
+                {isLoggedIn() ? <HeaderLogged /> : <HeaderUnLogged />}
+                <Container className={"float-left my-md-3"}>
+                    <Row>
+                        <Col className={"col-md-4 ml-md-1"}>
+                            <Card bg={"dark"} className={"text-light ml-md-1"}>
+                                <Card.Img variant={"top"} src={props.picture} />
+                                <Card.Header><a className={"text-light"} href={`${PRODUCT_URL}/${product.id}`}>{product.name}</a></Card.Header>
+                                <Card.Body>
+                                    price: {props.price}€ <br />
+                                    by {consumer.profile.user.email} <br />
+                                </Card.Body>
+                                <Card.Body>
+                                    {store}
+                                </Card.Body>
+                                <Card.Footer>
+                                    <small>Reported on the {get_day_month_year_from_date(props.created_time)}</small>
+                                </Card.Footer>
+                            </Card>
+                        </Col>
+                        <Col className={"col-md-1"}></Col>
+                        <Col className={"col-md-6"}>
+                            <h3>Location of the report on the map</h3>
+                            <StaticMap latitude={coords[1]} longitude={coords[0]} label={"Was reported here"} />
+                        </Col>
+                    </Row>
+                </Container>
             </div>
         )
     }

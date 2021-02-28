@@ -8,6 +8,7 @@ import HeaderLogged from "../components/utils/HeaderLogged";
 import StaticMap from "../components/map/StaticMap";
 import {ANALYST_LABEL, CONSUMER_LABEL} from "../components/utils/const";
 import {getCoordinatesByIP, getIP} from "../components/utils/utils";
+import {Card, Col, Container, Row} from "react-bootstrap";
 
 
 class MainProfile extends React.Component {
@@ -80,10 +81,29 @@ class MainProfile extends React.Component {
         return (
             <div>
                 <HeaderLogged />
-                {profile_type}
-                <StaticMap latitude={this.state.coords[1]} longitude={this.state.coords[0]} label={"Your location"} />
-                <h5>{this.state.errors}</h5>
-                <DetailGroupReport reports={this.state.reports} />
+                <Container className={"float-left my-md-3"}>
+                    <Row>
+                        <Col className={"col-md-4 ml-md-1"}>
+                            {profile_type}
+                            {/*<Card bg={"dark"} className={"text-light"}>
+                                <Card.Img variant={"top"} src={store.picture} />
+                                <Card.Header>{store.name}</Card.Header>
+                                <Card.Body>
+                                    There are {reports.length} reports in this store
+                                </Card.Body>
+                            </Card>*/}
+                        </Col>
+                        <Col className={"col-md-1"}></Col>
+                        <Col className={"col-md-6"}>
+                            <h3>Location of the store on the map</h3>
+                            <StaticMap latitude={this.state.coords[1]} longitude={this.state.coords[0]} label={"Current location"} />
+                        </Col>
+                    </Row>
+                </Container>
+                <Container className={"container-fluid col-md-12 my-5"}>
+                    <h3>Reports in this store</h3>
+                    <DetailGroupReport reports={this.state.reports} />
+                </Container>
             </div>
         )
     }
