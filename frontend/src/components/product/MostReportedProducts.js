@@ -22,7 +22,7 @@ class MostReportedProducts extends React.Component {
 
     render () {
         return (
-            <Container className={"col-md-12 my-5"} fluid>
+            <Container className={"my-5"} fluid>
                 <h3>The most rated products</h3>
                 <DetailGroupProduct products={this.state.products} />
             </Container>

@@ -43,7 +43,7 @@ class MainReport extends React.Component {
         return (
             <div>
                 {isLoggedIn() ? <HeaderLogged/> : <HeaderUnLogged/>}
-                <Container className={"float-left my-md-3 "} fluid>
+                <Container className={"float-left my-md-3"} fluid>
                     <Row>
                         <Col className={"col-md-4 ml-md-1"}>
                             <Card bg={"dark"} className={"text-light ml-md-1"}>

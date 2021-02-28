@@ -5,7 +5,7 @@ import {STORE_URL} from "../urls/navigation";
 import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
-import {Card, Row} from "react-bootstrap";
+import {Card, Container, Row} from "react-bootstrap";
 
 
 class DetailStoreItem extends React.Component {
@@ -73,10 +73,12 @@ class Stores extends React.Component
         return (
             <div>
                 {isLoggedIn() ? <HeaderLogged /> : <HeaderUnLogged />}
-                <h3>There are {stores.length} stores</h3>
-                <Row className={"ml-md-2"}>
-                    {stores.map((store) => <DetailStoreItem store={store} key={store.id}/>)}
-                </Row>
+                <Container className={"ml-md-2 my-md-3"} fluid>
+                    <h3>There are {stores.length} stores</h3>
+                    <Row>
+                        {stores.map((store) => <DetailStoreItem store={store} key={store.id}/>)}
+                    </Row>
+                </Container>
             </div>
         )
     }

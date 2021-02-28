@@ -1,7 +1,9 @@
 import React from "react";
 import axios from "axios";
-import {SEARCH_STARRED_API} from "../../urls/endpoints";
+import {REPORTS_SEARCH_API, SEARCH_LATEST_API} from "../../urls/endpoints";
 import {getAuthHeader} from "../../auth";
+import {Container} from "react-bootstrap";
+import {DetailGroupReport} from "../report/DetailGroupReport";
 
 class RecentSearch extends React.Component {
     constructor(props) {
@@ -12,16 +14,38 @@ class RecentSearch extends React.Component {
     }
 
     componentDidMount() {
-        axios.get(SEARCH_STARRED_API, getAuthHeader()).then(
-            res => { this.setState({
-                searches: res.data.results,
-            })
-        });
+        axios.get(SEARCH_LATEST_API, getAuthHeader()).then(
+            res => {
+                if (res.data.results.length === 0) {
+                    this.setState({
+                        reports: []
+                    });
+                } else {
+                    const search_id = res.data.results.features[0].id;
+                    axios.get(`${REPORTS_SEARCH_API}/${search_id}`, getAuthHeader()).then(
+                        res => {
+                            this.setState({
+                                reports: res.data.features
+                            });
+                        }
+                    )
+
+                }
+            });
     }
 
-    render () {
+    render() {
         return (
-            <h1>Your recent search results</h1>
+            <div>
+                {
+                    this.state.reports ?
+                        <Container className={"my-5"} fluid>
+                            <h3>Reports in the last your search</h3>
+                            <DetailGroupReport reports={this.state.reports}/>
+                        </Container>
+                        : <h3 className={'container-fluid'}>No reports in the latest search</h3>
+                }
+            </div>
         )
     }
 }

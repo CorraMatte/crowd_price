@@ -43,7 +43,6 @@ class MainCategory extends React.Component {
     render() {
         const products_dict = this.state.products_reports;
         const products = this.state.products;
-        console.log(this.state.products)
         if (!products_dict) {
             return (<div></div>)
         }
