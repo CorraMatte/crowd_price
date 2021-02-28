@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import {PRODUCTS_MOST_REPORTED_API} from "../../urls/endpoints";
 import {DetailGroupProduct} from "./DetailGroupProduct";
+import {Container} from "react-bootstrap";
 
 class MostReportedProducts extends React.Component {
     constructor(props) {
@@ -21,10 +22,10 @@ class MostReportedProducts extends React.Component {
 
     render () {
         return (
-            <div>
-                <h1>The most rated products</h1>
+            <Container className={"container-fluid col-md-12 my-5"}>
+                <h3>The most rated products</h3>
                 <DetailGroupProduct products={this.state.products} />
-            </div>
+            </Container>
         )
     }
 }
