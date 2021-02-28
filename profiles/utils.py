@@ -25,7 +25,7 @@ def create_profile(request):
         user.set_password(password1)
         user.save()
     except IntegrityError:
-        return Response({"detail": ["email already presents in the database"]}, status.HTTP_400_BAD_REQUEST)
+        return Response({"detail": ["The email is already present in the database"]}, status.HTTP_400_BAD_REQUEST)
 
     try:
         validate_password(password1, user)

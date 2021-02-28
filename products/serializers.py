@@ -13,7 +13,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         depth = 1
-        fields = ['id', 'picture', 'name', 'categories']
+        fields = ['id', 'name', 'categories']
 
 
 class StoreSerializer(geo_serializers.GeoFeatureModelSerializer):

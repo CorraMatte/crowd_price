@@ -8,7 +8,6 @@ urlpatterns = [
     path('graph/report/product/top/price/trend', views.GetMostRatedProductPriceTrend.as_view()),
     path('graph/report/category/top', views.GetMostRatedCategories.as_view()),
     path('graph/report/store/top', views.GetMostRatedStores.as_view()),
-
     path('graph/search/product/top', views.GetMostSearchedProducts.as_view()),
     path('graph/search/category/top', views.GetMostSearchedCategories.as_view()),
 ]

@@ -28,7 +28,6 @@ class Store(models.Model):
 
 
 class Product(models.Model):
-    picture = models.ImageField(upload_to='img/products/%Y', default='img/product_blank.png')
     name = models.CharField(max_length=50, unique=True)
     categories = models.ManyToManyField(Category)
 

@@ -16,7 +16,6 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     picture = models.ImageField(upload_to='img/profile/%Y', default="img/blank_profile.png")
     subscribe_date = models.DateTimeField(validators=[NotFuture], auto_now_add=True)
-    # pnt = models.PointField(srid=SRID)
 
     def __str__(self):
         return self.user.email
@@ -28,8 +27,6 @@ class Profile(models.Model):
 class Consumer(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     experience = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(MAX_EXPERIENCE)])
-    # followers = models.ManyToManyField("self")
-    # birth = models.DateField(default=False, validators=[AgeValidator])
 
     # Could be useful
     # is_oauth = models.BooleanField(default=False)

@@ -73,7 +73,7 @@ class LoginAPI(APIView):
 
         # Check password
         if not user.check_password(request.data.get('password')):
-            return Response({'detail': 'invalid email/password'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': 'Invalid email or password!'}, status=status.HTTP_400_BAD_REQUEST)
 
         token = Token.objects.get(user=User.objects.get(email=user.email))
 
