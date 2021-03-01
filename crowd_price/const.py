@@ -1,5 +1,5 @@
 # 1 Million as maximum price
-MAX_PRICE = 1000000.00
+MAX_PRICE = 10000.00
 
 # 1 cent as minimum price
 MIN_PRICE = 0.00
