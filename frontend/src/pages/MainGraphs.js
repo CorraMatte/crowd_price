@@ -16,6 +16,7 @@ import {
     GRAPH_REPORT_PRODUCT_TOP_TITLE, GRAPH_REPORT_STORE_TOP_TITLE,
     GRAPH_REPORT_USER_MOST_ACTIVE_TITLE, GRAPH_SEARCH_CATEGORY_TOP_TITLE, GRAPH_SEARCH_PRODUCT_TOP_TITLE
 } from "../components/utils/const";
+import {Card, Container} from "react-bootstrap";
 
 
 export class MainGraphs extends React.Component {
@@ -57,14 +58,19 @@ export class MainGraphs extends React.Component {
         let graphs = [];
 
         for (const [field, value] of Object.entries(this.state)) {
-            graphs.push(<BarChartItem key={field} title={value.title} data={value.data} />)
+            graphs.push(
+                <Card bg={"light"} className={"my-md-3"}>
+                    <Card.Header>{value.title}</Card.Header>
+                    <BarChartItem key={field} data={value.data} />
+                </Card>
+                )
         }
 
         return (
-            <div>
+            <Container fluid>
                 <HeaderLogged />
                 {graphs}
-            </div>
+            </Container>
         )
     }
 }
