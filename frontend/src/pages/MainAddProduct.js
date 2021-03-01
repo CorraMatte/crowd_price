@@ -69,7 +69,7 @@ export class MainAddProduct extends React.Component {
                                              onChange={this.fieldChangeHandler}/>
                     )}
 
-                    <Button id={"submit"} color={"primary"} type="submit">search</Button>
+                    <Button id={"submit"} className={"btn-block btn-primary"} type="submit">search</Button>
                 </Form>
             </div>
         )

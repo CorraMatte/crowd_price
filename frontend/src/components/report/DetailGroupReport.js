@@ -17,7 +17,7 @@ class DetailReportItem extends React.Component {
             <a href={`${STORE_URL}/${props.store.id}`} className={"text-light"}>Reported in the store <b>"{props.store.name}"</b></a>
 
         return (
-            <Card bg={"dark"} className={"text-light col-md-3 ml-md-2 mb-md-2"}>
+            <Card bg={"dark"} className={"text-light ml-md-2 mb-md-2 " + this.props.col_size}>
                 <Card.Img variant={"top"} src={props.picture} />
                 <Card.Header><h4><a className={"text-light"} href={`${PRODUCT_URL}/${product.id}`}>{product.name}</a></h4></Card.Header>
                 <Card.Body>
@@ -42,7 +42,7 @@ class DetailGroupReport extends React.Component {
         return (
             <div>
                 <Row className={"ml-md-2"}>
-                    {res.map((report) => (<DetailReportItem report={report} key={report.id}/>))}
+                    {res.map((report) => (<DetailReportItem report={report} key={report.id} col_size={"col-md-3"}/>))}
                 </Row>
             </div>
         )

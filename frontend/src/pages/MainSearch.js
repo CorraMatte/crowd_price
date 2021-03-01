@@ -7,16 +7,18 @@ import {
     SEARCH_ADD_FAVORITE_API,
     SEARCH_SORT_OPTIONS_API
 } from "../urls/endpoints";
-import {Button, Form} from "react-bootstrap";
+import {Alert, Button, Card, Col, Container, Form, Row} from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import {ANALYST_LABEL, MAX_DISTANCE, MAX_PRICE, MIN_PRICE} from "../components/utils/const"
-import {DetailGroupReport} from "../components/report/DetailGroupReport";
+import { DetailReportItem} from "../components/report/DetailGroupReport";
 import {getAuthHeader, getUserType, isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 import DynMap from "../components/map/DynMap";
-import { saveAs } from 'file-saver'
+import {saveAs} from 'file-saver'
 import {getCoordinatesByIP, getIP} from "../components/utils/utils";
+import {RangeSlider, Slider} from 'reactrangeslider';
+import "react-datepicker/dist/react-datepicker.css";
 
 
 class MainSearch extends React.Component {
@@ -66,7 +68,7 @@ class MainSearch extends React.Component {
         }
 
         navigator.geolocation.getCurrentPosition(
-            position =>  {
+            position => {
                 this.setState({
                     pnt: `POINT(${position.coords.longitude} ${position.coords.latitude})`
                 });
@@ -77,7 +79,6 @@ class MainSearch extends React.Component {
                         getCoordinatesByIP(res.data.ip).then(
                             res_coords => {
                                 this.setState({
-                                    errors: [err.message],
                                     pnt: `POINT(${res_coords.data.longitude} ${res_coords.data.latitude})`
                                 })
                             }
@@ -111,13 +112,8 @@ class MainSearch extends React.Component {
                 })
             }).catch(
             err => {
-                let errors = []
-                for (const [field, error_message] of Object.entries(err.response.data)) {
-                    errors.push(`Error in field "${field}": ${error_message}`)
-                }
-
                 this.setState({
-                    errors: errors
+                    errors: 'You have to insert at least the product name'
                 })
             }
         )
@@ -127,10 +123,10 @@ class MainSearch extends React.Component {
         e.preventDefault();
         const req = {"export_format": this.state.export_format}
         axios.post(REPORTS_DUMP_API, req, {
-            headers: { Authorization: `Token ${isLoggedIn()}` },
+            headers: {Authorization: `Token ${isLoggedIn()}`},
             responseType: 'blob'
         }).then(response => {
-            let [ , filename] = response.headers['content-disposition'].split('filename=');
+            let [, filename] = response.headers['content-disposition'].split('filename=');
             filename = filename.replaceAll('"', '');
             saveAs(response.data, filename);
         })
@@ -174,6 +170,19 @@ class MainSearch extends React.Component {
         })
     }
 
+    priceChangeHandler = (prices) => {
+        this.setState({
+            price_min: prices.start,
+            price_max: prices.end
+        })
+    }
+
+    distanceChangeHandler = (distance) => {
+        this.setState({
+            distance: distance
+        })
+    }
+
     render() {
         let result_header;
         let dump_menu = "";
@@ -197,73 +206,108 @@ class MainSearch extends React.Component {
                 result_header = <span>There are {this.state.reports.length} reports for that product</span>
             }
         } else {
-            result_header = this.state.errors.map((err) => [<span>{err}</span>, <br/>])
+            result_header = <Alert variant={"danger"}>{this.state.errors}</Alert>
         }
 
         return (
             <div>
                 {isLoggedIn() ? <HeaderLogged/> : <HeaderUnLogged/>}
-                <Form onSubmit={this.send_search}>
-                    <Form.Control
-                        type="text"
-                        name="product_query"
-                        id={"product_query"}
-                        defaultValue={this.state.product_query}
-                        onChange={this.fieldChangeHandler}
-                    />
+                <Container className={"float-left my-md-3"} fluid>
+                    <Row>
+                        <Col className={"col-md-4 ml-md-1"}>
+                            <Card bg={"dark"} className={'text-light'}>
+                                <Card.Header>Search reports for the product</Card.Header>
+                                <Form onSubmit={this.send_search}>
+                                    <Card.Body>
+                                        <Form.Control
+                                            type="text"
+                                            name="product_query"
+                                            placeholder={"Type the product name"}
+                                            id={"product_query"}
+                                            defaultValue={this.state.product_query}
+                                            onChange={this.fieldChangeHandler}
+                                        />
+                                    </Card.Body>
 
-                    <Form.Control
-                        type="number"
-                        name="price_min"
-                        id="price_min"
-                        min={this.state.price_min}
-                        defaultValue={MIN_PRICE}
-                        onChange={this.fieldChangeHandler}
-                    />
+                                    <Card.Body>
+                                        Price from {this.state.price_min}€ to {this.state.price_max}€
+                                        <RangeSlider
+                                            value={{start: this.state.price_min, end: this.state.price_max}}
+                                            onChange={this.priceChangeHandler}
+                                            min={MIN_PRICE}
+                                            max={MAX_PRICE}
+                                            step={100}
+                                        />
+                                    </Card.Body>
 
-                    <Form.Control
-                        type="number"
-                        name="price_max"
-                        id={"price_max"}
-                        defaultValue={this.state.price_max}
-                        max={MAX_PRICE}
-                        onChange={this.fieldChangeHandler}
-                    />
+                                    <Card.Body>
+                                        Distance up to {this.state.distance} km
+                                        <Slider
+                                            min={10}
+                                            max={MAX_DISTANCE}
+                                            step={5}
+                                            value={this.state.distance}
+                                            onChange={this.distanceChangeHandler}
+                                        />
+                                    </Card.Body>
 
-                    <Form.Control
-                        type="number"
-                        name="distance"
-                        id={"distance"}
-                        max={this.state.distance}
-                        defaultValue={MAX_DISTANCE}
-                        onChange={this.fieldChangeHandler}
-                    />
+                                    <Card.Body>
+                                        Categories
+                                        {this.state.all_categories.map(
+                                            (cat) => <Form.Check type='checkbox' id={cat.id} name={cat.name}
+                                                                 label={cat.name} key={cat.id}
+                                                                 onChange={this.fieldChangeHandler}/>
+                                        )}
+                                    </Card.Body>
 
-                    {this.state.all_categories.map(
-                        (cat) => <Form.Check type='checkbox' id={cat.id} name={cat.name} label={cat.name} key={cat.id}
-                                             onChange={this.fieldChangeHandler}/>
-                    )}
+                                    <Card.Body>
+                                        Published after <br/>
+                                        <DatePicker selected={this.state.after_date} onChange={this.dateChangeHandler}/>
+                                    </Card.Body>
 
-                    <DatePicker selected={this.state.after_date} onChange={this.dateChangeHandler}/>
+                                    <Card.Body>
+                                        Sort by
+                                        <Form.Control as="select" onChange={this.fieldChangeHandler}
+                                                      name={'ordering_by'}>
+                                            {this.state.sorting_options.map((opt) => <option value={opt[0]}
+                                                                                             key={opt[0]}>{opt[1]}</option>)}
+                                        </Form.Control>
+                                    </Card.Body>
 
-                    <Form.Control as="select" onChange={this.fieldChangeHandler} name={'ordering_by'}>
-                        {this.state.sorting_options.map((opt) => <option value={opt[0]} key={opt[0]}>{opt[1]}</option>)}
-                    </Form.Control>
+                                    <Card.Footer>
+                                        <Button id={"submit"} className={"btn-block btn-primary"}
+                                                type="submit">Search</Button>
+                                    </Card.Footer>
+                                    {isLoggedIn() ?
+                                        <Card.Body>
+                                            <br/>
+                                            <br/>
+                                            <Button className={'btn-block'} onClick={this.addToFavorite}>
+                                                Add last search to favorite searches
+                                            </Button>
+                                        </Card.Body> :
+                                        <div></div>
+                                    }
+                                </Form>
+                            </Card>
 
-                    <Button id={"submit"} color={"primary"} type="submit">search</Button>
+                            {dump_menu}
 
-                </Form>
-                <h1>{result_header}</h1>
-                {isLoggedIn() ? <Button onClick={this.addToFavorite}>Add to favorite search</Button> : <div></div>}
-
-                {dump_menu}
-
-                <DetailGroupReport reports={this.state.reports}/>
-                <DynMap reports={this.state.reports}/>
-
+                        </Col>
+                        <Col className={"col-md-7"}>
+                            <h3>{result_header}</h3>
+                            {this.state.reports.map((report) => (
+                                <DetailReportItem report={report} col_size={"col-md-11"} />
+                            ))}
+                        </Col>
+                    </Row>
+                </Container>
+                <Container className={"float-left my-md-3"} fluid>
+                    <h3>{this.state.reports.length ? "Results in the map" : ""}</h3>
+                    <DynMap reports={this.state.reports}/>
+                </Container>
             </div>
         )
-
     }
 }
 
