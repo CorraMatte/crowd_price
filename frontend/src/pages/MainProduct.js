@@ -46,9 +46,9 @@ class MainProduct extends React.Component {
         return (
             <div>
                 {isLoggedIn() ? <HeaderLogged/> : <HeaderUnLogged/>}
-                <Container className={"my-md-3"}>
+                <Container className={"float-left my-md-3"} fluid>
                     <Row>
-                        <Col className={"col-md-3"}>
+                        <Col className={"col-md-4  ml-md-1"}>
                             <Card bg={"dark"} className={"text-light"}>
                                 <Card.Header><h4>{prod.name}</h4></Card.Header>
                                 {/* TODO: Show the last report date for this product (?)*/}
@@ -64,7 +64,8 @@ class MainProduct extends React.Component {
                                 </Card.Body>
                             </Card>
                         </Col>
-                        <Col className={"col-md-9"}>
+                        <Col className={"col-md-1"}></Col>
+                        <Col className={"col-md-6"}>
                             <DynMap reports={reports}/>
                         </Col>
                     </Row>
