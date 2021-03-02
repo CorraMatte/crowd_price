@@ -13,12 +13,12 @@ italy_timezone = timezone('Europe/Rome')
 
 
 class OrderBy(models.TextChoices):
-    TMP_DESC = '-created_time', 'created_time descending'
-    TMP_ASC = 'created_time', 'created_time ascending'
-    PRC_ASC = 'price', 'price ascending'
-    PRC_DESC = '-price', 'price descending'
-    DIST_ASC = 'distance', 'distance ascending'
-    DIST_DESC = '-distance', 'distance descending'
+    TMP_DESC = '-created_time', 'Order by newer report'
+    TMP_ASC = 'created_time', 'Order by newer older'
+    PRC_ASC = 'price', 'Order by cheaper'
+    PRC_DESC = '-price', 'Order by expensive'
+    DIST_ASC = 'distance', 'Order by nearest'
+    DIST_DESC = '-distance', 'Order by furthest'
 
 
 class Search(models.Model):

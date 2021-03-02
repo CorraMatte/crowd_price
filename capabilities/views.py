@@ -97,12 +97,10 @@ class CreateReportAPI(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        store = None
         try:
             consumer = Consumer.objects.get(profile__user=request.user)
             product = Product.objects.get(pk=request.data['product'])
-            if 'store' in request.data:
-                store = Store.objects.get(pk=request.data['store'])
+            store = Store.objects.get(pk=request.data['store']) if 'store' in request.data else None
 
         except ObjectDoesNotExist:
             return Response({'detail': 'user not allowed'}, status.HTTP_403_FORBIDDEN)
