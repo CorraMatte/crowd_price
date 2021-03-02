@@ -4,8 +4,7 @@ import {Alert, StyleSheet, Text, TextInput, View} from "react-native";
 import {UPLOAD_BUTTON, UPLOAD_MESSAGE_STR} from "../utils/strings";
 import {Button} from "react-native-elements";
 import AppHeader from "../utils/AppHeader";
-import {getCoordinatesByIP, getIP} from "../utils/utils";
-import Geolocation from "react-native-geolocation-service";
+import {setPntState} from "../utils/utils";
 import {Picker} from '@react-native-picker/picker';
 import {PRODUCTS_API, STORES_API} from "../urls/endpoints";
 import * as ImagePicker from "react-native-image-picker";
@@ -65,30 +64,7 @@ export class Upload extends React.Component {
             })
         })
 
-        Geolocation.getCurrentPosition(
-            (position) => {
-                console.log(`POINT(${position.coords.longitude} ${position.coords.latitude})`);
-                this.setState({
-                    'pnt': `POINT(${position.coords.longitude} ${position.coords.latitude})`
-                })
-            },
-            (error) => {
-                Alert.alert("Activate geo localization for a better service");
-                getIP().then(
-                    res => {
-                        getCoordinatesByIP(res.data.ip).then(
-                            res => {
-                                this.setState({
-                                    longitude: res.data.longitude,
-                                    latitude: res.data.latitude,
-                                })
-                            }
-                        )
-                    }
-                )
-            },
-            { enableHighAccuracy: true, timeout: 5000 }
-        );
+        setPntState(this);
     }
 
     add_report = () => {

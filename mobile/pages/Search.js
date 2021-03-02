@@ -3,15 +3,20 @@ import axios from "react-native-axios";
 import {Alert, StyleSheet, Text, TextInput, View} from "react-native";
 import {SEARCH_BUTTON, SEARCH_MESSAGE_STR} from "../utils/strings";
 import {Button} from "react-native-elements";
-import {getCoordinatesByIP, getIP, MAX_DISTANCE, MAX_PRICE, MIN_PRICE} from "../utils/utils";
+import {MAX_DISTANCE, MAX_PRICE, MIN_PRICE, setPntState} from "../utils/utils";
 import {REPORTS_SEARCH_API, SEARCH_SORT_OPTIONS_API} from "../urls/endpoints";
 import {getAuthHeader, getToken} from "../utils/auth";
 import AppHeader from "../utils/AppHeader";
-import Geolocation from 'react-native-geolocation-service';
 import {Picker} from "@react-native-picker/picker";
+import RangeSlider from 'react-native-range-slider-expo';
 
 
 const styles = StyleSheet.create({
+    picker: {
+        width: 200,
+        borderColor: 'black',
+        borderWidth: 1,
+    },
     container: {
         flex: 1,
         alignItems: "center",
@@ -61,31 +66,7 @@ export class Search extends React.Component {
             });
         });
 
-        Geolocation.getCurrentPosition(
-            (position) => {
-                console.log(`POINT(${position.coords.longitude} ${position.coords.latitude})`);
-                this.setState({
-                    pnt: `POINT(${position.coords.longitude} ${position.coords.latitude})`
-                })
-            },
-            (error) => {
-                console.log(error.code, error.message);
-                Alert.alert("Activate geo localization for a better service");
-                getIP().then(
-                    res => {
-                        getCoordinatesByIP(res.data.ip).then(
-                            res => {
-                                this.setState({
-                                    longitude: res.data.longitude,
-                                    latitude: res.data.latitude,
-                                })
-                            }
-                        )
-                    }
-                )
-            },
-            { enableHighAccuracy: true, timeout: 5000 }
-        );
+        setPntState(this);
     }
 
 
@@ -138,31 +119,10 @@ export class Search extends React.Component {
                     placeholder="Search a product"
                     style={styles.input}
                 />
-
+                
+                <Text>Maximum distance</Text>
                 <TextInput
-                    value={this.state.price_min}
-                    onChangeText={(text => {
-                        this.setState({price_min: text})
-                    })}
-                    keyboardType="number-pad"
-                    label="minimum price"
-                    placeholder="0"
-                    style={styles.input}
-                />
-
-                <TextInput
-                    value={this.state.price_max}
-                    onChangeText={(text => {
-                        this.setState({price_max: text})
-                    })}
-                    keyboardType="number-pad"
-                    label="maximum price"
-                    placeholder="0"
-                    style={styles.input}
-                />
-
-                <TextInput
-                    value={this.state.distance}
+                    value={"" + this.state.distance}
                     onChangeText={(text => {
                         this.setState({distance: text})
                     })}
@@ -172,7 +132,18 @@ export class Search extends React.Component {
                     style={styles.input}
                 />
 
+                <Text>Price</Text>
+                <RangeSlider
+                    min={MIN_PRICE}
+                    max={MAX_PRICE}
+                    fromValueOnChange={value => this.setState({price_min: value})}
+                    toValueOnChange={value => this.setState({price_max: value})}
+                    initialFromValue={MIN_PRICE}
+                    step={100}
+                />
+
                 <Picker
+                    style={styles.picker}
                     selectedValue={this.state.ordering_by_value}
                     onValueChange={(itemValue, itemIndex) =>
                         this.setState({
@@ -181,7 +152,7 @@ export class Search extends React.Component {
                         })
                     }
                 >
-                    {this.state.sorting_options.map((opt) =>  <Picker.Item label={opt[1]} value={opt[0]} key={opt[0]}/>)}
+                    {this.state.sorting_options.map((opt) => <Picker.Item label={opt[1]} value={opt[0]} key={opt[0]}/>)}
                 </Picker>
 
                 <Button

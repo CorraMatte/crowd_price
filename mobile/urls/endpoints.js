@@ -2,7 +2,7 @@
     Django API endpoints
 */
 
-const backend_url = 'http://127.0.0.1:8000';
+const backend_url = 'http://192.168.1.19:8000';
 
 export const REPORTS_NEWER_API = `${backend_url}/reports/newer`;
 export const REPORTS_NEAREST_API = `${backend_url}/reports/nearest`;

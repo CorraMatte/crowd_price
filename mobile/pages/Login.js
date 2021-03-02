@@ -31,6 +31,8 @@ const styles = StyleSheet.create({
     }
 });
 
+
+// https://reactnative.dev/docs/textinput
 export class Login extends React.Component {
     constructor(props) {
         super(props);
@@ -59,15 +61,14 @@ export class Login extends React.Component {
     }
 
     render() {
-        this.props.navigation.navigate("Search");
+        this.props.navigation.navigate("Menu");
 
         getToken().then(
             res => {
                 if (res !== null) {
                     // Has to be Menu
-                    // this.props.navigation.navigate("Menu");
+                    this.props.navigation.navigate("Menu");
                     // this.props.navigation.navigate("Search");
-                    this.props.navigation.navigate("Search");
                 }
             }
         )
