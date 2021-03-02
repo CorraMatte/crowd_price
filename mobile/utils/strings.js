@@ -7,7 +7,7 @@ export const SIGNUP_MESSAGE_STR = "Sign up to Crowd Price!";
 export const SIGNUP_TO_LOGIN_STR = "Already have an account? Log in!";
 export const SIGNUP_BUTTON = "Sign up";
 
-export const HOME_MESSAGE_STR = "Create a new report or make a search!";
+export const MENU_MESSAGE_STR = "Create a new report \n or make a search!";
 export const SEARCH_BUTTON = "Search";
 export const UPLOAD_BUTTON = "Upload";
 
