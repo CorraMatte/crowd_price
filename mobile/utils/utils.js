@@ -4,7 +4,6 @@ import {Accuracy} from "expo-location";
 import {Alert} from "react-native";
 
 
-
 export const getCoordinatesByIP = (ip) => {
     return axios.get('https://www.iplocate.io/api/lookup/' + ip);
 }

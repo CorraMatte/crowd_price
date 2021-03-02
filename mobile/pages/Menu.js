@@ -18,7 +18,7 @@ export class Menu extends React.Component {
         return (
             <View style={styles.container}>
                 <AppHeader title={"Menu"} navigation={this.props.navigation}/>
-                <Text style={styles.inputext}>{HOME_MESSAGE_STR}</Text>
+                <Text>{HOME_MESSAGE_STR}</Text>
                 <Button
                     title={SEARCH_BUTTON}
                     style={styles.input}

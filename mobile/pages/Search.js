@@ -72,8 +72,6 @@ export class Search extends React.Component {
 
     send_search = (e) => {
         e.preventDefault();
-        console.log(this.state.ordering_by_index)
-        console.log(this.state.sorting_options)
 
         const req = {
             price_min: this.state.price_min,
@@ -84,13 +82,10 @@ export class Search extends React.Component {
             pnt: this.state.pnt
         }
 
-        console.log(req)
-
         getToken().then(
             token => {
                 axios.post(REPORTS_SEARCH_API, req, getAuthHeader(token)).then(
                     res => {
-                        console.log(res.data.features)
                         this.props.navigation.navigate("SearchResults", {results: res.data.features});
                     }).catch(
                     err => {
@@ -119,7 +114,7 @@ export class Search extends React.Component {
                     placeholder="Search a product"
                     style={styles.input}
                 />
-                
+
                 <Text>Maximum distance</Text>
                 <TextInput
                     value={"" + this.state.distance}

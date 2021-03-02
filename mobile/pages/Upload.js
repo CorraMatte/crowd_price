@@ -4,13 +4,19 @@ import {Alert, StyleSheet, Text, TextInput, View} from "react-native";
 import {UPLOAD_BUTTON, UPLOAD_MESSAGE_STR} from "../utils/strings";
 import {Button} from "react-native-elements";
 import AppHeader from "../utils/AppHeader";
-import {setPntState} from "../utils/utils";
 import {Picker} from '@react-native-picker/picker';
 import {PRODUCTS_API, STORES_API} from "../urls/endpoints";
-import * as ImagePicker from "react-native-image-picker";
+import * as Permissions from "expo-permissions";
+import * as ImagePicker from "expo-image-picker";
+import {setPntState} from "../utils/utils";
 
 
 const styles = StyleSheet.create({
+    picker: {
+        width: 200,
+        borderColor: 'black',
+        borderWidth: 1,
+    },
     container: {
         flex: 1,
         alignItems: "center",
@@ -42,6 +48,7 @@ export class Upload extends React.Component {
             store_id: 0,
             price: 0.01,
             pnt: 'POINT(0 0)',
+            uri: '',
 
             products: [],
             stores: [],
@@ -49,6 +56,56 @@ export class Upload extends React.Component {
             product_selected: 0
         }
     }
+
+    // https://github.com/expo/image-upload-example/blob/master/frontend/App.js
+    // https://docs.expo.io/versions/latest/sdk/imagepicker/#imagepickerlaunchimagelibraryasyncoptions
+    _takePhoto = async () => {
+        const {
+            status: cameraPerm
+        } = await Permissions.askAsync(Permissions.CAMERA);
+
+        const {
+            status: cameraRollPerm
+        } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+        // only if user allows permission to camera AND camera roll
+        if (cameraPerm === 'granted' && cameraRollPerm === 'granted') {
+            let pickerResult = await ImagePicker.launchCameraAsync({
+                allowsEditing: true,
+            });
+
+            await this._handleImagePicked(pickerResult);
+        }
+    };
+
+    _pickImage = async () => {
+        const {
+            status: cameraRollPerm
+        } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+        // only if user allows permission to camera roll
+        if (cameraRollPerm === 'granted') {
+            let pickerResult = await ImagePicker.launchImageLibraryAsync({
+                allowsEditing: true,
+            });
+
+            await this._handleImagePicked(pickerResult);
+        }
+    };
+
+    _handleImagePicked = async pickerResult => {
+        try {
+            if (!pickerResult.cancelled) {
+                console.log(pickerResult.uri);
+                this.setState({
+                    image: pickerResult.uri
+                });
+            }
+        } catch (e) {
+            console.log({ e });
+            alert('Upload failed, sorry :(');
+        }
+    };
 
     // https://github.com/Agontuk/react-native-geolocation-service
     componentDidMount() {
@@ -92,8 +149,8 @@ export class Upload extends React.Component {
                 <AppHeader title={"Upload"} navigation={this.props.navigation} leftOption={"Menu"}/>
                 <Text style={styles.inputext}>{UPLOAD_MESSAGE_STR}</Text>
 
-                // https://github.com/react-native-picker/picker
                 <Picker
+                    style={styles.picker}
                     selectedValue={this.state.product_selected}
                     onValueChange={(itemValue, itemIndex) =>
                     this.setState({
@@ -106,6 +163,7 @@ export class Upload extends React.Component {
                 </Picker>
 
                 <Picker
+                    style={styles.picker}
                     selectedValue={this.state.store_selected}
                     onValueChange={(itemValue, itemIndex) =>
                         this.setState({
@@ -119,7 +177,7 @@ export class Upload extends React.Component {
                 </Picker>
 
                 <TextInput
-                    value={this.state.price}
+                    value={"" + this.state.price}
                     onChangeText={(text => {this.setState({price: text})})}
                     keyboardType="number-pad"
                     label="minimum price"
@@ -129,36 +187,12 @@ export class Upload extends React.Component {
 
                 <Button
                     title="Take image"
-                    onPress={() =>
-                        ImagePicker.launchCamera(
-                            {
-                                mediaType: 'photo',
-                                includeBase64: false,
-                                maxHeight: 200,
-                                maxWidth: 200,
-                            },
-                            (response) => {
-                                setResponse(response);
-                            },
-                        )
-                    }
+                    onPress={this._takePhoto}
                 />
 
                 <Button
                     title="Select image"
-                    onPress={() =>
-                        ImagePicker.launchImageLibrary(
-                            {
-                                mediaType: 'photo',
-                                includeBase64: false,
-                                maxHeight: 200,
-                                maxWidth: 200,
-                            },
-                            (response) => {
-                                setResponse(response);
-                            },
-                        )
-                    }
+                    onPress={this._pickImage}
                 />
 
                 <Button
