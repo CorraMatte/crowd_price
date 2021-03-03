@@ -43,9 +43,10 @@ export const setPntState = (component) => {
     )
 }
 
-export const get_day_month_year_from_date = (date) => {
+export const get_str_date = (date) => {
+    const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
     const new_date = new Date(date);
-    return `${new_date.getDay()}/${new_date.getMonth()}/${new_date.getFullYear()}`
+    return new_date.toLocaleString(options);
 }
 
 

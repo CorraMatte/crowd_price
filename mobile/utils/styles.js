@@ -17,7 +17,7 @@ const menu_buttons_view_group = {
     alignContent: "center"
 }
 
-const menu_message_str = {
+const title_message_str = {
     textAlign: "center",
     fontSize: 34
 }
@@ -39,7 +39,7 @@ export const menu_style = StyleSheet.create({
     menu_message_view: menu_message_view,
     menu_button_view: menu_button_view,
     menu_buttons_view_group: menu_buttons_view_group,
-    menu_message_str: menu_message_str,
+    menu_message_str: title_message_str,
 });
 
 const search_message = {
@@ -115,5 +115,31 @@ export const search_result_style = StyleSheet.create({
     item_view: item_view,
     item_date_str: item_date_str,
     item_title_str: item_title_str
-
 });
+
+
+const report_container = {
+    flex: 1,
+    backgroundColor: "#E5EAF5"
+}
+
+const report_text_view = {
+    flex: 1,
+    justifyContent: "center",
+    width: "80%",
+    alignSelf: "center"
+}
+
+const report_detail_str = {
+    fontSize: 18,
+    marginBottom: 2
+}
+
+export const report_style = StyleSheet.create({
+    report_container: report_container,
+    report_text_view: report_text_view,
+    report_button_view: menu_button_view,
+    report_message_str: title_message_str,
+    item_date_str: report_detail_str,
+    report_detail_str: report_detail_str
+})
