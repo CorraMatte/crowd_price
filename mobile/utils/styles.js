@@ -143,3 +143,32 @@ export const report_style = StyleSheet.create({
     item_date_str: report_detail_str,
     report_detail_str: report_detail_str
 })
+
+
+const txt_view_group = {
+    flex: 1,
+    alignSelf: "center",
+    width: "90%",
+    justifyContent: "space-around"
+}
+
+const advice_str = {
+    fontWeight: "bold",
+    color: "#50A5D0",
+}
+
+const login_button_view = {
+    flex: 1,
+    width: "70%",
+    alignSelf:"center",
+    justifyContent: "space-around",
+}
+
+export const login_style = StyleSheet.create({
+    container: report_container,
+    login_message_str: title_message_str,
+    login_button_view: login_button_view,
+    text_input: text_input,
+    txt_view_group: txt_view_group,
+    advice_str: advice_str
+})
