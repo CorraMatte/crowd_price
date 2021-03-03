@@ -48,7 +48,7 @@ export class Login extends React.Component {
 
         return (
             <View style={login_style.container}>
-                <View style={{flex: 2, justifyContent: "space-around"}}>
+                <View style={login_style.login_message_view}>
                     <Text style={login_style.login_message_str}>{WELCOME_MESSAGE_STR}</Text>
                 </View>
 
@@ -83,7 +83,6 @@ export class Login extends React.Component {
                 <View style={login_style.login_button_view}>
                     <Button
                         title={LOGIN_BUTTON}
-                        style={login_style.login_button_view}
                         onPress={this.onLogin}
                     />
                 </View>

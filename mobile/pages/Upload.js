@@ -139,8 +139,6 @@ export class Upload extends React.Component {
             Alert.alert("Select at least a product");
             return
         }
-
-        console.log(req);
     }
 
     render() {

@@ -24,7 +24,7 @@ const title_message_str = {
 
 const menu_button_view = {
     width: "90%",
-    alignSelf:"center",
+    alignSelf: "center",
     marginBottom: 30
 }
 
@@ -54,9 +54,9 @@ const search_message_view = {
 
 const search_input_view = {
     flex: 1,
-    justifyContent:"space-around",
+    justifyContent: "space-around",
     width: "70%",
-    alignSelf:"center"
+    alignSelf: "center"
 }
 
 const distance_txt = {
@@ -66,15 +66,15 @@ const distance_txt = {
 
 const search_button_view = {
     width: "70%",
-    alignSelf:"center",
+    alignSelf: "center",
     marginBottom: 30
 }
 
 const picker_view = {
     flex: 0.5,
-    justifyContent:"space-around",
+    justifyContent: "space-around",
     width: "70%",
-    alignSelf:"center"
+    alignSelf: "center"
 }
 
 const picker = {
@@ -142,7 +142,7 @@ export const report_style = StyleSheet.create({
     report_message_str: title_message_str,
     item_date_str: report_detail_str,
     report_detail_str: report_detail_str
-})
+});
 
 
 const txt_view_group = {
@@ -160,8 +160,13 @@ const advice_str = {
 const login_button_view = {
     flex: 1,
     width: "70%",
-    alignSelf:"center",
+    alignSelf: "center",
     justifyContent: "space-around",
+}
+
+const login_message_view = {
+    flex: 1,
+    justifyContent: "space-around"
 }
 
 export const login_style = StyleSheet.create({
@@ -170,5 +175,8 @@ export const login_style = StyleSheet.create({
     login_button_view: login_button_view,
     text_input: text_input,
     txt_view_group: txt_view_group,
-    advice_str: advice_str
-})
+    advice_str: advice_str,
+    login_message_view: login_message_view
+});
+
+export const signup_style = login_style;
