@@ -11,24 +11,29 @@ export class Menu extends React.Component {
         return (
             <View style={menu_style.container}>
                 <AppHeader title={"Menu"} navigation={this.props.navigation}/>
-                <View style={menu_style.body}>
-                    <Text
+                <View style={menu_style.menu_message_view}>
+                   <Text
                         style={menu_style.menu_message}
                     >{MENU_MESSAGE_STR}</Text>
-                    <Button
-                        title={SEARCH_BUTTON}
-                        style={menu_style.menu_button}
-                        onPress={() => {
-                            this.props.navigation.navigate("Search")
-                        }}
-                    />
-                    <Button
-                        title={UPLOAD_BUTTON}
-                        style={menu_style.menu_button}
-                        onPress={() => {
-                            this.props.navigation.navigate("Upload")
-                        }}
-                    />
+                </View>
+                <View style={menu_style.menu_buttons_view_group}>
+                    <View style={menu_style.menu_button_view}>
+                        <Button
+                            title={SEARCH_BUTTON}
+                            onPress={() => {
+                                this.props.navigation.navigate("Search")
+                            }}
+                        />
+                    </View>
+                    <View style={menu_style.menu_button_view}>
+                        <Button
+                            title={UPLOAD_BUTTON}
+                            style={{flex: 1}}
+                            onPress={() => {
+                                this.props.navigation.navigate("Upload")
+                            }}
+                        />
+                    </View>
                 </View>
             </View>
         )
