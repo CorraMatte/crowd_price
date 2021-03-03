@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "react-native-axios";
-import {Alert, StyleSheet, Text, TextInput, View} from "react-native";
+import {Alert, Text, TextInput, View} from "react-native";
 import {SEARCH_BUTTON, SEARCH_MESSAGE_STR} from "../utils/strings";
 import {Button} from "react-native-elements";
 import {MAX_DISTANCE, MAX_PRICE, MIN_PRICE, setPntState} from "../utils/utils";
@@ -9,38 +9,8 @@ import {getAuthHeader, getToken} from "../utils/auth";
 import AppHeader from "../utils/AppHeader";
 import {Picker} from "@react-native-picker/picker";
 import RangeSlider from 'react-native-range-slider-expo';
+import {search_style} from "../utils/styles";
 
-
-const styles = StyleSheet.create({
-    picker: {
-        width: 200,
-        borderColor: 'black',
-        borderWidth: 1,
-    },
-    container: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-        backgroundColor: "#E5EAF5"
-    },
-    input: {
-        width: 200,
-        height: 35,
-        padding: 10,
-        borderWidth: 1,
-        borderRadius: 20,
-        marginBottom: 10,
-    },
-    inputext: {
-        width: 200,
-        height: 50,
-        padding: 10,
-        textAlign: "center",
-        fontSize: 24,
-        marginBottom: 20,
-    }
-});
 
 export class Search extends React.Component {
     constructor(props) {
@@ -102,60 +72,74 @@ export class Search extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={search_style.container}>
                 <AppHeader title={"Search"} navigation={this.props.navigation} leftOption={"Menu"}/>
-                <Text style={styles.inputext}>{SEARCH_MESSAGE_STR}</Text>
-                <TextInput
-                    value={this.state.product_query}
-                    onChangeText={(text => {
-                        this.setState({product_query: text})
-                    })}
-                    label="product_query"
-                    placeholder="Search a product"
-                    style={styles.input}
-                />
+                <View style={{flex: 1}}>
+                    <View style={search_style.search_message_view}>
+                        <Text style={search_style.search_message}>{SEARCH_MESSAGE_STR}</Text>
+                    </View>
 
-                <Text>Maximum distance</Text>
-                <TextInput
-                    value={"" + this.state.distance}
-                    onChangeText={(text => {
-                        this.setState({distance: text})
-                    })}
-                    keyboardType="number-pad"
-                    label="distance"
-                    placeholder="100"
-                    style={styles.input}
-                />
+                    <View style={search_style.search_input_view}>
+                        <TextInput
+                            value={this.state.product_query}
+                            onChangeText={(text => {
+                                this.setState({product_query: text})
+                            })}
+                            style={search_style.text_input}
+                            label="product_query"
+                            placeholder="Product name"
+                        />
+                    </View>
 
-                <Text>Price</Text>
-                <RangeSlider
-                    min={MIN_PRICE}
-                    max={MAX_PRICE}
-                    fromValueOnChange={value => this.setState({price_min: value})}
-                    toValueOnChange={value => this.setState({price_max: value})}
-                    initialFromValue={MIN_PRICE}
-                    step={100}
-                />
+                    <View style={search_style.search_input_view}>
+                        <Text style={search_style.distance_txt}>Maximum distance</Text>
+                        <TextInput
+                            value={"" + this.state.distance}
+                            onChangeText={(text => {
+                                this.setState({distance: text})
+                            })}
+                            style={search_style.text_input}
+                            keyboardType="number-pad"
+                            label="distance"
+                            placeholder="100"
+                        />
+                    </View>
 
-                <Picker
-                    style={styles.picker}
-                    selectedValue={this.state.ordering_by_value}
-                    onValueChange={(itemValue, itemIndex) =>
-                        this.setState({
-                            ordering_by_index: itemIndex,
-                            ordering_by_value: itemValue
-                        })
-                    }
-                >
-                    {this.state.sorting_options.map((opt) => <Picker.Item label={opt[1]} value={opt[0]} key={opt[0]}/>)}
-                </Picker>
+                    <View style={search_style.search_input_view}>
+                        <Text style={search_style.distance_txt}>Price</Text>
+                        <RangeSlider
+                            min={MIN_PRICE}
+                            max={MAX_PRICE}
+                            fromValueOnChange={value => this.setState({price_min: value})}
+                            toValueOnChange={value => this.setState({price_max: value})}
+                            initialFromValue={MIN_PRICE}
+                            step={10}
+                        />
+                    </View>
 
-                <Button
-                    title={SEARCH_BUTTON}
-                    style={styles.input}
-                    onPress={this.send_search}
-                />
+                    <View style={search_style.picker_view}>
+                        <Picker
+                            style={search_style.picker}
+                            selectedValue={this.state.ordering_by_value}
+                            onValueChange={(itemValue, itemIndex) =>
+                                this.setState({
+                                    ordering_by_index: itemIndex,
+                                    ordering_by_value: itemValue
+                                })
+                            }
+                        >
+                            {this.state.sorting_options.map((opt) => <Picker.Item label={opt[1]} value={opt[0]} key={opt[0]}/>)}
+                        </Picker>
+                    </View>
 
+                    <View style={search_style.search_button_view}>
+                        <Button
+                            title={SEARCH_BUTTON}
+                            onPress={this.send_search}
+                        />
+                    </View>
+
+                </View>
             </View>
         )
     }
