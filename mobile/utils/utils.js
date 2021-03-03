@@ -43,9 +43,14 @@ export const setPntState = (component) => {
     )
 }
 
+export const get_day_month_year_from_date = (date) => {
+    const new_date = new Date(date);
+    return `${new_date.getDay()}/${new_date.getMonth()}/${new_date.getFullYear()}`
+}
+
 
 // 1 Million as maximum price
-export const MAX_PRICE = 10000;
+export const MAX_PRICE = 5000;
 
 // 1 cent as minimum price
 export const MIN_PRICE = 0;

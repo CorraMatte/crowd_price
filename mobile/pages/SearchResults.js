@@ -2,15 +2,16 @@ import React from "react";
 import {Button, FlatList, StyleSheet, Text, View} from "react-native";
 import AppHeader from "../utils/AppHeader";
 import {SEARCH_RESULTS_TITLE_STR} from "../utils/strings";
+import {get_day_month_year_from_date} from "../utils/utils";
+import {search_result_style} from "../utils/styles";
 
 class Item extends React.Component {
     render () {
-        console.log(this.props.data);
         const data = this.props.data;
         return (
-            <View>
-                <Text>{data.product}</Text>
-                <Text>{data.price}</Text>
+            <View style={search_result_style.item_view}>
+                <Text style={search_result_style.item_title_str}>{data.product + ": " + data.price + "€"}</Text>
+                <Text style={search_result_style.item_date_str}>{"created on " + get_day_month_year_from_date(data.created_time)}</Text>
                 <Button title={"open"} onPress={() => this.props.navigation.navigate(
                     "Report", {data: data}
                 )} />
@@ -21,7 +22,6 @@ class Item extends React.Component {
 
 // https://reactnative.dev/docs/flatlist
 export class SearchResults extends React.Component {
-
     render() {
         let new_data = [];
         this.props.route.params.results.forEach(
