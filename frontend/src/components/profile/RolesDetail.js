@@ -3,8 +3,8 @@ import {get_badge_from_experience, get_day_month_year_from_date} from "../utils/
 import {Alert, Button, Card, Form} from "react-bootstrap";
 import bsCustomFileInput from 'bs-custom-file-input';
 import axios from "axios";
-import {isLoggedIn} from "../../auth";
-import {PROFILE_UPDATE_IMG_API} from "../../urls/endpoints";
+import {getAuthHeader, isLoggedIn} from "../../auth";
+import {file_url, PROFILE_IMG_API, PROFILE_UPDATE_IMG_API} from "../../urls/endpoints";
 
 
 class ProfileDetail extends React.Component {
@@ -37,9 +37,14 @@ class ProfileDetail extends React.Component {
             },
         }).then(
             res => {
-                this.setState({
-                    picture: img.name
-                });
+                axios.get(PROFILE_IMG_API, getAuthHeader()).then(
+                    res_pic => {
+                        this.setState({
+                            picture: file_url(res_pic.data.results),
+                            errors: ''
+                        });
+                    }
+                )
             },
             err => {
                 this.setState({
@@ -59,11 +64,9 @@ class ProfileDetail extends React.Component {
         }
 
         const profile = this.props.profile;
-
-        console.log(this.props.profile.picture)
         return (
             <div>
-                <Card.Img alt={'profile image'} src={profile.picture} variant={"top"} />
+                <Card.Img alt={'profile image'} src={this.state.picture} variant={"top"} />
                 <Card.Body>
                     <Form onSubmit={this.updateProfilePic}>
                         <div className="custom-file">

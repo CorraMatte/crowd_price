@@ -13,6 +13,7 @@ urlpatterns = [
     path('profile/update/img', views.ChangeProfilePicAPI.as_view()),
 
     # Get
+    path('profile/img', views.RetrieveProfilePicAPI.as_view()),
     path('consumer/detail', views.RetrieveConsumerAPI.as_view()),
     path('analyst/detail', views.RetrieveAnalystAPI.as_view()),
     path('organization/<int:pk>', views.RetrieveOrganizationAPI.as_view()),

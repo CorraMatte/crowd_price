@@ -1,3 +1,5 @@
+from django.core.validators import validate_image_file_extension
+from django.core.exceptions import ValidationError
 from rest_framework.authtoken.models import Token
 from rest_framework import generics, status, permissions
 from profiles.models import Consumer, Organization, Analyst, Profile
@@ -90,8 +92,6 @@ class ChangeProfilePicAPI(APIView):
         if 'image' not in request.data:
             return Response({'detail': 'image is a required parameter'}, status.HTTP_400_BAD_REQUEST)
 
-        from django.core.validators import validate_image_file_extension
-        from django.core.exceptions import ValidationError
         try:
             validate_image_file_extension(request.data['image'])
         except ValidationError:
@@ -102,3 +102,11 @@ class ChangeProfilePicAPI(APIView):
         profile.save()
 
         return Response({"detail": "image change correctly"}, status.HTTP_201_CREATED)
+
+
+class RetrieveProfilePicAPI(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        profile = generics.get_object_or_404(Profile.objects.all(), user=request.user)
+        return Response({'results': profile.picture.url}, status.HTTP_200_OK)

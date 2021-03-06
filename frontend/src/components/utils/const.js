@@ -1,5 +1,5 @@
 // 1 Million as maximum price
-export const MAX_PRICE = 1000000.00;
+export const MAX_PRICE = 5000.00;
 
 // 1 cent as minimum price
 export const MIN_PRICE = 0.00;
@@ -17,6 +17,9 @@ export const MAP_STYLE = "mapbox://styles/mapbox/streets-v11";
 export const MAP_STATIC_ZOOM = 12;
 export const MAP_DYN_ZOOM = 8;
 export const MAX_RESULTS_IN_LABEL = 10;
+
+// Access Token for MAP-GL
+export const ACCESS_TOKEN = 'pk.eyJ1IjoiY29ycmFtYXR0ZW8iLCJhIjoiY2tsZGlnbmh1MXMwaDJ4bjBnN3FzYWZjdCJ9.seTk3YxBHFsIoyQq0CZRPw';
 
 
 // Labels for user types
