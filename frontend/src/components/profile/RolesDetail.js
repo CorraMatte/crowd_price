@@ -85,7 +85,6 @@ class ProfileDetail extends React.Component {
                 });
             }
         )
-        console.log(req);
     }
 
     fieldChangeHandler = (e) => {
@@ -222,10 +221,10 @@ class AnalystDetail extends React.Component {
 
         const analyst = this.props.analyst;
         return (
-            <Card bg={"dark"} className={"text-light col-md-3"}>
+            <Card bg={"dark"} className={"text-light"}>
                 <ProfileDetail profile={analyst.profile}/>
                 <Card.Footer>
-                    <small>Your organization is <b>{analyst.organization}</b></small>
+                    <small>Your organization is <b>{analyst.organization.name}</b></small>
                 </Card.Footer>
             </Card>
         )

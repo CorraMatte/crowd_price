@@ -6,7 +6,7 @@ export class BarChartItem extends React.Component {
 
     render() {
         return (
-            <ResponsiveContainer width={"60%"} height={500}>
+            <ResponsiveContainer width={"100%"} height={500}>
                 <BarChart data={this.props.data} >
                     <CartesianGrid strokeDasharray="3 3" />
                     <YAxis />
@@ -14,7 +14,7 @@ export class BarChartItem extends React.Component {
                     </XAxis>
                     <Tooltip />
                     <Legend />
-                    <Bar name={"reports"} dataKey="value" fill="#8884d8" />
+                    <Bar name={this.props.label} dataKey="value" fill="#8884d8" />
                 </BarChart>
             </ResponsiveContainer>
         )

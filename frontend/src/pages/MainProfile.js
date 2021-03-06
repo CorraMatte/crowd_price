@@ -92,16 +92,20 @@ class MainProfile extends React.Component {
                         </Col>
                     </Row>
                 </Container>
-                <Container className={"col-md-12 my-5"} fluid>
-                    <Card bg={"light"} className={"my-md-3"}>
-                        <Card.Header>
-                            <h3>Reports created</h3>
-                        </Card.Header>
-                        <Card.Body>
-                            <DetailGroupReport reports={this.state.reports} />
-                        </Card.Body>
-                    </Card>
-                </Container>
+                {
+                    this.state.user_type === CONSUMER_LABEL ?
+                        <Container className={"col-md-12 my-5"} fluid>
+                            <Card bg={"light"} className={"my-md-3"}>
+                                <Card.Header>
+                                    <h3>Reports created</h3>
+                                </Card.Header>
+                                <Card.Body>
+                                    <DetailGroupReport reports={this.state.reports} />
+                                </Card.Body>
+                            </Card>
+                        </Container>
+                        : <div></div>
+                }
             </div>
         )
     }

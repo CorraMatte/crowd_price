@@ -1,20 +1,36 @@
 import React from "react";
 import axios from "axios";
 import {DetailGroupReport} from "../components/report/DetailGroupReport";
-import {PRODUCT_API, REPORTS_PRODUCT_API} from "../urls/endpoints";
+import {GRAPH_PRODUCT_PRICE_TREND_API, PRODUCT_API, REPORTS_PRODUCT_API} from "../urls/endpoints";
 import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 import DynMap from "../components/map/DynMap";
 import {Card, Col, Container, Row} from "react-bootstrap";
 import CategoryItem from "../components/product/CategoryItem";
+import LineChartItem from "../components/graph/LineChartItem";
+
 
 class MainProduct extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             product: null,
-            reports: []
+            reports: [],
+            prices: [
+                {
+                    "date": "2021-02-20T12:12:10.584206Z",
+                    "price": 33
+                },
+                {
+                    "date": "2021-02-20T12:09:03.061646Z",
+                    "price": 2
+                },
+                {
+                    "date": "2021-02-20T12:08:20.341877Z",
+                    "price": 21
+                }
+            ]
         };
     }
 
@@ -24,15 +40,22 @@ class MainProduct extends React.Component {
             res => {
                 this.setState({
                     product: res.data
-                })
+                });
             });
 
         axios.get(`${REPORTS_PRODUCT_API}/${id}`).then(
             res => {
                 this.setState({
                     reports: res.data.results.features
-                })
+                });
             });
+        axios.get(`${GRAPH_PRODUCT_PRICE_TREND_API}/${id}`).then(
+            res => {
+                this.setState({
+                    prices: res.data.results
+                })
+            }
+        )
     }
 
     render() {
@@ -42,6 +65,9 @@ class MainProduct extends React.Component {
         if (!prod) {
             return (<div></div>)
         }
+
+        console.log(this.state.prices)
+
 
         return (
             <div>
@@ -77,6 +103,9 @@ class MainProduct extends React.Component {
                             <Card.Header>
                                 <h3>Prices based on report</h3>
                             </Card.Header>
+                            <Card.Body>
+                                <LineChartItem prices={this.state.prices} />
+                            </Card.Body>
                         </Card>
                         <Card bg={"light"} className={"my-md-3"}>
                             <Card.Header>
