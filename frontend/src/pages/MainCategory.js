@@ -1,12 +1,13 @@
 import React from "react";
 import axios from "axios";
-import {PRODUCTS_CATEGORY_API, REPORTS_PRODUCT_API} from "../urls/endpoints";
+import {GRAPH_CATEGORY_PRICE_TREND_API, PRODUCTS_CATEGORY_API, REPORTS_PRODUCT_API} from "../urls/endpoints";
 import {DetailGroupProduct} from "../components/product/DetailGroupProduct";
 import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 import {Card, Container} from "react-bootstrap";
 import {DetailGroupReport} from "../components/report/DetailGroupReport";
+import {MultiLineChartItem} from "../components/graph/LineChartItem";
 
 
 class MainCategory extends React.Component {
@@ -14,7 +15,8 @@ class MainCategory extends React.Component {
         super(props);
         this.state = {
             products: [],
-            products_reports: {}
+            products_reports: {},
+            prices: []
         };
     }
 
@@ -38,6 +40,14 @@ class MainCategory extends React.Component {
                     )
                 })
             });
+
+        axios.get(`${GRAPH_CATEGORY_PRICE_TREND_API}/${id}`).then(
+            res => {
+                this.setState({
+                    prices: res.data.results
+                })
+            }
+        );
     }
 
     render() {
@@ -65,10 +75,20 @@ class MainCategory extends React.Component {
             }
         }
 
+        console.log(this.state.products)
+
         return (
             <div>
                 {isLoggedIn() ? <HeaderLogged/> : <HeaderUnLogged/>}
                 <Container className={"my-md-3"} fluid>
+                    <Card bg={"light"} className={"my-md-3"}>
+                        <Card.Header>
+                            <h3>Price trend of products in this category</h3>
+                        </Card.Header>
+                        <Card.Body>
+                            <MultiLineChartItem prices={this.state.prices} products={this.state.products}/>
+                        </Card.Body>
+                    </Card>
                     <Card bg={"light"} className={"my-md-3"}>
                         <Card.Header>
                             <h3>Products in this category</h3>

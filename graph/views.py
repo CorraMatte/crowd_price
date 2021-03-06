@@ -88,20 +88,6 @@ class GetAvgMostRatedProductPrices(APIView):
         return Response({'results': serial_res}, status.HTTP_200_OK)
 
 
-class GetMostRatedProductPriceTrend(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    @check_user_is_analyst
-    def get(self, request):
-        prods = Product.objects.annotate(count=Count('report')).order_by('-count')[:10]
-        serial_res = []
-
-        for p in prods:
-            serial_res.append([p.name, [r.price for r in p.report_set.all()[:20]]])
-
-        return Response({'results': serial_res}, status.HTTP_200_OK)
-
-
 class GetProductPriceTrend(APIView):
     def get(self, request, pk):
         prod = generics.get_object_or_404(Product.objects.all(), pk=pk)
@@ -112,6 +98,21 @@ class GetProductPriceTrend(APIView):
             serial_res.append({
                 'date': datetime.strftime(r.created_time, '%H:%M:%S %d/%m/%Y'),
                 'price': r.price
+            })
+
+        return Response({'results': serial_res}, status.HTTP_200_OK)
+
+
+class GetCategoryPriceTrend(APIView):
+    def get(self, request, pk):
+        cat = generics.get_object_or_404(Category.objects.all(), pk=pk)
+        reports = Report.objects.filter(product__categories__in=[cat])
+        serial_res = []
+
+        for r in reports:
+            serial_res.append({
+                'date': datetime.strftime(r.created_time, '%H:%M:%S %d/%m/%Y'),
+                r.product.name: r.price
             })
 
         return Response({'results': serial_res}, status.HTTP_200_OK)

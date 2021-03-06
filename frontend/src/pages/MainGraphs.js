@@ -4,17 +4,22 @@ import {
     GRAPH_REPORT_CATEGORY_TOP_API,
     GRAPH_REPORT_PRODUCT_TOP_API,
     GRAPH_REPORT_PRODUCT_TOP_PRICE_AVG_API,
-    // GRAPH_REPORT_PRODUCT_TOP_PRICE_TREND_API,
     GRAPH_REPORT_STORE_TOP_API,
-    GRAPH_REPORT_USER_MOST_ACTIVE_API, GRAPH_SEARCH_CATEGORY_TOP_API, GRAPH_SEARCH_PRODUCT_TOP_API
+    GRAPH_REPORT_USER_MOST_ACTIVE_API,
+    GRAPH_SEARCH_CATEGORY_TOP_API,
+    GRAPH_SEARCH_PRODUCT_TOP_API
 } from "../urls/endpoints";
 import axios from "axios";
 import {getAuthHeader} from "../auth";
 import BarChartItem from "../components/graph/BarChartItem";
 import {
-    GRAPH_REPORT_CATEGORY_TOP_TITLE, GRAPH_REPORT_PRODUCT_TOP_PRICE_AVG_TITLE,
-    GRAPH_REPORT_PRODUCT_TOP_TITLE, GRAPH_REPORT_STORE_TOP_TITLE,
-    GRAPH_REPORT_USER_MOST_ACTIVE_TITLE, GRAPH_SEARCH_CATEGORY_TOP_TITLE, GRAPH_SEARCH_PRODUCT_TOP_TITLE
+    GRAPH_REPORT_CATEGORY_TOP_TITLE,
+    GRAPH_REPORT_PRODUCT_TOP_PRICE_AVG_TITLE,
+    GRAPH_REPORT_PRODUCT_TOP_TITLE,
+    GRAPH_REPORT_STORE_TOP_TITLE,
+    GRAPH_REPORT_USER_MOST_ACTIVE_TITLE,
+    GRAPH_SEARCH_CATEGORY_TOP_TITLE,
+    GRAPH_SEARCH_PRODUCT_TOP_TITLE
 } from "../components/utils/const";
 import {Card, Container} from "react-bootstrap";
 
@@ -26,39 +31,45 @@ export class MainGraphs extends React.Component {
             most_active_user: {
                 url: GRAPH_REPORT_USER_MOST_ACTIVE_API,
                 title: GRAPH_REPORT_USER_MOST_ACTIVE_TITLE,
-                label: 'reports'
+                label: 'reports',
+                type: 'barchart'
             },
             most_rated_products: {
                 url: GRAPH_REPORT_PRODUCT_TOP_API,
                 title: GRAPH_REPORT_PRODUCT_TOP_TITLE,
-                label: 'reports'
+                label: 'reports',
+                type: 'barchart'
             },
             most_rated_categories: {
                 url: GRAPH_REPORT_CATEGORY_TOP_API,
                 title: GRAPH_REPORT_CATEGORY_TOP_TITLE,
-                label: 'reports'
+                label: 'reports',
+                type: 'barchart'
             },
             most_rated_stores: {
                 url: GRAPH_REPORT_STORE_TOP_API,
                 title: GRAPH_REPORT_STORE_TOP_TITLE,
-                label: 'reports'
+                label: 'reports',
+                type: 'barchart'
             },
             most_searched_categories: {
                 url: GRAPH_SEARCH_CATEGORY_TOP_API,
                 title: GRAPH_SEARCH_CATEGORY_TOP_TITLE,
-                label: 'searches'
+                label: 'searches',
+                type: 'barchart'
             },
             most_searched_products: {
                 url: GRAPH_SEARCH_PRODUCT_TOP_API,
                 title: GRAPH_SEARCH_PRODUCT_TOP_TITLE,
-                label: 'searches'
+                label: 'searches',
+                type: 'barchart'
             },
             most_report_products_avg_price: {
                 url: GRAPH_REPORT_PRODUCT_TOP_PRICE_AVG_API,
                 title: GRAPH_REPORT_PRODUCT_TOP_PRICE_AVG_TITLE,
-                label: 'price'
-            },
-            // most_report_products_price_trend: {url: GRAPH_REPORT_PRODUCT_TOP_PRICE_TREND_API, },
+                label: 'price',
+                type: 'barchart'
+            }
         }
 
         for (const value of Object.values(graphs)) {
@@ -85,11 +96,17 @@ export class MainGraphs extends React.Component {
     render() {
         let graphs = [];
 
+        console.log(this.state)
         for (const [field, value] of Object.entries(this.state)) {
+            let graph;
+            if (value.type === 'barchart') {
+                graph = <BarChartItem key={field} data={value.data} label={value.label} />
+            }
+
             graphs.push(
                 <Card bg={"light"} className={"my-md-3"} key={field}>
                     <Card.Header>{value.title}</Card.Header>
-                    <BarChartItem key={field} data={value.data} label={value.label} />
+                    {graph}
                 </Card>
                 )
         }

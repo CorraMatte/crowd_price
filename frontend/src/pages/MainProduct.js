@@ -8,7 +8,7 @@ import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 import DynMap from "../components/map/DynMap";
 import {Card, Col, Container, Row} from "react-bootstrap";
 import CategoryItem from "../components/product/CategoryItem";
-import LineChartItem from "../components/graph/LineChartItem";
+import {LineChartItem} from "../components/graph/LineChartItem";
 
 
 class MainProduct extends React.Component {
