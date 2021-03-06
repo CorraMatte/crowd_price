@@ -24,5 +24,6 @@ class ConsumerSerializer(serializers.ModelSerializer):
 
 class AnalystSerializer(serializers.ModelSerializer):
     class Meta:
+        depth = 2
         model = Analyst
         fields = ['id', 'profile', 'organization']
