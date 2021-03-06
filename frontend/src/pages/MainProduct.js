@@ -70,10 +70,22 @@ class MainProduct extends React.Component {
                         </Col>
                     </Row>
                 </Container>
+
                 {this.state.reports.length > 0 ? (
                     <Container className={"col-md-12 my-5"} fluid>
-                        <h3>Reports for this product</h3>
-                        <DetailGroupReport reports={this.state.reports}/>
+                        <Card bg={"light"} className={"my-md-3"}>
+                            <Card.Header>
+                                <h3>Prices based on report</h3>
+                            </Card.Header>
+                        </Card>
+                        <Card bg={"light"} className={"my-md-3"}>
+                            <Card.Header>
+                                <h3>Reports for this product</h3>
+                            </Card.Header>
+                            <Card.Body>
+                                <DetailGroupReport reports={this.state.reports}/>
+                            </Card.Body>
+                        </Card>
                     </Container>
                 ) : <h3 className={"my-5 mx-5"}>There no reports for this product</h3>}
 

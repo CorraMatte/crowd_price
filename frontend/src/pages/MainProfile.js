@@ -8,7 +8,7 @@ import HeaderLogged from "../components/utils/HeaderLogged";
 import StaticMap from "../components/map/StaticMap";
 import {ANALYST_LABEL, CONSUMER_LABEL} from "../components/utils/const";
 import {getCoordinatesByIP, getIP} from "../components/utils/utils";
-import {Col, Container, Row} from "react-bootstrap";
+import {Card, Col, Container, Row} from "react-bootstrap";
 
 
 class MainProfile extends React.Component {
@@ -93,8 +93,14 @@ class MainProfile extends React.Component {
                     </Row>
                 </Container>
                 <Container className={"col-md-12 my-5"} fluid>
-                    <h3>Reports created</h3>
-                    <DetailGroupReport reports={this.state.reports} />
+                    <Card bg={"light"} className={"my-md-3"}>
+                        <Card.Header>
+                            <h3>Reports created</h3>
+                        </Card.Header>
+                        <Card.Body>
+                            <DetailGroupReport reports={this.state.reports} />
+                        </Card.Body>
+                    </Card>
                 </Container>
             </div>
         )

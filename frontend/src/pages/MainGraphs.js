@@ -23,13 +23,41 @@ export class MainGraphs extends React.Component {
     constructor(props) {
         super(props);
         let graphs = {
-            most_active_user: {url: GRAPH_REPORT_USER_MOST_ACTIVE_API, title: GRAPH_REPORT_USER_MOST_ACTIVE_TITLE},
-            most_rated_products: {url: GRAPH_REPORT_PRODUCT_TOP_API, title: GRAPH_REPORT_PRODUCT_TOP_TITLE},
-            most_rated_categories: {url: GRAPH_REPORT_CATEGORY_TOP_API, title: GRAPH_REPORT_CATEGORY_TOP_TITLE},
-            most_rated_stores: {url: GRAPH_REPORT_STORE_TOP_API, title: GRAPH_REPORT_STORE_TOP_TITLE},
-            most_searched_categories: {url: GRAPH_SEARCH_CATEGORY_TOP_API, title: GRAPH_SEARCH_CATEGORY_TOP_TITLE},
-            most_searched_products: {url: GRAPH_SEARCH_PRODUCT_TOP_API, title: GRAPH_SEARCH_PRODUCT_TOP_TITLE},
-            most_report_products_avg_price: {url: GRAPH_REPORT_PRODUCT_TOP_PRICE_AVG_API, title: GRAPH_REPORT_PRODUCT_TOP_PRICE_AVG_TITLE},
+            most_active_user: {
+                url: GRAPH_REPORT_USER_MOST_ACTIVE_API,
+                title: GRAPH_REPORT_USER_MOST_ACTIVE_TITLE,
+                label: 'reports'
+            },
+            most_rated_products: {
+                url: GRAPH_REPORT_PRODUCT_TOP_API,
+                title: GRAPH_REPORT_PRODUCT_TOP_TITLE,
+                label: 'reports'
+            },
+            most_rated_categories: {
+                url: GRAPH_REPORT_CATEGORY_TOP_API,
+                title: GRAPH_REPORT_CATEGORY_TOP_TITLE,
+                label: 'reports'
+            },
+            most_rated_stores: {
+                url: GRAPH_REPORT_STORE_TOP_API,
+                title: GRAPH_REPORT_STORE_TOP_TITLE,
+                label: 'reports'
+            },
+            most_searched_categories: {
+                url: GRAPH_SEARCH_CATEGORY_TOP_API,
+                title: GRAPH_SEARCH_CATEGORY_TOP_TITLE,
+                label: 'searches'
+            },
+            most_searched_products: {
+                url: GRAPH_SEARCH_PRODUCT_TOP_API,
+                title: GRAPH_SEARCH_PRODUCT_TOP_TITLE,
+                label: 'searches'
+            },
+            most_report_products_avg_price: {
+                url: GRAPH_REPORT_PRODUCT_TOP_PRICE_AVG_API,
+                title: GRAPH_REPORT_PRODUCT_TOP_PRICE_AVG_TITLE,
+                label: 'price'
+            },
             // most_report_products_price_trend: {url: GRAPH_REPORT_PRODUCT_TOP_PRICE_TREND_API, },
         }
 
@@ -59,9 +87,9 @@ export class MainGraphs extends React.Component {
 
         for (const [field, value] of Object.entries(this.state)) {
             graphs.push(
-                <Card bg={"light"} className={"my-md-3"}>
+                <Card bg={"light"} className={"my-md-3"} key={field}>
                     <Card.Header>{value.title}</Card.Header>
-                    <BarChartItem key={field} data={value.data} />
+                    <BarChartItem key={field} data={value.data} label={value.label} />
                 </Card>
                 )
         }

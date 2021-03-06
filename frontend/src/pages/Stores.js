@@ -74,10 +74,16 @@ class Stores extends React.Component
             <div>
                 {isLoggedIn() ? <HeaderLogged /> : <HeaderUnLogged />}
                 <Container className={"ml-md-2 my-md-3"} fluid>
-                    <h3>There are {stores.length} stores</h3>
-                    <Row>
-                        {stores.map((store) => <DetailStoreItem store={store} key={store.id}/>)}
-                    </Row>
+                    <Card bg={"light"} className={"my-md-3"}>
+                        <Card.Header>
+                            <h3>There are {stores.length} stores</h3>
+                        </Card.Header>
+                        <Card.Body>
+                            <Row>
+                                {stores.map((store) => <DetailStoreItem store={store} key={store.id}/>)}
+                            </Row>
+                        </Card.Body>
+                    </Card>
                 </Container>
             </div>
         )

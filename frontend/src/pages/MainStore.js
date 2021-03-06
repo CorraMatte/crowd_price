@@ -66,8 +66,14 @@ class MainStore extends React.Component {
                     </Row>
                 </Container>
                 <Container className={"col-md-12 my-md-5"} fluid>
-                    <h3>Reports in this store</h3>
-                    <DetailGroupReport reports={reports} />
+                    <Card bg={"light"} className={"my-md-3"}>
+                        <Card.Header>
+                            <h3>Reports in this store</h3>
+                        </Card.Header>
+                        <Card.Body>
+                            <DetailGroupReport reports={reports} />
+                        </Card.Body>
+                    </Card>
                 </Container>
             </div>
         )

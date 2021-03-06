@@ -5,7 +5,7 @@ import {DetailGroupProduct} from "../components/product/DetailGroupProduct";
 import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
-import {Container} from "react-bootstrap";
+import {Card, Container} from "react-bootstrap";
 import {DetailGroupReport} from "../components/report/DetailGroupReport";
 
 
@@ -51,9 +51,15 @@ class MainCategory extends React.Component {
         for (const [prod_name, reports] of Object.entries(products_dict)) {
             if (reports.length > 0) {
                 prods_views.push(
-                    <Container fluid>
-                        <h3>Reports for {prod_name}</h3>
-                        <DetailGroupReport reports={reports}/>
+                    <Container className={"my-md-3"} fluid>
+                        <Card bg={"light"} className={"my-md-3"}>
+                            <Card.Header>
+                                <h3>Reports for {prod_name}</h3>
+                            </Card.Header>
+                            <Card.Body>
+                                <DetailGroupReport reports={reports}/>
+                            </Card.Body>
+                        </Card>
                     </Container>
                 )
             }
@@ -63,8 +69,14 @@ class MainCategory extends React.Component {
             <div>
                 {isLoggedIn() ? <HeaderLogged/> : <HeaderUnLogged/>}
                 <Container className={"my-md-3"} fluid>
-                    <h3>Products in this category</h3>
-                    <DetailGroupProduct products={products}/>
+                    <Card bg={"light"} className={"my-md-3"}>
+                        <Card.Header>
+                            <h3>Products in this category</h3>
+                        </Card.Header>
+                        <Card.Body>
+                            <DetailGroupProduct products={products}/>
+                        </Card.Body>
+                    </Card>
                 </Container>
                 {prods_views}
             </div>
