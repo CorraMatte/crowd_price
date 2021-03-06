@@ -54,7 +54,7 @@ export const get_badge_from_experience = (exp) => {
         return <Badge variant={"light"} pill>{INTERMEDIATE_LABEL}</Badge>
     } else if (exp < EXPERT_THRESHOLD) {
         return <Badge variant={"secondary"} pill>{EXPERT_LABEL}</Badge>
-    } else if (exp === VETERAN_THRESHOLD) {
+    } else if (exp >= VETERAN_THRESHOLD) {
         return <Badge variant={"success"} pill>{VETERAN_LABEL}</Badge>
     }
 }

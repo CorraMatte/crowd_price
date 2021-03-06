@@ -5,10 +5,10 @@ export const MAX_PRICE = 5000.00;
 export const MIN_PRICE = 0.00;
 
 // Max experience of a user
-export const MAX_EXPERIENCE = 1000;
+export const MAX_EXPERIENCE = 100;
 
 // Max distance in KM
-export const MAX_DISTANCE = 100;
+export const MAX_DISTANCE = 1000;
 
 // SRID for the project
 export const SRID = 4326;
@@ -46,5 +46,5 @@ export const INTERMEDIATE_LABEL = 'INTERMEDIATE';
 export const EXPERT_THRESHOLD = 50;
 export const EXPERT_LABEL = 'EXPERT';
 
-export const VETERAN_THRESHOLD = 100;
+export const VETERAN_THRESHOLD = MAX_EXPERIENCE;
 export const VETERAN_LABEL = 'VETERAN';
