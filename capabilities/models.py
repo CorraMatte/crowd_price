@@ -78,7 +78,7 @@ class Report(models.Model):
     consumer = models.ForeignKey(Consumer, on_delete=models.CASCADE)
     store = models.ForeignKey(Store, null=True, on_delete=models.SET_NULL)
     created_time = models.DateTimeField(default=django_timezone.now)
-    picture = models.ImageField(upload_to='img/report/%Y', default="img/blank_profile.png")
+    picture = models.ImageField(upload_to='reports/%Y', default="reports/blank_report.png")
 
     price = models.DecimalField(
         max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES,

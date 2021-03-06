@@ -15,7 +15,7 @@ class Category(models.Model):
 
 
 class Store(models.Model):
-    picture = models.ImageField(upload_to='img/store/%Y', default='img/store_blank.png')
+    picture = models.ImageField(upload_to='stores/%Y', default='stores/blank_store.png')
     name = models.CharField(max_length=50)
     pnt = models.PointField(srid=SRID)
 
