@@ -1,12 +1,13 @@
 import React from "react";
 import axios from "axios";
-import {STORE_API, REPORTS_STORE_API} from "../urls/endpoints";
+import {STORE_API, REPORTS_STORE_API, GRAPH_STORE_PRICE_TREND_API} from "../urls/endpoints";
 import {DetailGroupReport} from "../components/report/DetailGroupReport"
 import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 import {StaticMap} from "../components/map/StaticMap";
 import {Card, Col, Container, Row} from "react-bootstrap";
+import {MultiLineChartItem} from "../components/graph/LineChartItem";
 
 
 class MainStore extends React.Component {
@@ -14,7 +15,8 @@ class MainStore extends React.Component {
         super(props);
         this.state = {
             store: null,
-            reports: []
+            reports: [],
+            prices: []
         };
     }
 
@@ -33,6 +35,14 @@ class MainStore extends React.Component {
                 reports: res.data.results.features
             })
         });
+
+        axios.get(`${GRAPH_STORE_PRICE_TREND_API}/${id}`).then(
+            res => {
+                this.setState({
+                    prices: res.data.results
+                })
+            }
+        );
     }
 
     render () {
@@ -66,6 +76,15 @@ class MainStore extends React.Component {
                     </Row>
                 </Container>
                 <Container className={"col-md-12 my-md-5"} fluid>
+                    <Card bg={"light"} className={"my-md-3"}>
+                        <Card.Header>
+                            <h3>Price trend of products in this store</h3>
+                        </Card.Header>
+                        <Card.Body>
+                            <MultiLineChartItem prices={this.state.prices} />
+                        </Card.Body>
+                    </Card>
+
                     <Card bg={"light"} className={"my-md-3"}>
                         <Card.Header>
                             <h3>Reports in this store</h3>

@@ -22,9 +22,14 @@ export class LineChartItem extends Component {
 export class MultiLineChartItem extends Component {
     render () {
         let lines = [];
-        this.props.products.forEach((prod) => {
-            lines.push(<Line type="monotone" dataKey={prod.name} stroke="#82ca9d" />)
+        let prods = new Set();
+        this.props.prices.forEach((report) => {
+            prods.add(Object.keys(report)[1])
         })
+
+        prods.forEach((prod) =>
+            lines.push(<Line type="monotone" dataKey={prod} stroke="#82ca9d" key={prod} />)
+        )
 
         return (
             <ResponsiveContainer width={"100%"} height={500}>

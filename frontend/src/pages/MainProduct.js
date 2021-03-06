@@ -17,20 +17,7 @@ class MainProduct extends React.Component {
         this.state = {
             product: null,
             reports: [],
-            prices: [
-                {
-                    "date": "2021-02-20T12:12:10.584206Z",
-                    "price": 33
-                },
-                {
-                    "date": "2021-02-20T12:09:03.061646Z",
-                    "price": 2
-                },
-                {
-                    "date": "2021-02-20T12:08:20.341877Z",
-                    "price": 21
-                }
-            ]
+            prices: []
         };
     }
 

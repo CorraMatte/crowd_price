@@ -86,7 +86,7 @@ class MainCategory extends React.Component {
                             <h3>Price trend of products in this category</h3>
                         </Card.Header>
                         <Card.Body>
-                            <MultiLineChartItem prices={this.state.prices} products={this.state.products}/>
+                            <MultiLineChartItem prices={this.state.prices} />
                         </Card.Body>
                     </Card>
                     <Card bg={"light"} className={"my-md-3"}>

@@ -11,4 +11,5 @@ urlpatterns = [
     path('graph/search/category/top', views.GetMostSearchedCategories.as_view()),
     path('graph/product/price/trend/<int:pk>', views.GetProductPriceTrend.as_view()),
     path('graph/category/price/trend/<int:pk>', views.GetCategoryPriceTrend.as_view()),
+    path('graph/store/price/trend/<int:pk>', views.GetStorePriceTrend.as_view()),
 ]

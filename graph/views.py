@@ -116,3 +116,18 @@ class GetCategoryPriceTrend(APIView):
             })
 
         return Response({'results': serial_res}, status.HTTP_200_OK)
+
+
+class GetStorePriceTrend(APIView):
+    def get(self, request, pk):
+        store = generics.get_object_or_404(Store.objects.all(), pk=pk)
+        reports = Report.objects.filter(store=store)
+        serial_res = []
+
+        for r in reports:
+            serial_res.append({
+                'date': datetime.strftime(r.created_time, '%H:%M:%S %d/%m/%Y'),
+                r.product.name: r.price
+            })
+
+        return Response({'results': serial_res}, status.HTTP_200_OK)
