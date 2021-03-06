@@ -32,6 +32,7 @@ export const CONSUMER_API = `${backend_url}/consumer/detail`;
 export const ANALYST_API = `${backend_url}/analyst/detail`;
 export const CONSUMER_SIGNUP_API = `${backend_url}/consumer/signup`;
 export const USER_LOGIN_API = `${backend_url}/user/login`;
+export const PROFILE_UPDATE_IMG_API = `${backend_url}/profile/update/img`;
 
 export const GRAPH_REPORT_USER_MOST_ACTIVE_API = `${backend_url}/graph/report/user/most_active`;
 export const GRAPH_REPORT_PRODUCT_TOP_API = `${backend_url}/graph/report/product/top`;

@@ -24,7 +24,6 @@ class MainProfile extends React.Component {
     }
 
     componentDidMount() {
-        // const id = this.props.match.params.id;
         if (this.state.user_type === CONSUMER_LABEL) {
             axios.get(`${CONSUMER_API}`, getAuthHeader()).then(
                 res => {this.setState({
