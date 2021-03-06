@@ -44,7 +44,10 @@ class MainSearch extends React.Component {
             sorting_options: [],
             dump_format_options: [],
             has_results: false,
-            errors: ''
+            errors: '',
+
+            is_valid_search: false,
+            saved_search_result: '',
         }
     }
 
@@ -108,12 +111,14 @@ class MainSearch extends React.Component {
                 this.setState({
                     reports: res.data.features,
                     has_search: true,
-                    errors: ''
+                    errors: '',
+                    is_valid_search: true
                 })
             }).catch(
             err => {
                 this.setState({
-                    errors: 'You have to insert at least the product name'
+                    errors: 'You have to insert at least the product name',
+                    is_valid_search: false
                 })
             }
         )
@@ -133,10 +138,12 @@ class MainSearch extends React.Component {
     }
 
     addToFavorite = () => {
-        axios.post(SEARCH_ADD_FAVORITE_API, getAuthHeader()).then(
+        axios.post(SEARCH_ADD_FAVORITE_API, {}, getAuthHeader()).then(
             res => {
                 this.setState({
-                    errors: ''
+                    errors: '',
+                    saved_search_result: 'Search has been saved',
+                    is_valid_search: false
                 })
             }
         )
@@ -208,7 +215,7 @@ class MainSearch extends React.Component {
         } else {
             result_header = <Alert variant={"danger"}>{this.state.errors}</Alert>
         }
-
+        
         return (
             <div>
                 {isLoggedIn() ? <HeaderLogged/> : <HeaderUnLogged/>}
@@ -245,7 +252,7 @@ class MainSearch extends React.Component {
                                         <Slider
                                             min={10}
                                             max={MAX_DISTANCE}
-                                            step={5}
+                                            step={10}
                                             value={this.state.distance}
                                             onChange={this.distanceChangeHandler}
                                         />
@@ -278,16 +285,30 @@ class MainSearch extends React.Component {
                                         <Button id={"submit"} className={"btn-block btn-primary"}
                                                 type="submit">Search</Button>
                                     </Card.Footer>
+
                                     {isLoggedIn() ?
                                         <Card.Body>
                                             <br/>
                                             <br/>
-                                            <Button className={'btn-block'} onClick={this.addToFavorite}>
+                                            <Button
+                                                className={'btn-block'}
+                                                onClick={this.addToFavorite}
+                                                disabled={!this.state.is_valid_search}
+                                            >
                                                 Add last search to favorite searches
                                             </Button>
                                         </Card.Body> :
                                         <div></div>
                                     }
+
+                                    {
+                                        this.state.saved_search_result ?
+                                            <Card.Body>
+                                                <Alert variant={"success"}>{this.state.saved_search_result}</Alert>
+                                            </Card.Body> :
+                                            <div></div>
+                                    }
+
                                 </Form>
                             </Card>
 

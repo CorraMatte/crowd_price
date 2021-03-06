@@ -186,7 +186,7 @@ class AddSearchToFavoriteAPI(APIView):
 
     def post(self, request):
         user = User.objects.get(pk=request.user.id)
-        s = Search.objects.filter(user=user).latest('created_time')
+        s = Search.objects.filter(profile=Profile.objects.get(user=user)).latest('created_time')
         s.is_starred = True
         s.save()
         return Response({'detail': 'success'}, status.HTTP_201_CREATED)

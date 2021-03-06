@@ -38,7 +38,7 @@ export const getUserType = () => {
 // Delete the token from the sessionStorage
 export const logOut = () => {
     sessionStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.removeItem("type");
 }
 
 // Create header for request
