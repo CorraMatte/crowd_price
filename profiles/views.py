@@ -1,3 +1,4 @@
+from django.contrib.auth.password_validation import validate_password
 from django.core.validators import validate_image_file_extension
 from django.core.exceptions import ValidationError
 from rest_framework.authtoken.models import Token
@@ -110,3 +111,30 @@ class RetrieveProfilePicAPI(APIView):
     def get(self, request):
         profile = generics.get_object_or_404(Profile.objects.all(), user=request.user)
         return Response({'results': profile.picture.url}, status.HTTP_200_OK)
+
+
+class ChangeUserPasswordAPI(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def put(self, request):
+        data = request.data
+        u = request.user
+        old_password = data.get('old_password')
+        if not u.check_password(old_password):
+            return Response({'detail': ['Old password is not correct']}, status.HTTP_404_NOT_FOUND)
+
+        password1, password2 = data.get('new_password1'), data.get('new_password2')
+        if password1 != password2 or password1 is None:
+            return Response({"detail": ["password not valid or doesn't match"]}, status.HTTP_400_BAD_REQUEST)
+
+        if old_password == password1:
+            return Response({'detail': ['Insert a different password']}, status.HTTP_400_BAD_REQUEST)
+
+        try:
+            validate_password(password1, u)
+        except ValidationError as e:
+            return Response({"detail": e}, status.HTTP_400_BAD_REQUEST)
+
+        u.set_password(password1)
+        u.save()
+        return Response({"detail": "Password updated successfully"}, status.HTTP_201_CREATED)

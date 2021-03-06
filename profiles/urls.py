@@ -10,7 +10,10 @@ urlpatterns = [
     path('consumer/signup', views.CreateConsumerAPI.as_view()),
     path('analyst/signup', views.CreateAnalystAPI.as_view()),
     path('user/login', views.LoginAPI.as_view()),
+
+    # Put
     path('profile/update/img', views.ChangeProfilePicAPI.as_view()),
+    path('user/update/password', views.ChangeUserPasswordAPI.as_view()),
 
     # Get
     path('profile/img', views.RetrieveProfilePicAPI.as_view()),
