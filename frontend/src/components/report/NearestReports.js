@@ -3,7 +3,7 @@ import axios from "axios";
 import {REPORTS_NEAREST_API} from "../../urls/endpoints";
 import {getAuthHeader} from "../../auth";
 import {DetailGroupReport} from "./DetailGroupReport";
-import {Container} from "react-bootstrap";
+import {Card, Container} from "react-bootstrap";
 import {getCoordinatesByIP, getIP} from "../utils/utils";
 
 class NearestReports extends React.Component {
@@ -52,10 +52,21 @@ class NearestReports extends React.Component {
                 {
                     this.state.reports ?
                         <Container className={"my-5"} fluid>
-                            <h3>Reports near to you</h3>
-                            <DetailGroupReport reports={this.state.reports}/>
+                            <Card bg={"light"}>
+                                <Card.Header>
+                                    <h3>Reports near to you</h3>
+                                </Card.Header>
+                                <Card.Body>
+                                    <DetailGroupReport reports={this.state.reports}/>
+                                </Card.Body>
+                            </Card>
                         </Container>
-                        : <h3 className={'container-fluid'}>No reports near to your location</h3>
+                        :
+                        <Card bg={"light"}>
+                            <Card.Header>
+                                <h3>No reports near to your location</h3>
+                            </Card.Header>
+                        </Card>
                 }
             </div>
         )

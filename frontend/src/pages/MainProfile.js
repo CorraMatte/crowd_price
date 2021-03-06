@@ -93,7 +93,7 @@ class MainProfile extends React.Component {
                     </Row>
                 </Container>
                 <Container className={"col-md-12 my-5"} fluid>
-                    <h3>Reports in this store</h3>
+                    <h3>Reports created</h3>
                     <DetailGroupReport reports={this.state.reports} />
                 </Container>
             </div>

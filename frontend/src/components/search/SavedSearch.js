@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import {REPORTS_SEARCH_API, SEARCH_STARRED_API} from "../../urls/endpoints";
 import {getAuthHeader} from "../../auth";
-import {Container} from "react-bootstrap";
+import {Card, Container} from "react-bootstrap";
 import {DetailGroupReport} from "../report/DetailGroupReport";
 
 class SavedSearch extends React.Component {
@@ -43,10 +43,21 @@ class SavedSearch extends React.Component {
                 {
                     this.state.saved_searcher_results ?
                         <Container className={"my-5"} fluid>
-                            <h3>Reports in your saved searches</h3>
-                            {results}
+                            <Card>
+                                <Card.Header>
+                                    <h3>Reports in your saved searches</h3>
+                                </Card.Header>
+                                <Card.Body>
+                                    {results}
+                                </Card.Body>
+                            </Card>
                         </Container>
-                        : <h3 className={'container-fluid'}>No saved search for this user</h3>
+                        :
+                        <Card>
+                            <Card.Header>
+                                <h3 className={'container-fluid'}>No saved search for this user</h3>
+                            </Card.Header>
+                        </Card>
                 }
             </div>
         )

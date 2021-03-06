@@ -201,7 +201,6 @@ class ConsumerDetail extends React.Component {
             <Card bg={"dark"} className={"text-light"}>
                 <ProfileDetail profile={consumer.profile}/>
                 <Card.Body>
-                    Your current level is <br/>
                     <h2>{get_badge_from_experience(consumer.experience)}</h2>
                 </Card.Body>
                 <Card.Body>

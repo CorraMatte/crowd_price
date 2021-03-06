@@ -215,7 +215,7 @@ class MainSearch extends React.Component {
         } else {
             result_header = <Alert variant={"danger"}>{this.state.errors}</Alert>
         }
-        
+
         return (
             <div>
                 {isLoggedIn() ? <HeaderLogged/> : <HeaderUnLogged/>}

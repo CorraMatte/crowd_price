@@ -18,9 +18,9 @@ class Home extends React.Component {
         return (
             <div>
                 {isLoggedIn() ? <HeaderLogged /> : <HeaderUnLogged />}
-                {only_log_features}
                 <MostReportedProducts />
                 <NewerReports />
+                {only_log_features}
             </div>
         );
     };
