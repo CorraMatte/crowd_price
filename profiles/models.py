@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from crowd_price.validators import *
 from crowd_price.const import *
-from django.core.validators import MaxValueValidator
+from django.core.validators import MaxValueValidator, validate_image_file_extension
 from django.contrib.gis.db import models
 
 
@@ -14,7 +14,7 @@ class Organization(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    picture = models.ImageField(upload_to='img/profile/%Y', default="img/blank_profile.png")
+    picture = models.ImageField(upload_to='profiles/%Y', default="profiles/blank_profile.png")
     subscribe_date = models.DateTimeField(validators=[NotFuture], auto_now_add=True)
 
     def __str__(self):

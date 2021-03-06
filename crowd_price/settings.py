@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import datetime
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
 
     # Extension
     'django_extensions',
+    'django.contrib.gis',
 
     # Custom
     'products',
@@ -64,8 +66,8 @@ INSTALLED_APPS = [
     'capabilities',
     'graph',
 
-    # Installed from Django
-    'django.contrib.gis',
+    # SWAGGER TEST
+    'drf_yasg',
 
     # Rest framework
     'rest_framework',
@@ -224,4 +226,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '/tmp/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 SITE_ID = 1

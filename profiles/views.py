@@ -1,6 +1,6 @@
 from rest_framework.authtoken.models import Token
 from rest_framework import generics, status, permissions
-from profiles.models import Consumer, Organization, Analyst
+from profiles.models import Consumer, Organization, Analyst, Profile
 from django.contrib.auth.models import User
 from profiles import serializers as serial
 from rest_framework.views import APIView
@@ -80,4 +80,25 @@ class LoginAPI(APIView):
         return Response({
             'key': token.key,
             'type': 'consumer' if Consumer.objects.filter(profile__user=user) else 'analyst'
-        })
+        }, status.HTTP_200_OK)
+
+
+class ChangeProfilePicAPI(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def put(self, request):
+        if 'image' not in request.data:
+            return Response({'detail': 'image is a required parameter'}, status.HTTP_400_BAD_REQUEST)
+
+        from django.core.validators import validate_image_file_extension
+        from django.core.exceptions import ValidationError
+        try:
+            validate_image_file_extension(request.data['image'])
+        except ValidationError:
+            return Response({'detail': 'Selected file is not a valid image'}, status.HTTP_400_BAD_REQUEST)
+
+        profile = generics.get_object_or_404(Profile.objects.all(), user=request.user)
+        profile.picture = request.data['image']
+        profile.save()
+
+        return Response({"detail": "image change correctly"}, status.HTTP_201_CREATED)
