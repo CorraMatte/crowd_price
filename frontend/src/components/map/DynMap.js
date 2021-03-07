@@ -10,6 +10,7 @@ import {
     getLatFromReport,
     getLongFromReport
 } from "../utils/utils";
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 
 export class DynMap extends React.Component {

@@ -9,7 +9,7 @@ import {
 } from "../urls/endpoints";
 import {Alert, Button, Card, Col, Container, Form, Row} from "react-bootstrap";
 import DatePicker from "react-datepicker";
-import {ANALYST_LABEL, MAX_DISTANCE, MAX_PRICE, MIN_PRICE} from "../components/utils/const"
+import {ACCESS_TOKEN, ANALYST_LABEL, MAX_DISTANCE, MAX_PRICE, MIN_PRICE} from "../components/utils/const"
 import { DetailReportItem} from "../components/report/DetailGroupReport";
 import {getAuthHeader, getUserType, isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
@@ -19,6 +19,10 @@ import {saveAs} from 'file-saver'
 import {getCoordinatesByIP, getIP} from "../components/utils/utils";
 import {RangeSlider, Slider} from 'reactrangeslider';
 import "react-datepicker/dist/react-datepicker.css";
+import ReactMapGL, {Marker} from "react-map-gl";
+import 'mapbox-gl/dist/mapbox-gl.css';
+import { FaSearchLocation } from 'react-icons/fa';
+
 
 
 class MainSearch extends React.Component {
@@ -48,7 +52,19 @@ class MainSearch extends React.Component {
 
             is_valid_search: false,
             saved_search_result: '',
+
+            latitude: 0,
+            longitude: 0,
+            zoom: 15
         }
+    }
+
+    MapChange = (e) => {
+        this.setState({
+            latitude: e.latitude,
+            longitude: e.longitude,
+            zoom: e.zoom
+        })
     }
 
     componentDidMount() {
@@ -73,6 +89,8 @@ class MainSearch extends React.Component {
         navigator.geolocation.getCurrentPosition(
             position => {
                 this.setState({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
                     pnt: `POINT(${position.coords.longitude} ${position.coords.latitude})`
                 });
             },
@@ -82,6 +100,8 @@ class MainSearch extends React.Component {
                         getCoordinatesByIP(res.data.ip).then(
                             res_coords => {
                                 this.setState({
+                                    latitude: res_coords.data.latitude,
+                                    longitude: res_coords.data.longitude,
                                     pnt: `POINT(${res_coords.data.longitude} ${res_coords.data.latitude})`
                                 })
                             }
@@ -102,7 +122,7 @@ class MainSearch extends React.Component {
             distance: this.state.distance,
             after_date: this.state.after_date,
             ordering_by: this.state.ordering_by,
-            pnt: this.state.pnt,
+            pnt: this.state.pnt
         }
 
         const opt = isLoggedIn() ? getAuthHeader() : {};
@@ -190,6 +210,15 @@ class MainSearch extends React.Component {
         })
     }
 
+    onMarkerDragEnd = (event) => {
+        this.setState({
+            longitude: event.lngLat[0],
+            latitude: event.lngLat[1],
+            pnt: `POINT(${event.lngLat[0]} ${event.lngLat[1]})`
+        });
+    }
+
+
     render() {
         let result_header;
         let dump_menu = "";
@@ -259,11 +288,18 @@ class MainSearch extends React.Component {
                                     </Card.Body>
 
                                     <Card.Body>
-                                        Categories
+                                        Categories <br />
                                         {this.state.all_categories.map(
-                                            (cat) => <Form.Check type='checkbox' id={cat.id} name={cat.name}
-                                                                 label={cat.name} key={cat.id}
-                                                                 onChange={this.fieldChangeHandler}/>
+                                            (cat) =>
+                                                <Form.Check
+                                                    type='checkbox'
+                                                    id={cat.id}
+                                                    name={cat.name}
+                                                    label={cat.name}
+                                                    key={cat.id}
+                                                    onChange={this.fieldChangeHandler}
+                                                    className={'d-inline mx-md-2'}
+                                                />
                                         )}
                                     </Card.Body>
 
@@ -279,6 +315,29 @@ class MainSearch extends React.Component {
                                             {this.state.sorting_options.map((opt) => <option value={opt[0]}
                                                                                              key={opt[0]}>{opt[1]}</option>)}
                                         </Form.Control>
+                                    </Card.Body>
+
+                                    <Card.Body>
+                                        Edit your current location
+                                        <ReactMapGL
+                                            width="100%"
+                                            height="50vh"
+                                            zoom={this.state.zoom}
+                                            latitude={this.state.latitude}
+                                            longitude={this.state.longitude}
+                                            mapStyle="mapbox://styles/mapbox/streets-v11"
+                                            onViewportChange={this.MapChange}
+                                            mapboxApiAccessToken={ACCESS_TOKEN}
+                                        >
+                                            <Marker
+                                                longitude={this.state.longitude}
+                                                latitude={this.state.latitude}
+                                                draggable
+                                                onDragEnd={this.onMarkerDragEnd}
+                                            >
+                                                <FaSearchLocation color={'#343a40'} size={30} />
+                                            </Marker>
+                                        </ReactMapGL>
                                     </Card.Body>
 
                                     <Card.Footer>

@@ -40,6 +40,8 @@ export class MultiLineChartItem extends Component {
                     <Tooltip dataKey={'product'} />
                     <Legend />
                     {lines}
+                    {/*<Line type="monotone" dataKey={"prod1"} stroke="#82ca9d" key={"prod1"} />
+                    <Line type="monotone" dataKey={"prod"} stroke="#8884d8" key={"prod"} />*/}
                 </LineChart>
             </ResponsiveContainer>
         )
