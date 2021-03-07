@@ -44,7 +44,7 @@ export const GRAPH_REPORT_CATEGORY_TOP_API = `${backend_url}/graph/report/catego
 export const GRAPH_REPORT_STORE_TOP_API = `${backend_url}/graph/report/store/top`;
 export const GRAPH_SEARCH_PRODUCT_TOP_API = `${backend_url}/graph/search/product/top`;
 export const GRAPH_SEARCH_CATEGORY_TOP_API = `${backend_url}/graph/search/category/top`;
-
+export const GRAPH_PRODUCT_PRICE_LAST_REPORT_API = `${backend_url}/graph/product/price/last_report`;
 export const GRAPH_REPORT_PRODUCT_TOP_PRICE_AVG_API = `${backend_url}/graph/report/product/top/price/avg`;
 export const GRAPH_PRODUCT_PRICE_TREND_API = `${backend_url}/graph/product/price/trend`
 export const GRAPH_CATEGORY_PRICE_TREND_API = `${backend_url}/graph/category/price/trend`

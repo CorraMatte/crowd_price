@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import {DetailGroupReport} from "../components/report/DetailGroupReport";
 import {
+    GRAPH_PRODUCT_PRICE_LAST_REPORT_API,
     GRAPH_PRODUCT_PRICE_TREND_API,
     PRODUCT_API,
     PRODUCT_PRICE_AVG_API,
@@ -14,6 +15,7 @@ import DynMap from "../components/map/DynMap";
 import {Card, Col, Container, Row} from "react-bootstrap";
 import CategoryItem from "../components/product/CategoryItem";
 import {LineChartItem} from "../components/graph/LineChartItem";
+import BarChartItem from "../components/graph/BarChartItem";
 
 
 class MainProduct extends React.Component {
@@ -24,6 +26,7 @@ class MainProduct extends React.Component {
             reports: [],
             prices: [],
             avg: 0,
+            last_reports: []
         };
     }
 
@@ -58,6 +61,16 @@ class MainProduct extends React.Component {
                 })
             }
         )
+
+        axios.get(`${GRAPH_PRODUCT_PRICE_LAST_REPORT_API}/${id}`).then(
+            res => {
+                console.log(res.data.results)
+                this.setState({
+                    last_reports: res.data.results
+                })
+            }
+        )
+
     }
 
     render() {
@@ -67,9 +80,6 @@ class MainProduct extends React.Component {
         if (!prod) {
             return (<div></div>)
         }
-
-        console.log(this.state.prices)
-
 
         return (
             <div>
@@ -112,6 +122,16 @@ class MainProduct extends React.Component {
                                 <LineChartItem prices={this.state.prices} />
                             </Card.Body>
                         </Card>
+
+                        <Card bg={"light"} className={"my-md-3"}>
+                            <Card.Header>
+                                <h3>Prices based on the latest reports</h3>
+                            </Card.Header>
+                            <Card.Body>
+                                <BarChartItem data={this.state.last_reports} label={"price"} />
+                            </Card.Body>
+                        </Card>
+
                         <Card bg={"light"} className={"my-md-3"}>
                             <Card.Header>
                                 <h3>Reports for this product</h3>

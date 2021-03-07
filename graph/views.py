@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from django.db.models import Count, Avg
 from capabilities.models import Search, Report
 from products.models import Product, Store, Category
@@ -91,7 +90,7 @@ class GetAvgMostRatedProductPrices(APIView):
 class GetProductPriceTrend(APIView):
     def get(self, request, pk):
         prod = generics.get_object_or_404(Product.objects.all(), pk=pk)
-        reports = Report.objects.filter(product=prod)
+        reports = Report.objects.filter(product=prod).order_by('created_time')
         serial_res = []
 
         for r in reports:
@@ -106,7 +105,7 @@ class GetProductPriceTrend(APIView):
 class GetCategoryPriceTrend(APIView):
     def get(self, request, pk):
         cat = generics.get_object_or_404(Category.objects.all(), pk=pk)
-        reports = Report.objects.filter(product__categories__in=[cat])
+        reports = Report.objects.filter(product__categories__in=[cat]).order_by('created_time')
         serial_res = []
 
         for r in reports:
@@ -121,13 +120,28 @@ class GetCategoryPriceTrend(APIView):
 class GetStorePriceTrend(APIView):
     def get(self, request, pk):
         store = generics.get_object_or_404(Store.objects.all(), pk=pk)
-        reports = Report.objects.filter(store=store)
+        reports = Report.objects.filter(store=store).order_by('created_time')
         serial_res = []
 
         for r in reports:
             serial_res.append({
                 'date': datetime.strftime(r.created_time, '%H:%M:%S %d/%m/%Y'),
                 r.product.name: r.price
+            })
+
+        return Response({'results': serial_res}, status.HTTP_200_OK)
+
+
+class GetLastReportProduct(APIView):
+    def get(self, request, pk):
+        prod = generics.get_object_or_404(Product.objects.all(), pk=pk)
+        reports = Report.objects.filter(product=prod)[:5]
+        serial_res = []
+
+        for r in reports:
+            serial_res.append({
+                'name': datetime.strftime(r.created_time, '%H:%M:%S %d/%m/%Y'),
+                'value': r.price
             })
 
         return Response({'results': serial_res}, status.HTTP_200_OK)
