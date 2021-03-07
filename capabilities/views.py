@@ -120,7 +120,7 @@ class CreateReportAPI(APIView):
             serializer.validated_data['store'] = store
 
         report = serializer.save()
-        if not report.pnt:
+        if store:
             report.pnt = report.store.pnt
             report.save()
 

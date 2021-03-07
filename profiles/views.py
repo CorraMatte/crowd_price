@@ -113,6 +113,14 @@ class RetrieveProfilePicAPI(APIView):
         return Response({'results': profile.picture.url}, status.HTTP_200_OK)
 
 
+class RetrieveConsumerExpAPI(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        c = generics.get_object_or_404(Consumer.objects.all(), profile__user=request.user)
+        return Response({'result': c.experience}, status.HTTP_200_OK)
+
+
 class ChangeUserPasswordAPI(APIView):
     permission_classes = [permissions.IsAuthenticated]
 

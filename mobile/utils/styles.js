@@ -34,12 +34,19 @@ const text_input = {
     padding: 10
 }
 
+const menu_exp_view = {
+    flex: 2,
+    justifyContent: "center",
+    alignContent: "center"
+}
+
 export const menu_style = StyleSheet.create({
     container: container,
     menu_message_view: menu_message_view,
     menu_button_view: menu_button_view,
     menu_buttons_view_group: menu_buttons_view_group,
     menu_message_str: title_message_str,
+    menu_exp_view: menu_exp_view
 });
 
 const search_message = {
