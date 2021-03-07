@@ -23,7 +23,6 @@ export class Menu extends React.Component {
             token => {
                 axios.get(CONSUMER_EXPERIENCE_API, getAuthHeader(token)).then(
                     res => {
-                        console.log(res.data.result)
                         this.setState({
                             exp: res.data.result
                         });

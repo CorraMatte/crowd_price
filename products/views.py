@@ -1,9 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from capabilities.models import Report
 from products.models import Product, Store, Category
 import products.serializers as serial
 from rest_framework import status, generics, permissions
-from django.db.models import Count
+from django.db.models import Count, Avg
 
 
 class RetrieveProductAPI(generics.RetrieveAPIView):
@@ -32,6 +33,13 @@ class RetrieveCategoryProductAPI(generics.ListAPIView):
 
     def get_queryset(self):
         return Product.objects.filter(categories=self.kwargs.get('pk'))
+
+
+class RetrieveProductPriceAVGAPI(APIView):
+    def get(self, request, pk):
+        product = generics.get_object_or_404(Product.objects.all(), pk=pk)
+        avg = Report.objects.filter(product=product).aggregate(avg=Avg('price'))['avg']
+        return Response({"result": avg}, status.HTTP_200_OK)
 
 
 class RetrieveMostReportedProductAPI(APIView):

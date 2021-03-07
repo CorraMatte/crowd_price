@@ -1,7 +1,12 @@
 import React from "react";
 import axios from "axios";
 import {DetailGroupReport} from "../components/report/DetailGroupReport";
-import {GRAPH_PRODUCT_PRICE_TREND_API, PRODUCT_API, REPORTS_PRODUCT_API} from "../urls/endpoints";
+import {
+    GRAPH_PRODUCT_PRICE_TREND_API,
+    PRODUCT_API,
+    PRODUCT_PRICE_AVG_API,
+    REPORTS_PRODUCT_API
+} from "../urls/endpoints";
 import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
@@ -17,7 +22,8 @@ class MainProduct extends React.Component {
         this.state = {
             product: null,
             reports: [],
-            prices: []
+            prices: [],
+            avg: 0,
         };
     }
 
@@ -36,10 +42,19 @@ class MainProduct extends React.Component {
                     reports: res.data.results.features
                 });
             });
+
         axios.get(`${GRAPH_PRODUCT_PRICE_TREND_API}/${id}`).then(
             res => {
                 this.setState({
                     prices: res.data.results
+                })
+            }
+        )
+
+        axios.get(`${PRODUCT_PRICE_AVG_API}/${id}`).then(
+            res => {
+                this.setState({
+                    avg: res.data.result
                 })
             }
         )
@@ -61,7 +76,7 @@ class MainProduct extends React.Component {
                 {isLoggedIn() ? <HeaderLogged/> : <HeaderUnLogged/>}
                 <Container className={"float-left my-md-3"} fluid>
                     <Row>
-                        <Col className={"col-md-4  ml-md-1"}>
+                        <Col className={"col-md-4 ml-md-1"}>
                             <Card bg={"dark"} className={"text-light"}>
                                 <Card.Header><h4>{prod.name}</h4></Card.Header>
                                 <Card.Body>
@@ -74,6 +89,10 @@ class MainProduct extends React.Component {
                                 <Card.Body>
                                     {`Has ${this.state.reports.length ? this.state.reports.length : '0'} reviews`}
                                 </Card.Body>
+                            </Card>
+
+                            <Card bg={"dark"} className={"text-light my-md-2"}>
+                                <Card.Header><h4>{"Average reported price is " + this.state.avg + "€"}</h4></Card.Header>
                             </Card>
                         </Col>
                         <Col className={"col-md-1"}></Col>

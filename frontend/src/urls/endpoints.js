@@ -14,6 +14,7 @@ export const REPORT_API = `${backend_url}/report`;
 
 export const PRODUCTS_MOST_REPORTED_API = `${backend_url}/products/most_reported`;
 export const PRODUCTS_CATEGORY_API = `${backend_url}/products/category`;
+export const PRODUCT_PRICE_AVG_API = `${backend_url}/products/price/avg`;
 export const CATEGORIES_API = `${backend_url}/categories`;
 
 export const SEARCH_LATEST_API = `${backend_url}/search/latest`;
