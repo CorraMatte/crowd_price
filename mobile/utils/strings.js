@@ -12,7 +12,7 @@ export const SEARCH_BUTTON = "Search";
 export const UPLOAD_BUTTON = "Upload";
 
 export const SEARCH_MESSAGE_STR = "Search reports near to you!"
-export const UPLOAD_MESSAGE_STR = "Upload price report for a product!"
+export const UPLOAD_MESSAGE_STR = "Upload a new report!"
 
 export const SEARCH_RESULTS_TITLE_STR = "Results";
 export const REPORT_TITLE_STR = "Report";

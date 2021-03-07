@@ -9,6 +9,7 @@ import { Menu } from "./pages/Menu";
 import { Search } from "./pages/Search";
 import { Upload } from "./pages/Upload";
 import { SearchResults } from "./pages/SearchResults";
+import { Report } from "./pages/Report";
 
 
 const Stack = createStackNavigator();
@@ -19,6 +20,7 @@ export default function App() {
       <NavigationContainer initialRouteName="Login" headerMode="none">
         <Stack.Navigator>
             <Stack.Screen name="Login" component={ Login } options={ { headerShown: false } } />
+            <Stack.Screen name="Report" component={ Report } options={ { headerShown: false } } />
             <Stack.Screen name="Signup" component={ Signup } options={ { headerShown: false } } />
             <Stack.Screen name="Menu" component={ Menu } options={ { headerShown: false } } />
             <Stack.Screen name="Search" component={ Search } options={ { headerShown: false } } />

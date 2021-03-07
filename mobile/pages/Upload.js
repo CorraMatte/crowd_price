@@ -15,7 +15,11 @@ import {getToken} from "../utils/auth";
 export class Upload extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
+        this.state = this.get_initial_state();
+    }
+
+    get_initial_state = () => {
+        return {
             product_id: 0,
             store_id: 0,
             price: 10,
@@ -78,20 +82,20 @@ export class Upload extends React.Component {
     }
 
     add_report = () => {
-        let req = {};
-
+        let formData = new FormData();
         if (this.state.uri) {
             const uri = this.state.uri;
             const filename = this.state.uri.replace(/^.*[\\\/]/, '');
 
-            req.photo= {
+            formData.append('picture', {
                 uri,
                 name: filename,
-            };
+                type: 'image/jpg',
+            });
         }
 
         if (this.state.store_id !== 0) {
-            req.store = this.state.store_id
+            formData.append('store', this.state.store_id)
         }
 
         if (this.state.product_id === 0 || this.state.price === 0) {
@@ -99,31 +103,28 @@ export class Upload extends React.Component {
             return;
         }
 
-        req.price = this.state.price;
-        req.product = this.state.product_id;
-        req.pnt = this.state.pnt;
+        formData.append('price', this.state.price)
+        formData.append('product', this.state.product_id)
+        formData.append('pnt', this.state.pnt)
 
         getToken().then(
             token => {
-                console.log(req)
-                axios.post(REPORT_ADD_API, req, {
+                axios.post(REPORT_ADD_API, formData, {
                     headers: {
-                        Authorization: "Token " + token
-                    }}).then(
+                        Authorization: "Token " + token,
+                        'content-type': 'multipart/form-data',
+                        Accept: 'application/json',
+                    }
+                }).then(
                     res => {
-                        Alert.alert('Report has been upload sucessfully');
+                        Alert.alert('Report has been upload successfully!');
+                        this.setState(this.get_initial_state());
                         this.props.navigation.navigate("Menu");
                     }
-                ).catch(err => {
-                    console.log(err)
-                })
+                )
             }
-        ).catch(err => {
-            console.log(err)
-        })
-
+        )
     }
-
 
     render() {
         return (
