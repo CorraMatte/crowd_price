@@ -1,7 +1,4 @@
 import React from "react";
-
-// https://visgl.github.io/react-map-gl/docs/get-started/get-started
-// https://visgl.github.io/react-map-gl/docs/api-reference/popup
 import ReactMapGL, {Popup} from 'react-map-gl';
 import {ACCESS_TOKEN, MAP_DYN_ZOOM, MAX_RESULTS_IN_LABEL} from "../utils/const"
 import {
@@ -35,7 +32,6 @@ export class DynMap extends React.Component {
         let popups = [];
 
         if (this.props && this.props.reports.length !== 0) {
-            // City from lon lat https://docs.mapbox.com/api/search/geocoding/
             const aggr_reports = aggregate_report_by_coords(this.props.reports);
             for (const [key, reports] of Object.entries(aggr_reports)) {
                 const labels = [];

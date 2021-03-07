@@ -37,7 +37,6 @@ export class BaseRouter extends React.Component {
 
                 {/*Mobile features*/}
                 {/*<LoginRequiredRoute path='/upload/' component={Upload}/>}
-                {/*<LoginRequiredRoute path='/add_product/' component={MainAddProduct}/>*/}
                 {/**/}
             </Router>
         );

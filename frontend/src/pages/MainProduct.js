@@ -64,7 +64,6 @@ class MainProduct extends React.Component {
                         <Col className={"col-md-4  ml-md-1"}>
                             <Card bg={"dark"} className={"text-light"}>
                                 <Card.Header><h4>{prod.name}</h4></Card.Header>
-                                {/* TODO: Show the last report date for this product (?)*/}
                                 <Card.Body>
                                     Categories <br/>
                                     {prod.categories.length > 0 ? prod.categories.map((cat) => (
