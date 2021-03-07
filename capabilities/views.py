@@ -99,9 +99,6 @@ class CreateReportAPI(APIView):
     def post(self, request):
         try:
             consumer = Consumer.objects.get(profile__user=request.user)
-            product = Product.objects.get(pk=request.data['product'])
-            store = Store.objects.get(pk=request.data['store']) if 'store' in request.data else None
-
         except ObjectDoesNotExist:
             return Response({'detail': 'user not allowed'}, status.HTTP_403_FORBIDDEN)
 
@@ -109,6 +106,8 @@ class CreateReportAPI(APIView):
         if not serializer.is_valid():
             return Response({'detail': serializer.errors}, status.HTTP_400_BAD_REQUEST)
 
+        product = Product.objects.get(pk=request.data['product'])
+        store = Store.objects.get(pk=request.data['store']) if 'store' in request.data else None
         if 'pnt' not in request.data and 'store' not in request.data:
             return Response({'detail': 'point or store must be provided'}, status.HTTP_400_BAD_REQUEST)
 
