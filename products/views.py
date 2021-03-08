@@ -44,7 +44,7 @@ class RetrieveProductPriceAVGAPI(APIView):
 
 class RetrieveMostReportedProductAPI(APIView):
     def get(self, request):
-        prods = Product.objects.annotate(count=Count('report')).order_by('-count')[:10]
+        prods = Product.objects.annotate(count=Count('report')).order_by('-count')[:9]
         res = []
         for p in prods:
             ps = serial.ProductSerializer(p).data

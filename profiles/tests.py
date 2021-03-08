@@ -35,6 +35,45 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     """
+        Test password change
+    """
+    def test_password_change_for_user(self):
+        url = '/consumer/signup'
+        user = {
+            "username": "user", "password1": "P4sswordVeryS€cure@", "password2": "P4sswordVeryS€cure@",
+            "email": "test.email@gmail.com"
+        }
+        response = self.client.post(url, data=user)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        self.token = self.client.post(
+            '/user/login', data={'email': 'test.email@gmail.com', 'password': 'P4sswordVeryS€cure@'}
+        ).json()['key']
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token)
+
+        url = '/user/update/password'
+        new_creds = {
+            'new_password1': 'S3cureenough!',
+            'new_password2': 'S3cureenough!',
+            'old_password': 'this is a wrong password!'
+        }
+        response = self.client.put(url, data=new_creds)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        new_creds['old_password'] = 'P4sswordVeryS€cure@'
+        new_creds['new_password1'] = new_creds['new_password2'] = 'are', 'different'
+        response = self.client.put(url, data=new_creds)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        new_creds['new_password1'] = new_creds['new_password2'] = 'Moresecurenotenough'
+        response = self.client.put(url, data=new_creds)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        new_creds['new_password1'] = new_creds['new_password2'] = 'Moresecurenotenough!'
+        response = self.client.put(url, data=new_creds)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        new_creds['new_password1'] = new_creds['new_password2'] = 'S3cureenough!'
+        response = self.client.put(url, data=new_creds)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    """
         Test password strength and the validators, no need a test for the analyst part
         path('consumer/signup', views.CreateConsumerView.as_view()),
     """
@@ -45,7 +84,6 @@ class UserTests(APITestCase):
             "username": "UserVerySecure", "password1": "test.email@gmail.com", "password2": "test.email@gmail.com",
             "email": "test.email@gmail.com"
         }
-
         response = self.client.post(url, data=user)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         user['password1'] = user['password2'] = 'are', 'different'

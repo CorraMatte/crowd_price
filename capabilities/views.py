@@ -77,7 +77,7 @@ class RetrieveNearestReportAPI(APIView):
 
         return Response(
             {"results": serial.ReportSerializer(
-                Report.objects.all().annotate(distance=Distance("pnt", pnt)).order_by("distance")[:10], many=True
+                Report.objects.all().annotate(distance=Distance("pnt", pnt)).order_by("distance")[:9], many=True
             ).data},
             status.HTTP_200_OK
         )
@@ -88,7 +88,7 @@ class RetrieveNewerReportAPI(generics.ListAPIView):
     serializer_class = serial.ReportSerializer
 
     def get_queryset(self):
-        return Report.objects.all().order_by('-created_time')[:10]
+        return Report.objects.all().order_by('-created_time')[:9]
 
 
 class CreateReportAPI(APIView):
