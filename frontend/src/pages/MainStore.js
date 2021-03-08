@@ -5,9 +5,9 @@ import {DetailGroupReport} from "../components/report/DetailGroupReport"
 import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
-import {StaticMap} from "../components/map/StaticMap";
 import {Card, Col, Container, Row} from "react-bootstrap";
 import {MultiLineChartItem} from "../components/graph/LineChartItem";
+import DynMap from "../components/map/DynMap";
 
 
 class MainStore extends React.Component {
@@ -54,12 +54,18 @@ class MainStore extends React.Component {
         const store = this.state.store.properties;
         const reports = this.state.reports;
 
+        const popup = {
+            longitude: coords[0],
+            latitude: coords[1],
+            label: store.name
+        }
+
         return (
             <div>
                 {isLoggedIn() ? <HeaderLogged /> : <HeaderUnLogged />}
                 <Container className={"float-left my-md-3"} fluid>
                     <Row>
-                        <Col className={"col-md-4 ml-md-1"}>
+                        <Col className={"col-md-4"}>
                             <Card bg={"dark"} className={"text-light"}>
                                 <Card.Img variant={"top"} src={store.picture} />
                                 <Card.Header><h4>{store.name}</h4></Card.Header>
@@ -68,14 +74,13 @@ class MainStore extends React.Component {
                                 </Card.Body>
                             </Card>
                         </Col>
-                        <Col className={"col-md-1"}></Col>
-                        <Col className={"col-md-6"}>
+                        <Col className={"col-md-8"}>
                             <h3>Location of the store on the map</h3>
-                            <StaticMap latitude={coords[1]} longitude={coords[0]} label={store.name} />
+                            <DynMap reports={[]} popup={popup} />
                         </Col>
                     </Row>
                 </Container>
-                <Container className={"col-md-12 my-md-5"} fluid>
+                <Container className={"my-md-5"} fluid>
                     <Card bg={"light"} className={"my-md-3"}>
                         <Card.Header>
                             <h3>Price trend of products in this store</h3>
