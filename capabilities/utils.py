@@ -2,7 +2,8 @@ import csv
 import json
 from copy import copy
 from decimal import Decimal
-from django.contrib.gis.measure import Distance
+from django.contrib.gis.measure import Distance as D
+from django.contrib.gis.db.models.functions import Distance
 from django.contrib.postgres.search import TrigramSimilarity
 from django.http import HttpResponse
 from excel_response import ExcelResponse
@@ -22,7 +23,9 @@ def get_reports_from_product_set(product_set, search):
         reports = reports.filter(product__categories__in=search.categories.all())
 
     if search.pnt:
-        reports = reports.filter(pnt__distance_lte=(search.pnt, Distance(km=search.distance)))
+        reports = reports.filter(pnt__distance_lte=(search.pnt, D(km=search.distance)))
+
+    reports = reports.annotate(distance=Distance('pnt', search.pnt))
 
     return reports
 
@@ -46,8 +49,11 @@ def get_reports_by_search(search_pk):
 
 def get_serial_reports_by_search(search_pk):
     reports = get_reports_by_search(search_pk)
-    serial_prods = serial.ReportSerializer(reports, many=True).data
-    return serial_prods
+    serial_reports = serial.ReportSerializer(reports, many=True).data
+    for index, r in enumerate(serial_reports['features']):
+        r['properties'].update({'distance': int(reports[index].distance.km)})
+
+    return serial_reports
 
 
 def get_dump_fieldnames():

@@ -6,7 +6,7 @@ import {USER_LOGIN_API} from "./urls/endpoints";
 // Set the authentication token
 export const setToken = (token, type) => {
     sessionStorage.setItem("token", token);
-    localStorage.setItem("type", type);
+    sessionStorage.setItem("type", type);
     return sessionStorage.getItem("token") !== null
 }
 
@@ -32,13 +32,13 @@ export const isLoggedIn = () => {
 
 //
 export const getUserType = () => {
-    return localStorage.getItem("type");
+    return sessionStorage.getItem("type");
 }
 
 // Delete the token from the sessionStorage
 export const logOut = () => {
     sessionStorage.removeItem("token");
-    localStorage.removeItem("type");
+    sessionStorage.removeItem("type");
 }
 
 // Create header for request

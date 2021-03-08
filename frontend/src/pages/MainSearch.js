@@ -321,7 +321,7 @@ class MainSearch extends React.Component {
                                                                                              key={opt[0]}>{opt[1]}</option>)}
                                         </Form.Control>
                                     </Card.Body>
-                                    
+
                                     <Card.Footer>
                                         <Button id={"submit"} className={"btn-block btn-primary"}
                                                 type="submit">Search</Button>

@@ -45,7 +45,10 @@ export class DynMap extends React.Component {
             for (const [key, reports] of Object.entries(aggr_reports)) {
                 const labels = [];
                 reports.slice(0, MAX_RESULTS_IN_LABEL).forEach((report) => {
-                    labels.push(`${report.properties.price} on ${get_day_month_year_from_date(report.properties.created_time)}€`);
+                    const props = report.properties
+                    labels.push(
+                        `${props.product.name}: ${props.price}€ on ${get_day_month_year_from_date(props.created_time)}
+                        `);
                 })
 
                 if (reports.length > MAX_RESULTS_IN_LABEL) {
