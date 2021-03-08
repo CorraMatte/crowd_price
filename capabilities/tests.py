@@ -160,7 +160,7 @@ class SearchTest(APITestCase):
         response = self.client.post('/reports/search', data=search).json()
         self.assertEqual(
             len(response['features']),
-            len(Report.objects.filter(product__categories__in=[c.pk for c in Category.objects.all()]))
+            len(Report.objects.filter(product__categories__in=[c.pk for c in Category.objects.all()]).distinct())
         )
 
     """

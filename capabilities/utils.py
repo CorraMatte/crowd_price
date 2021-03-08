@@ -26,6 +26,7 @@ def get_reports_from_product_set(product_set, search):
 
     return reports
 
+
 # https://docs.djangoproject.com/en/3.1/ref/contrib/postgres/search/#trigramsimilarity
 # https://docs.djangoproject.com/en/3.1/ref/contrib/postgres/search/#the-search-lookup
 def get_reports_by_search(search_pk):
@@ -36,11 +37,11 @@ def get_reports_by_search(search_pk):
     exact_reports = get_reports_from_product_set(Product.objects.filter(name__search=search.product_query), search)
     similar_reports = get_reports_from_product_set(Product.objects.annotate(
                 similarity=TrigramSimilarity('name', search.product_query)
-            ).filter(similarity__gt=0.1), search)
+            ).filter(similarity__gt=0.1), search).difference(exact_reports)
 
-    reports = exact_reports | similar_reports
+    reports = list(exact_reports.order_by(search.ordering_by)) + list(similar_reports.order_by(search.ordering_by))
 
-    return reports.order_by(search.ordering_by)
+    return reports
 
 
 def get_serial_reports_by_search(search_pk):
