@@ -75,8 +75,6 @@ class MainCategory extends React.Component {
             }
         }
 
-        console.log(this.state.products)
-
         return (
             <div>
                 {isLoggedIn() ? <HeaderLogged/> : <HeaderUnLogged/>}

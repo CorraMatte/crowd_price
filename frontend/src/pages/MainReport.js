@@ -45,7 +45,7 @@ class MainReport extends React.Component {
                 {isLoggedIn() ? <HeaderLogged/> : <HeaderUnLogged/>}
                 <Container className={"float-left my-md-3"} fluid>
                     <Row>
-                        <Col className={"col-md-4 ml-md-1"}>
+                        <Col className={"col-md-4"}>
                             <Card bg={"dark"} className={"text-light ml-md-1"}>
                                 <Card.Img variant={"top"} src={props.picture}/>
                                 <Card.Header><h4><a className={"text-light"}
@@ -62,8 +62,7 @@ class MainReport extends React.Component {
                                 </Card.Footer>
                             </Card>
                         </Col>
-                        <Col className={"col-md-1"}></Col>
-                        <Col className={"col-md-6"}>
+                        <Col className={"col-md-8"}>
                             <h3>Location of the report on the map</h3>
                             <StaticMap latitude={coords[1]} longitude={coords[0]} label={"Was reported here"}/>
                         </Col>

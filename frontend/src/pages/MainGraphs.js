@@ -96,7 +96,6 @@ export class MainGraphs extends React.Component {
     render() {
         let graphs = [];
 
-        console.log(this.state)
         for (const [field, value] of Object.entries(this.state)) {
             let graph;
             if (value.type === 'barchart') {
