@@ -50,7 +50,7 @@ class MainProduct extends React.Component {
             res => {
                 this.setState({
                     prices: res.data.results
-                })
+                });
             }
         )
 
@@ -58,16 +58,15 @@ class MainProduct extends React.Component {
             res => {
                 this.setState({
                     avg: res.data.result
-                })
+                });
             }
         )
 
         axios.get(`${GRAPH_PRODUCT_PRICE_LAST_REPORT_API}/${id}`).then(
             res => {
-                console.log(res.data.results)
                 this.setState({
                     last_reports: res.data.results
-                })
+                });
             }
         )
 
@@ -81,6 +80,8 @@ class MainProduct extends React.Component {
             return (<div></div>)
         }
 
+
+        console.log(reports)
         return (
             <div>
                 {isLoggedIn() ? <HeaderLogged/> : <HeaderUnLogged/>}
@@ -105,15 +106,14 @@ class MainProduct extends React.Component {
                                 <Card.Header><h4>{"Average reported price is " + this.state.avg + "€"}</h4></Card.Header>
                             </Card>
                         </Col>
-                        <Col className={"col-md-1"}></Col>
-                        <Col className={"col-md-6"}>
+                        <Col className={"col-md-7"}>
                             <DynMap reports={reports}/>
                         </Col>
                     </Row>
                 </Container>
 
                 {this.state.reports.length > 0 ? (
-                    <Container className={"col-md-12 my-5"} fluid>
+                    <Container className={"my-5"} fluid>
                         <Card bg={"light"} className={"my-md-3"}>
                             <Card.Header>
                                 <h3>Prices based on report</h3>
@@ -142,7 +142,6 @@ class MainProduct extends React.Component {
                         </Card>
                     </Container>
                 ) : <h3 className={"my-5 mx-5"}>There no reports for this product</h3>}
-
 
             </div>
         )
