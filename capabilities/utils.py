@@ -12,23 +12,10 @@ from products.models import Product, Store
 from profiles.models import Consumer
 
 
-# https://docs.djangoproject.com/en/3.1/ref/contrib/postgres/search/#trigramsimilarity
-# https://docs.djangoproject.com/en/3.1/ref/contrib/postgres/search/#the-search-lookup
-def get_reports_by_search(search_pk):
-    search = Search.objects.get(pk=search_pk)
-    if not search:
-        return []
-
-    products = (
-            Product.objects.filter(name__search=search.product_query) |
-            Product.objects.annotate(
-                similarity=TrigramSimilarity('name', search.product_query)
-            ).filter(similarity__gt=0.1)
-    ).distinct()
-
+def get_reports_from_product_set(product_set, search):
     reports = Report.objects.filter(
         price__gte=Decimal(search.price_min), price__lte=Decimal(search.price_max),
-        created_time__gte=search.after_date, product__in=products
+        created_time__gte=search.after_date, product__in=product_set
     )
 
     if search.categories.all():
@@ -36,6 +23,22 @@ def get_reports_by_search(search_pk):
 
     if search.pnt:
         reports = reports.filter(pnt__distance_lte=(search.pnt, Distance(km=search.distance)))
+
+    return reports
+
+# https://docs.djangoproject.com/en/3.1/ref/contrib/postgres/search/#trigramsimilarity
+# https://docs.djangoproject.com/en/3.1/ref/contrib/postgres/search/#the-search-lookup
+def get_reports_by_search(search_pk):
+    search = Search.objects.get(pk=search_pk)
+    if not search:
+        return []
+
+    exact_reports = get_reports_from_product_set(Product.objects.filter(name__search=search.product_query), search)
+    similar_reports = get_reports_from_product_set(Product.objects.annotate(
+                similarity=TrigramSimilarity('name', search.product_query)
+            ).filter(similarity__gt=0.1), search)
+
+    reports = exact_reports | similar_reports
 
     return reports.order_by(search.ordering_by)
 
