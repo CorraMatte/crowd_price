@@ -1,6 +1,6 @@
 import React from "react";
 import ReactMapGL, {Popup} from 'react-map-gl';
-import {ACCESS_TOKEN, MAP_DYN_ZOOM, MAX_RESULTS_IN_LABEL} from "../utils/const"
+import {ACCESS_TOKEN, MAP_DYN_ZOOM, MAP_STATIC_ZOOM, MAX_RESULTS_IN_LABEL} from "../utils/const"
 import {
     aggregate_report_by_coords,
     get_day_month_year_from_date,
@@ -13,10 +13,19 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 export class DynMap extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            latitude: 0,
-            longitude: 0,
-            zoom: MAP_DYN_ZOOM
+
+        if (this.props.reports.length === 0) {
+            this.state = {
+                latitude: this.props.popup.latitude,
+                longitude: this.props.popup.longitude,
+                zoom: MAP_STATIC_ZOOM
+            };
+        } else {
+            this.state = {
+                latitude: 0,
+                longitude: 0,
+                zoom: MAP_DYN_ZOOM
+            }
         }
     }
 
@@ -31,7 +40,7 @@ export class DynMap extends React.Component {
     render() {
         let popups = [];
 
-        if (this.props && this.props.reports.length !== 0) {
+        if (this.props.reports) {
             const aggr_reports = aggregate_report_by_coords(this.props.reports);
             for (const [key, reports] of Object.entries(aggr_reports)) {
                 const labels = [];
@@ -50,11 +59,11 @@ export class DynMap extends React.Component {
                     key: key
                 });
             }
-
         } else {
             return (<div></div>)
         }
 
+        console.log(popups)
         return (
             <ReactMapGL
                 width="100%"
@@ -83,6 +92,9 @@ export class DynMap extends React.Component {
                             </Popup>
                     )
                 }
+                <Popup longitude={this.props.popup.longitude} latitude={this.props.popup.latitude}>
+                    {this.props.popup.label}
+                </Popup>
             </ReactMapGL>
         )
     }

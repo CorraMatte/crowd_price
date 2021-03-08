@@ -218,7 +218,6 @@ class MainSearch extends React.Component {
         });
     }
 
-
     render() {
         let result_header;
         let dump_menu = "";
@@ -243,6 +242,12 @@ class MainSearch extends React.Component {
             }
         } else {
             result_header = <Alert variant={"danger"}>{this.state.errors}</Alert>
+        }
+
+        const you_are_here_popup = {
+            latitude: this.state.latitude,
+            longitude: this.state.longitude,
+            label: "Your current location"
         }
 
         return (
@@ -316,6 +321,11 @@ class MainSearch extends React.Component {
                                                                                              key={opt[0]}>{opt[1]}</option>)}
                                         </Form.Control>
                                     </Card.Body>
+                                    
+                                    <Card.Footer>
+                                        <Button id={"submit"} className={"btn-block btn-primary"}
+                                                type="submit">Search</Button>
+                                    </Card.Footer>
 
                                     <Card.Body>
                                         Edit your current location
@@ -339,11 +349,6 @@ class MainSearch extends React.Component {
                                             </Marker>
                                         </ReactMapGL>
                                     </Card.Body>
-
-                                    <Card.Footer>
-                                        <Button id={"submit"} className={"btn-block btn-primary"}
-                                                type="submit">Search</Button>
-                                    </Card.Footer>
 
                                     {isLoggedIn() ?
                                         <Card.Body>
@@ -382,10 +387,14 @@ class MainSearch extends React.Component {
                         </Col>
                     </Row>
                 </Container>
-                <Container className={"float-left my-md-3"} fluid>
+                {this.state.reports.length > 0 ?
+                    <Container className={"float-left my-md-3"} fluid>
                     <h3>{this.state.reports.length ? "Results in the map" : ""}</h3>
-                    <DynMap reports={this.state.reports}/>
-                </Container>
+                    <DynMap reports={this.state.reports} popup={you_are_here_popup}/>
+                    </Container> :
+                    <Container></Container>
+                }
+
             </div>
         )
     }
