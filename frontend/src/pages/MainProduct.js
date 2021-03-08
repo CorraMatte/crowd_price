@@ -16,6 +16,8 @@ import {Card, Col, Container, Row} from "react-bootstrap";
 import CategoryItem from "../components/product/CategoryItem";
 import {LineChartItem} from "../components/graph/LineChartItem";
 import BarChartItem from "../components/graph/BarChartItem";
+import {getCoordinatesByIP, getIP} from "../components/utils/utils";
+import {popup} from "leaflet/dist/leaflet-src.esm";
 
 
 class MainProduct extends React.Component {
@@ -26,7 +28,9 @@ class MainProduct extends React.Component {
             reports: [],
             prices: [],
             avg: 0,
-            last_reports: []
+            last_reports: [],
+
+            popup: {}
         };
     }
 
@@ -70,6 +74,34 @@ class MainProduct extends React.Component {
             }
         )
 
+        navigator.geolocation.getCurrentPosition(
+            position =>  {
+                this.setState({
+                    popup: {
+                        longitude: position.coords.longitude,
+                        latitude: position.coords.latitude,
+                        label: "Your current location"
+                    }
+                });
+            },
+            err => {
+                getIP().then(
+                    res => {
+                        getCoordinatesByIP(res.data.ip).then(
+                            res_coords => {
+                                this.setState({
+                                    popup: {
+                                        longitude: res_coords.data.longitude,
+                                        latitude: res_coords.data.latitude,
+                                        label: "Your current location"
+                                    }
+                                });
+                            }
+                        )
+                    }
+                )
+            }
+        );
     }
 
     render() {
@@ -80,14 +112,12 @@ class MainProduct extends React.Component {
             return (<div></div>)
         }
 
-
-        console.log(reports)
         return (
             <div>
                 {isLoggedIn() ? <HeaderLogged/> : <HeaderUnLogged/>}
                 <Container className={"float-left my-md-3"} fluid>
                     <Row>
-                        <Col className={"col-md-4 ml-md-1"}>
+                        <Col className={"col-md-4"}>
                             <Card bg={"dark"} className={"text-light"}>
                                 <Card.Header><h4>{prod.name}</h4></Card.Header>
                                 <Card.Body>
@@ -106,8 +136,8 @@ class MainProduct extends React.Component {
                                 <Card.Header><h4>{"Average reported price is " + this.state.avg + "€"}</h4></Card.Header>
                             </Card>
                         </Col>
-                        <Col className={"col-md-7"}>
-                            <DynMap reports={reports}/>
+                        <Col className={"col-md-8"}>
+                            <DynMap reports={reports} popup={this.state.popup}/>
                         </Col>
                     </Row>
                 </Container>
