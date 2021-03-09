@@ -6,6 +6,7 @@ from rest_framework import status
 from profiles import serializers as serial
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from profiles.models import Consumer, Analyst
 
 
 # User validation
@@ -47,3 +48,12 @@ def create_profile(request):
 
     p = profile.save()
     return p
+
+
+def get_user_type(user):
+    if Consumer.objects.filter(profile__user=user):
+        return 'consumer'
+    elif Analyst.objects.filter(profile__user=user):
+        return 'analyst'
+    else:
+        return 'anon'

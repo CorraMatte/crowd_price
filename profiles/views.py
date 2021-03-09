@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from profiles import serializers as serial
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from profiles.utils import create_profile
+from profiles.utils import create_profile, get_user_type
 
 
 class CreateConsumerAPI(APIView):
@@ -82,7 +82,7 @@ class LoginAPI(APIView):
 
         return Response({
             'key': token.key,
-            'type': 'consumer' if Consumer.objects.filter(profile__user=user) else 'analyst'
+            'type': get_user_type(user)
         }, status.HTTP_200_OK)
 
 

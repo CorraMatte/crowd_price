@@ -121,8 +121,6 @@ class SearchTest(APITestCase):
         r.save()
         r = Report(product=Product.objects.all()[2], price=100, pnt='POINT(-100.0208 44.0489)', consumer=c)
         r.save()
-        r = Report(product=Product.objects.all()[2], price=100, pnt='POINT(-200.1000 44.0489)', consumer=c)
-        r.save()
 
     """
         Test the generic search results
@@ -130,7 +128,7 @@ class SearchTest(APITestCase):
     """
 
     def test_generic_search_api_create_and_result(self):
-        search = {"product_query": "product"}
+        search = {"product_query": "product", 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         json_response = response.json()
@@ -142,21 +140,21 @@ class SearchTest(APITestCase):
     """
 
     def test_category_search_api_result(self):
-        search = {"product_query": "product", "categories": [Category.objects.all()[0].pk]}
+        search = {"product_query": "product", "categories": [Category.objects.all()[0].pk], 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search).json()
         self.assertEqual(
             len(response['features']),
             len(Report.objects.filter(product__categories__in=[Category.objects.all()[0].pk]))
         )
 
-        search = {"product_query": "product", "categories": [Category.objects.all()[1].pk]}
+        search = {"product_query": "product", "categories": [Category.objects.all()[1].pk], 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search).json()
         self.assertEqual(
             len(response['features']),
             len(Report.objects.filter(product__categories__in=[Category.objects.all()[1].pk]))
         )
 
-        search = {"product_query": "product", "categories": [c.pk for c in Category.objects.all()]}
+        search = {"product_query": "product", "categories": [c.pk for c in Category.objects.all()], 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search).json()
         self.assertEqual(
             len(response['features']),
@@ -169,16 +167,16 @@ class SearchTest(APITestCase):
     """
 
     def test_price_search_api_result(self):
-        search = {"product_query": "product", "price_min": 50}
+        search = {"product_query": "product", "price_min": 50, 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search).json()
         self.assertEqual(len(response['features']), len(Report.objects.filter(price__gte=50)))
-        search = {"product_query": "product", "price_min": 100}
+        search = {"product_query": "product", "price_min": 100, 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search).json()
         self.assertEqual(len(response['features']), len(Report.objects.filter(price__gte=100)))
-        search = {"product_query": "product", "price_max": 50}
+        search = {"product_query": "product", "price_max": 50, 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search).json()
         self.assertEqual(len(response['features']), len(Report.objects.filter(price__lte=50)))
-        search = {"product_query": "product", "price_max": 100}
+        search = {"product_query": "product", "price_max": 100, 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search).json()
         self.assertEqual(len(response['features']), len(Report.objects.filter(price__lte=100)))
 
@@ -194,13 +192,13 @@ class SearchTest(APITestCase):
             rep.created_time = now - datetime.timedelta(minutes=1)
             rep.save()
 
-        search = {"product_query": "product", 'after_date': str_now}
+        search = {"product_query": "product", 'after_date': str_now, 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search).json()
         self.assertEqual(len(response['features']), len(Report.objects.filter(
             created_time__gte=now
         )))
         str_now_minus_30 = (now - datetime.timedelta(days=30)).strftime("%Y-%m-%dT%H:%M:%S")
-        search = {"product_query": "product", 'after_date': str_now_minus_30}
+        search = {"product_query": "product", 'after_date': str_now_minus_30, 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search).json()
         self.assertEqual(len(response['features']),
                          len(Report.objects.filter(created_time__gte=now - datetime.timedelta(days=30))))
@@ -211,6 +209,9 @@ class SearchTest(APITestCase):
     """
 
     def test_distance_search_api_result(self):
+        c = Consumer.objects.all()[0]
+        r = Report(product=Product.objects.all()[2], price=100, pnt='POINT(-200.1000 44.0489)', consumer=c)
+        r.save()
         search = {"product_query": "product", 'pnt': 'POINT(-200.1000 44.0000)', 'distance': 100}
         response = self.client.post('/reports/search', data=search).json()
         pnt = GEOSGeometry('POINT(-200.1000 44.0000)', srid=SRID)
