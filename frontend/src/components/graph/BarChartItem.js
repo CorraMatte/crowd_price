@@ -12,7 +12,9 @@ export class BarChartItem extends React.Component {
                     <YAxis />
                     <XAxis dataKey="name">
                     </XAxis>
-                    <Tooltip />
+                    <Tooltip
+                        formatter={(value, name, props) => ( [value + "€", name, ] )}
+                    />
                     <Legend />
                     <Bar name={this.props.label} dataKey="value" fill="#8884d8" />
                 </BarChart>

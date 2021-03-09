@@ -6,7 +6,6 @@ import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 import {Card, Col, Container, Row} from "react-bootstrap";
-import {MultiLineChartItem} from "../components/graph/LineChartItem";
 import DynMap from "../components/map/DynMap";
 
 
@@ -81,15 +80,6 @@ class MainStore extends React.Component {
                     </Row>
                 </Container>
                 <Container className={"my-md-5"} fluid>
-                    <Card bg={"light"} className={"my-md-3"}>
-                        <Card.Header>
-                            <h3>Price trend of products in this store</h3>
-                        </Card.Header>
-                        <Card.Body>
-                            <MultiLineChartItem prices={this.state.prices} />
-                        </Card.Body>
-                    </Card>
-
                     <Card bg={"light"} className={"my-md-3"}>
                         <Card.Header>
                             <h3>Reports in this store</h3>

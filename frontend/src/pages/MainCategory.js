@@ -7,7 +7,6 @@ import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 import {Card, Container} from "react-bootstrap";
 import {DetailGroupReport} from "../components/report/DetailGroupReport";
-import {MultiLineChartItem} from "../components/graph/LineChartItem";
 
 
 class MainCategory extends React.Component {
@@ -79,14 +78,6 @@ class MainCategory extends React.Component {
             <div>
                 {isLoggedIn() ? <HeaderLogged/> : <HeaderUnLogged/>}
                 <Container className={"my-md-3"} fluid>
-                    <Card bg={"light"} className={"my-md-3"}>
-                        <Card.Header>
-                            <h3>Price trend of products in this category</h3>
-                        </Card.Header>
-                        <Card.Body>
-                            <MultiLineChartItem prices={this.state.prices} />
-                        </Card.Body>
-                    </Card>
                     <Card bg={"light"} className={"my-md-3"}>
                         <Card.Header>
                             <h3>Products in this category</h3>

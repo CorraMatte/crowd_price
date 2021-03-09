@@ -9,6 +9,8 @@ import {
     VETERAN_THRESHOLD
 } from "./const";
 import {Badge} from "react-bootstrap";
+import moment from "moment";
+
 
 export const getCoordinatesByIP = (ip) => {
     return axios.get('https://www.iplocate.io/api/lookup/' + ip);
@@ -44,9 +46,7 @@ export const aggregate_report_by_coords = (reports) => {
 
 export const get_day_month_year_from_date = (date) => {
     const new_date = new Date(date);
-    const month = new_date.getMonth() + 1;
-    const day = new_date.getDate();
-    return `${day < 10 ? '0' + day : day}/${month < 10 ? '0' + month : month}/${new_date.getFullYear()}`
+    return moment(new_date).format("DD/MM/yyyy");
 }
 
 export const get_badge_from_experience = (exp) => {
