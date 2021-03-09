@@ -66,7 +66,6 @@ export class DynMap extends React.Component {
             return (<div></div>)
         }
 
-        console.log(popups)
         return (
             <ReactMapGL
                 width="100%"

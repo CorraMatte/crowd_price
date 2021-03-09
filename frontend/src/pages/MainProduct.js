@@ -17,7 +17,7 @@ import CategoryItem from "../components/product/CategoryItem";
 import {LineChartItem} from "../components/graph/LineChartItem";
 import BarChartItem from "../components/graph/BarChartItem";
 import {getCoordinatesByIP, getIP} from "../components/utils/utils";
-import {popup} from "leaflet/dist/leaflet-src.esm";
+import {PRODUCT_URL} from "../urls/navigation";
 
 
 class MainProduct extends React.Component {
@@ -119,7 +119,7 @@ class MainProduct extends React.Component {
                     <Row>
                         <Col className={"col-md-4"}>
                             <Card bg={"dark"} className={"text-light"}>
-                                <Card.Header><h4>{prod.name}</h4></Card.Header>
+                                <Card.Header><h4><a className={"text-light"} href={`${PRODUCT_URL}/${prod.id}`}>{prod.name}</a></h4></Card.Header>
                                 <Card.Body>
                                     Categories <br/>
                                     {prod.categories.length > 0 ? prod.categories.map((cat) => (
@@ -133,7 +133,9 @@ class MainProduct extends React.Component {
                             </Card>
 
                             <Card bg={"dark"} className={"text-light my-md-2"}>
-                                <Card.Header><h4>{"Average reported price is " + this.state.avg + "€"}</h4></Card.Header>
+                                <Card.Header>
+                                    <h4>{"Average reported price is: "} {this.state.avg ? this.state.avg + '€' : 'N/A'}</h4>
+                                </Card.Header>
                             </Card>
                         </Col>
                         <Col className={"col-md-8"}>
