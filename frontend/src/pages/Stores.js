@@ -18,9 +18,9 @@ class DetailStoreItem extends React.Component {
         const props = store.properties;
 
         return (
-            <Card bg={"dark"} className={"text-light col-md-3 ml-md-2 my-md-1"}>
+            <Card bg={"dark"} className={"text-light col-md-5 ml-md-2 my-md-1"}>
                 <Card.Header>
-                    <img src={props.picture} alt="immagine" />
+                    <img src={props.picture} alt="immagine" className={'mw-100'} />
                 </Card.Header>
                 <Card.Body>
                     {props.name}
