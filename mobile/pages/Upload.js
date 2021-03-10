@@ -5,7 +5,7 @@ import {UPLOAD_BUTTON, UPLOAD_MESSAGE_STR} from "../utils/strings";
 import {Button} from "react-native-elements";
 import AppHeader from "../utils/AppHeader";
 import {Picker} from '@react-native-picker/picker';
-import {PRODUCTS_API, REPORT_ADD_API, STORES_API} from "../urls/endpoints";
+import {CATEGORIES_API, PRODUCTS_API, PRODUCTS_CATEGORY_API, REPORT_ADD_API, STORES_API} from "../urls/endpoints";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import {setPntState} from "../utils/utils";
@@ -27,9 +27,13 @@ export class Upload extends React.Component {
             uri: '',
 
             products: [],
+            all_products: [],
             stores: [],
+            categories: [],
+            category_id: 0,
             store_selected: 0,
-            product_selected: 0
+            product_selected: 0,
+            category_selected: 0
         }
     }
 
@@ -64,7 +68,6 @@ export class Upload extends React.Component {
         }
     };
 
-    // https://github.com/Agontuk/react-native-geolocation-service
     componentDidMount() {
         axios.get(STORES_API).then(res => {
             this.setState({
@@ -74,7 +77,14 @@ export class Upload extends React.Component {
 
         axios.get(PRODUCTS_API).then(res => {
             this.setState({
-                products: res.data.results
+                products: res.data.results,
+                all_products: res.data.results,
+            })
+        })
+
+        axios.get(CATEGORIES_API).then(res => {
+            this.setState({
+                categories: res.data.results
             })
         })
 
@@ -132,6 +142,36 @@ export class Upload extends React.Component {
                 <AppHeader title={"Upload"} navigation={this.props.navigation} leftOption={"Menu"}/>
                 <View style={upload_style.upload_message_view}>
                     <Text style={upload_style.upload_message_str}>{UPLOAD_MESSAGE_STR}</Text>
+                </View>
+
+                <View style={upload_style.picker_view}>
+                    <Picker
+                        style={upload_style.picker}
+                        selectedValue={this.state.category_selected}
+                        onValueChange={(itemValue, itemIndex) => {
+                            if (itemValue === 0) {
+                                this.setState({
+                                    products: this.state.all_products,
+                                    category_id: itemIndex,
+                                    category_selected: itemValue
+                                })
+                            } else {
+                                axios.get(`${PRODUCTS_CATEGORY_API}/${itemValue}`).then(
+                                    res => {
+                                        this.setState({
+                                            products: res.data.results,
+                                            category_id: itemIndex,
+                                            category_selected: itemValue
+                                        });
+                                    }
+                                )}
+                            }
+                        }
+                    >
+                        <Picker.Item label={"Select a category"} value={0} key={0}/>
+                        {this.state.categories.map((cat) => <Picker.Item label={cat.name} value={cat.id}
+                                                                         key={cat.id}/>)}
+                    </Picker>
                 </View>
 
                 <View style={upload_style.picker_view}>

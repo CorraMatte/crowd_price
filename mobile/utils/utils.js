@@ -14,6 +14,7 @@ export const getIP = () => {
     return axios.get('https://api.ipify.org?format=json');
 }
 
+// https://github.com/Agontuk/react-native-geolocation-service
 export const setPntState = (component) => {
     Location.requestPermissionsAsync().then(
         res => {
@@ -45,7 +46,7 @@ export const setPntState = (component) => {
 }
 
 export const get_str_date = (date) => {
-    const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+    const options = {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'};
     const new_date = new Date(date);
     return new_date.toLocaleString(options);
 }
@@ -83,28 +84,32 @@ const badge_style = {
 
 export const get_badge_from_experience = (exp) => {
     if (exp < NEW_USER_THRESHOLD) {
-        return <Badge status={"error"}
-                      value={NEW_USER_LABEL}
-                      textStyle={badge_text_style}
-                      badgeStyle={badge_style}
+        return <Badge
+            status={"error"}
+            value={NEW_USER_LABEL}
+            textStyle={badge_text_style}
+            badgeStyle={badge_style}
         />
     } else if (exp < INTERMEDIATE_THRESHOLD) {
-        return <Badge status={"warning"}
-                      value={INTERMEDIATE_LABEL}
-                      textStyle={badge_text_style}
-                      badgeStyle={badge_style}
+        return <Badge
+            status={"warning"}
+            value={INTERMEDIATE_LABEL}
+            textStyle={badge_text_style}
+            badgeStyle={badge_style}
         />
     } else if (exp < EXPERT_THRESHOLD) {
-        return <Badge status={"primary"}
-                      value={EXPERT_LABEL}
-                      textStyle={badge_text_style}
-                      badgeStyle={badge_style}
+        return <Badge
+            status={"primary"}
+            value={EXPERT_LABEL}
+            textStyle={badge_text_style}
+            badgeStyle={badge_style}
         />
     } else if (exp >= VETERAN_THRESHOLD) {
-        return <Badge status={"success"}
-                      value={VETERAN_LABEL}
-                      textStyle={badge_text_style}
-                      badgeStyle={badge_style}
+        return <Badge
+            status={"success"}
+            value={VETERAN_LABEL}
+            textStyle={badge_text_style}
+            badgeStyle={badge_style}
         />
     }
 }

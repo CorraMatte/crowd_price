@@ -15,3 +15,5 @@ export const PRODUCTS_API = `${backend_url}/products`;
 export const CONSUMER_SIGNUP_API = `${backend_url}/consumer/signup`;
 export const CONSUMER_EXPERIENCE_API = `${backend_url}/consumer/experience`;
 export const USER_LOGIN_API = `${backend_url}/user/login`;
+export const CATEGORIES_API = `${backend_url}/categories`;
+export const PRODUCTS_CATEGORY_API = `${backend_url}/products/category`;
