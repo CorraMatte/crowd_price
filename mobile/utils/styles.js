@@ -142,13 +142,20 @@ const report_detail_str = {
     marginBottom: 2
 }
 
+const report_price_str = {
+    fontSize: 22,
+    marginBottom: 2
+}
+
+
 export const report_style = StyleSheet.create({
     report_container: report_container,
     report_text_view: report_text_view,
     report_button_view: menu_button_view,
     report_message_str: title_message_str,
     item_date_str: report_detail_str,
-    report_detail_str: report_detail_str
+    report_detail_str: report_detail_str,
+    report_price_str: report_price_str
 });
 
 

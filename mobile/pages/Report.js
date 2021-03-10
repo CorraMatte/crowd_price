@@ -29,17 +29,19 @@ export class Report extends React.Component {
     render() {
         const data = this.props.route.params.data;
 
-
-
         return (
             <View style={report_style.report_container}>
                 <AppHeader title={REPORT_TITLE_STR} />
                 <View style={report_style.report_text_view}>
-                    <Text style={report_style.report_message_str}>Report Detail</Text>
+                    <Text style={report_style.report_message_str}>{data.product}</Text>
                 </View>
                 <View style={report_style.report_text_view}>
-                    <Text style={report_style.report_detail_str}>{data.product + " " + data.price + "€"}</Text>
-                    <Text style={report_style.report_detail_str}>{"Created in store: " + data.store}</Text>
+                    <Text style={report_style.report_price_str}>{"Registered price: " + data.price + "€"}</Text>
+                    {
+                        data.store ?
+                            <Text style={report_style.report_detail_str}>{"Created in store: " + data.store}</Text>
+                            : <Text></Text>
+                    }
                     <Text style={report_style.report_detail_str}>{"by: " + data.profile}</Text>
                     <Text></Text>
                     <Text style={report_style.item_date_str}>{"on " + get_str_date(data.created_time)}</Text>
