@@ -133,7 +133,10 @@ class RetrieveLatestSearchAPI(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return [Search.objects.filter(profile__user=self.request.user.pk).order_by('-created_time')[0]]
+        try:
+            return [Search.objects.filter(profile__user=self.request.user.pk).order_by('-created_time')[0]]
+        except IndexError:
+            return []
 
 
 class RetrieveStarredSearchAPI(generics.ListAPIView):

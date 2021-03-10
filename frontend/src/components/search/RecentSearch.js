@@ -16,7 +16,7 @@ class RecentSearch extends React.Component {
     componentDidMount() {
         axios.get(SEARCH_LATEST_API, getAuthHeader()).then(
             res => {
-                if (res.data.results.length === 0) {
+                if (res.data.results.features.length === 0) {
                     this.setState({
                         reports: []
                     });
