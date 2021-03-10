@@ -5,12 +5,20 @@ import {UPLOAD_BUTTON, UPLOAD_MESSAGE_STR} from "../utils/strings";
 import {Button} from "react-native-elements";
 import AppHeader from "../utils/AppHeader";
 import {Picker} from '@react-native-picker/picker';
-import {CATEGORIES_API, PRODUCTS_API, PRODUCTS_CATEGORY_API, REPORT_ADD_API, STORES_API} from "../urls/endpoints";
+import {
+    CATEGORIES_API,
+    PRODUCT_ADD_API,
+    PRODUCTS_API,
+    PRODUCTS_CATEGORY_API,
+    REPORT_ADD_API,
+    STORES_API
+} from "../urls/endpoints";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import {setPntState} from "../utils/utils";
 import {upload_style} from "../utils/styles";
-import {getToken} from "../utils/auth";
+import {getAuthHeader, getToken} from "../utils/auth";
+import getTouchFromResponderEvent from "react-native-web/dist/hooks/usePressEvents/PressResponder";
 
 export class Upload extends React.Component {
     constructor(props) {
@@ -25,6 +33,7 @@ export class Upload extends React.Component {
             price: 10,
             pnt: 'POINT(0 0)',
             uri: '',
+            new_product_name: "",
 
             products: [],
             all_products: [],
@@ -108,14 +117,37 @@ export class Upload extends React.Component {
             formData.append('store', this.state.store_id)
         }
 
-        if (this.state.product_id === 0 || this.state.price === 0) {
+        if ((this.state.product_id === 0 && this.state.new_product_name === "") || this.state.price === 0) {
             Alert.alert("Select at least a product and a price");
             return;
         }
 
-        formData.append('price', this.state.price)
-        formData.append('product', this.state.product_id)
-        formData.append('pnt', this.state.pnt)
+        let product_id = this.state.product_id;
+        if (this.state.product_id === 0) {
+            if (this.state.category_selected === 0) {
+                Alert.alert('Select a category');
+                return;
+            }
+
+            const req = {
+                name: this.state.new_product_name,
+                categories: this.state.category_selected
+            }
+
+            getToken().then(
+                token => {
+                    axios.post(PRODUCT_ADD_API, req, getAuthHeader(token)).then(
+                        res => {
+                            res.data.result.id;
+                        }
+                    )
+                }
+                ).catch(err => Alert.alert(err))
+        }
+
+        formData.append('product', product_id);
+        formData.append('price', this.state.price);
+        formData.append('pnt', this.state.pnt);
 
         getToken().then(
             token => {
@@ -209,6 +241,19 @@ export class Upload extends React.Component {
                                 key={store.id}
                             />)}
                     </Picker>
+                </View>
+
+                <View style={upload_style.upload_text_input}>
+                    <Text>Select a category and create a product!</Text>
+                    <TextInput
+                        value={this.state.new_product_name}
+                        onChangeText={(text => {
+                            this.setState({new_product_name: text})
+                        })}
+                        label="minimum price"
+                        placeholder="Product name"
+                        style={upload_style.text_input}
+                    />
                 </View>
 
                 <View style={upload_style.upload_text_input}>
