@@ -134,7 +134,7 @@ class MainProduct extends React.Component {
 
                             <Card bg={"dark"} className={"text-light my-md-2"}>
                                 <Card.Header>
-                                    <h4>{"Average reported price is: "} {this.state.avg ? this.state.avg + '€' : 'N/A'}</h4>
+                                    <h4>{"Average reported price is: "} {this.state.avg ? this.state.avg.toFixed(2) + '€' : 'N/A'}</h4>
                                 </Card.Header>
                             </Card>
                         </Col>
