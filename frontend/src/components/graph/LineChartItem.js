@@ -9,11 +9,16 @@ export class LineChartItem extends Component {
 
     render () {
         let prices = [];
-        this.props.prices.forEach((rep) => {
-            prices.push({date: new Date(moment(rep.date, "hh:mm:ss DD/MM/YYYY")).getTime(), price: rep.price})
-        })
 
-        console.log(this.props.prices)
+        this.props.prices.forEach((rep) => {
+            let date = new Date(moment(rep.date, "hh:mm:ss DD/MM/YYYY"));
+
+            if (isNaN(date)) {
+                date = new Date(rep.date);
+            }
+
+            prices.push({date: date.getTime(), price: parseFloat(rep.price)})
+        })
 
         return (
             <ResponsiveContainer width={"100%"} height={500}>

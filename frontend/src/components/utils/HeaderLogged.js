@@ -1,7 +1,7 @@
 import React from "react";
 import {Navbar, Nav} from 'react-bootstrap';
 import {getUserType} from "../../auth";
-import {ANALYST_LABEL, CONSUMER_LABEL} from "./const";
+import {ANALYST_LABEL} from "./const";
 import Logo from "../../img/logo.png"
 
 
@@ -11,8 +11,6 @@ export class HeaderLogged extends React.Component {
         const user_type = getUserType();
         if (user_type === ANALYST_LABEL) {
             feature = <Nav.Link href="/graph/">Graph</Nav.Link>
-        } else if (user_type === CONSUMER_LABEL) {
-            feature = <Nav.Link href="/add_product/">Add product</Nav.Link>
         }
 
         return (

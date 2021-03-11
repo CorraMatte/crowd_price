@@ -22,6 +22,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import ReactMapGL, {Marker} from "react-map-gl";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import {FaSearchLocation} from 'react-icons/fa';
+import {LineChartItem} from "../components/graph/LineChartItem";
 
 
 class MainSearch extends React.Component {
@@ -42,6 +43,7 @@ class MainSearch extends React.Component {
             pnt: 'POINT(0 0)',
 
             export_format: 'csv',
+            prices: [],
 
             all_categories: [],
             sorting_options: [],
@@ -127,12 +129,19 @@ class MainSearch extends React.Component {
         const opt = isLoggedIn() ? getAuthHeader() : {};
         axios.post(REPORTS_SEARCH_API, req, opt).then(
             res => {
+                let prices = []
+                res.data.features.forEach((rep) => {
+                    prices.push({date: rep.properties.created_time, price: rep.properties.price});
+                });
+
                 this.setState({
                     reports: res.data.features,
                     has_search: true,
                     errors: '',
-                    is_valid_search: true
-                })
+                    is_valid_search: true,
+                    prices: prices
+                });
+
             }).catch(
             err => {
                 this.setState({
@@ -220,6 +229,8 @@ class MainSearch extends React.Component {
     render() {
         let result_header;
         let dump_menu = "";
+        let graph_result_for_analyst = "";
+
         if (getUserType() === ANALYST_LABEL) {
             dump_menu = (
                 <Form onSubmit={this.downloadDump}>
@@ -236,6 +247,21 @@ class MainSearch extends React.Component {
                     </Card.Body>
                 </Form>
             )
+
+            if (this.state.prices) {
+                graph_result_for_analyst = (
+                    <Container className={"float-left my-md-3"} fluid>
+                        <Card bg={"light"} className={"my-md-3"}>
+                            <Card.Header>
+                                <h3>Prices based on report</h3>
+                            </Card.Header>
+                            <Card.Body>
+                                <LineChartItem prices={this.state.prices}/>
+                            </Card.Body>
+                        </Card>
+                    </Container>
+                )
+            }
         }
 
         if (!this.state.errors) {
@@ -391,10 +417,19 @@ class MainSearch extends React.Component {
                         </Col>
                     </Row>
                 </Container>
+
+                {graph_result_for_analyst}
+
                 {this.state.reports.length > 0 ?
                     <Container className={"float-left my-md-3"} fluid>
-                        <h3>{this.state.reports.length ? "Results in the map" : ""}</h3>
-                        <DynMap reports={this.state.reports} popup={you_are_here_popup}/>
+                        <Card>
+                            <Card.Header>
+                                <h3>{this.state.reports.length ? "Results in the map" : ""}</h3>
+                            </Card.Header>
+                            <Card.Body>
+                                <DynMap reports={this.state.reports} popup={you_are_here_popup}/>
+                            </Card.Body>
+                        </Card>
                     </Container> :
                     <Container></Container>
                 }
