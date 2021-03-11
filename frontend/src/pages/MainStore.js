@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import {STORE_API, REPORTS_STORE_API, GRAPH_STORE_PRICE_TREND_API} from "../urls/endpoints";
+import {STORE_API, REPORTS_STORE_API} from "../urls/endpoints";
 import {DetailGroupReport} from "../components/report/DetailGroupReport"
 import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
@@ -14,8 +14,7 @@ class MainStore extends React.Component {
         super(props);
         this.state = {
             store: null,
-            reports: [],
-            prices: []
+            reports: []
         };
     }
 
@@ -34,14 +33,6 @@ class MainStore extends React.Component {
                 reports: res.data.results.features
             })
         });
-
-        axios.get(`${GRAPH_STORE_PRICE_TREND_API}/${id}`).then(
-            res => {
-                this.setState({
-                    prices: res.data.results
-                })
-            }
-        );
     }
 
     render () {

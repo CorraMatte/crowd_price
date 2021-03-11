@@ -48,6 +48,8 @@ export const GRAPH_PRODUCT_PRICE_LAST_REPORT_API = `${backend_url}/graph/product
 export const GRAPH_REPORT_PRODUCT_TOP_PRICE_AVG_API = `${backend_url}/graph/report/product/top/price/avg`;
 export const GRAPH_PRODUCT_PRICE_TREND_API = `${backend_url}/graph/product/price/trend`
 export const GRAPH_CATEGORY_PRICE_TREND_API = `${backend_url}/graph/category/price/trend`
+
+// API NOT USED
 export const GRAPH_STORE_PRICE_TREND_API = `${backend_url}/graph/store/price/trend`
 
 
