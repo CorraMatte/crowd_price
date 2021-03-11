@@ -10,7 +10,7 @@ import {
 import {Alert, Button, Card, Col, Container, Form, Row} from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import {ACCESS_TOKEN, ANALYST_LABEL, MAX_DISTANCE, MAX_PRICE, MIN_PRICE} from "../components/utils/const"
-import { DetailReportItem} from "../components/report/DetailGroupReport";
+import {DetailReportItem} from "../components/report/DetailGroupReport";
 import {getAuthHeader, getUserType, isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
@@ -21,8 +21,7 @@ import {RangeSlider, Slider} from 'reactrangeslider';
 import "react-datepicker/dist/react-datepicker.css";
 import ReactMapGL, {Marker} from "react-map-gl";
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { FaSearchLocation } from 'react-icons/fa';
-
+import {FaSearchLocation} from 'react-icons/fa';
 
 
 class MainSearch extends React.Component {
@@ -224,13 +223,18 @@ class MainSearch extends React.Component {
         if (getUserType() === ANALYST_LABEL) {
             dump_menu = (
                 <Form onSubmit={this.downloadDump}>
-                    <Form.Control as="select" name="export_format" onChange={this.fieldChangeHandler}>
-                        {this.state.dump_format_options.map((opt) => <option value={opt[0]}
-                                                                             key={opt[0]}>{opt[1]}</option>)}
-                    </Form.Control>
-                    <Button id={"submitDump"} color={"primary"} type="submit">download</Button>
+                    <Card.Body>
+                        Select the format download
+                        <Form.Control as="select" name="export_format" onChange={this.fieldChangeHandler}>
+                            {this.state.dump_format_options.map((opt) => <option value={opt[0]}
+                                                                                 key={opt[0]}>{opt[1]}</option>)}
+                        </Form.Control>
+                    </Card.Body>
+                    <Card.Body>
+                        <Button id={"submitDump"} color={"primary"} className={'btn-block'}
+                                type="submit">Download</Button>
+                    </Card.Body>
                 </Form>
-
             )
         }
 
@@ -293,18 +297,18 @@ class MainSearch extends React.Component {
                                     </Card.Body>
 
                                     <Card.Body>
-                                        Categories <br />
+                                        Categories <br/>
                                         {this.state.all_categories.map(
                                             (cat) =>
-                                                <Form.Check
-                                                    type='checkbox'
-                                                    id={cat.id}
-                                                    name={cat.name}
-                                                    label={cat.name}
-                                                    key={cat.id}
-                                                    onChange={this.fieldChangeHandler}
-                                                    className={'d-inline mx-md-2'}
-                                                />
+                                                    <Form.Check
+                                                        type='checkbox'
+                                                        id={cat.id}
+                                                        name={cat.name}
+                                                        label={cat.name}
+                                                        key={cat.id}
+                                                        onChange={this.fieldChangeHandler}
+                                                        className={'mx-md-2'}
+                                                    />
                                         )}
                                     </Card.Body>
 
@@ -317,8 +321,9 @@ class MainSearch extends React.Component {
                                         Sort by
                                         <Form.Control as="select" onChange={this.fieldChangeHandler}
                                                       name={'ordering_by'}>
-                                            {this.state.sorting_options.map((opt) => <option value={opt[0]}
-                                                                                             key={opt[0]}>{opt[1]}</option>)}
+                                            {this.state.sorting_options.map((opt) =>
+                                                <option value={opt[0]} key={opt[0]}>{opt[1]}</option>)
+                                            }
                                         </Form.Control>
                                     </Card.Body>
 
@@ -345,7 +350,7 @@ class MainSearch extends React.Component {
                                                 draggable
                                                 onDragEnd={this.onMarkerDragEnd}
                                             >
-                                                <FaSearchLocation color={'#343a40'} size={30} />
+                                                <FaSearchLocation color={'#343a40'} size={30}/>
                                             </Marker>
                                         </ReactMapGL>
                                     </Card.Body>
@@ -374,23 +379,22 @@ class MainSearch extends React.Component {
                                     }
 
                                 </Form>
+                                {dump_menu}
                             </Card>
-
-                            {dump_menu}
 
                         </Col>
                         <Col className={"col-md-7"}>
                             <h3>{result_header}</h3>
                             {this.state.reports.map((report) => (
-                                <DetailReportItem report={report} col_size={"col-md-11"} />
+                                <DetailReportItem report={report} col_size={"col-md-11"}/>
                             ))}
                         </Col>
                     </Row>
                 </Container>
                 {this.state.reports.length > 0 ?
                     <Container className={"float-left my-md-3"} fluid>
-                    <h3>{this.state.reports.length ? "Results in the map" : ""}</h3>
-                    <DynMap reports={this.state.reports} popup={you_are_here_popup}/>
+                        <h3>{this.state.reports.length ? "Results in the map" : ""}</h3>
+                        <DynMap reports={this.state.reports} popup={you_are_here_popup}/>
                     </Container> :
                     <Container></Container>
                 }
