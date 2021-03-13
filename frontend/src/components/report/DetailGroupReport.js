@@ -2,6 +2,7 @@ import React from "react";
 import {PRODUCT_URL, REPORT_URL, STORE_URL} from "../../urls/navigation";
 import {Card, Row} from "react-bootstrap";
 import {get_day_month_year_from_date} from "../utils/utils";
+import {file_url} from "../../urls/endpoints";
 
 
 class DetailReportItem extends React.Component {
@@ -15,10 +16,11 @@ class DetailReportItem extends React.Component {
         const consumer = props.consumer;
         const store = !props.store ? "Not located in a store" :
             <a href={`${STORE_URL}/${props.store.id}`} className={"text-light"}>Reported in the store <b>"{props.store.name}"</b></a>
+        const url_picture = props.picture.slice(0, 7) === 'http://' ? props.picture : file_url(props.picture);
 
         return (
             <Card bg={"dark"} className={"text-light ml-md-2 mb-md-2 " + this.props.col_size}>
-                <Card.Img variant={"top"} src={props.picture} />
+                <Card.Img variant={"top"} src={url_picture} />
                 <Card.Header><h4><a className={"text-light"} href={`${PRODUCT_URL}/${product.id}`}>{product.name}</a></h4></Card.Header>
                 <Card.Body>
                     price: {props.price}€ <br />

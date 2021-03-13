@@ -2,7 +2,7 @@ from datetime import datetime
 from django.db.models import Count, Avg
 from capabilities.models import Search, Report
 from products.models import Product, Store, Category
-from profiles.models import Consumer
+from profiles.models import Consumer, Profile
 from rest_framework import status, permissions, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -55,7 +55,9 @@ class GetMostSearchedProducts(APIView):
 
     @check_user_is_analyst
     def get(self, request):
-        res = Search.objects.values('product_query').annotate(count=Count('product_query')).order_by('-count', 'product_query')[:10]
+        res = Search.objects.filter(
+            profile__in=Profile.objects.filter(consumer__isnull=False)).values('product_query').annotate(
+            count=Count('product_query')).order_by('-count', 'product_query')[:10]
         serial_res = []
 
         for r in res:
@@ -69,8 +71,15 @@ class GetMostSearchedCategories(APIView):
 
     @check_user_is_analyst
     def get(self, request):
-        res = Category.objects.annotate(count=Count('search')).order_by('-count')[:10]
-        return get_serial_response_by_name(res)
+        res = Search.objects.filter(
+            profile__in=Profile.objects.filter(consumer__isnull=False)).values('categories').annotate(
+            count=Count('categories')).order_by('-count', 'categories')[:10]
+
+        serial_res = []
+        for r in res:
+            serial_res.append({"name": r['categories'], "value": r['count']})
+
+        return Response({'results': serial_res}, status.HTTP_200_OK)
 
 
 class GetAvgMostRatedProductPrices(APIView):

@@ -94,7 +94,7 @@ export class DynMap extends React.Component {
                             </Popup>
                     )
                 }
-                <Popup longitude={this.props.popup.longitude} latitude={this.props.popup.latitude}>
+                <Popup longitude={this.props.popup.longitude} latitude={this.props.popup.latitude} key={this.props.popup.label}>
                     {this.props.popup.label}
                 </Popup>
             </ReactMapGL>

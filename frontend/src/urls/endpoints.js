@@ -29,6 +29,7 @@ export const STORES_API = `${backend_url}/stores`;
 export const STORE_API = `${backend_url}/store`;
 
 export const PRODUCT_API = `${backend_url}/product`;
+export const PRODUCTS_API = `${backend_url}/products`;
 
 export const CONSUMER_API = `${backend_url}/consumer/detail`;
 export const ANALYST_API = `${backend_url}/analyst/detail`;

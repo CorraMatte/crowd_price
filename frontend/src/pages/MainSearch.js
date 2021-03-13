@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import {
     CATEGORIES_API,
-    DUMP_FORMAT_OPTIONS_API, REPORTS_DUMP_API,
+    DUMP_FORMAT_OPTIONS_API, PRODUCTS_API, REPORTS_DUMP_API,
     REPORTS_SEARCH_API,
     SEARCH_ADD_FAVORITE_API,
     SEARCH_SORT_OPTIONS_API
@@ -35,6 +35,7 @@ class MainSearch extends React.Component {
             price_min: MIN_PRICE,
             price_max: MAX_PRICE,
             product_query: '',
+            product: '',
             categories: [],
             distance: 100,
             after_date: past_date,
@@ -45,6 +46,7 @@ class MainSearch extends React.Component {
             export_format: 'csv',
             prices: [],
 
+            all_products: [],
             all_categories: [],
             sorting_options: [],
             dump_format_options: [],
@@ -74,11 +76,19 @@ class MainSearch extends React.Component {
                 all_categories: res.data.results
             })
         });
+
+        axios.get(PRODUCTS_API).then(res => {
+            this.setState({
+                all_products: res.data
+            })
+        });
+
         axios.get(SEARCH_SORT_OPTIONS_API).then(res => {
             this.setState({
                 sorting_options: res.data.results
             });
         });
+
         if (getUserType() === ANALYST_LABEL) {
             axios.get(DUMP_FORMAT_OPTIONS_API, getAuthHeader()).then(res => {
                 this.setState({
@@ -119,13 +129,14 @@ class MainSearch extends React.Component {
             price_min: this.state.price_min,
             price_max: this.state.price_max,
             categories: this.state.categories,
-            product_query: this.state.product_query,
+            product_query: this.state.product ? this.state.product : this.state.product_query,
             distance: this.state.distance,
             after_date: this.state.after_date,
             ordering_by: this.state.ordering_by,
             pnt: this.state.pnt
         }
 
+        console.log(req)
         const opt = isLoggedIn() ? getAuthHeader() : {};
         axios.post(REPORTS_SEARCH_API, req, opt).then(
             res => {
@@ -230,6 +241,7 @@ class MainSearch extends React.Component {
         let result_header;
         let dump_menu = "";
         let graph_result_for_analyst = "";
+        let combobox_for_analyst = "";
 
         if (getUserType() === ANALYST_LABEL) {
             dump_menu = (
@@ -262,6 +274,21 @@ class MainSearch extends React.Component {
                     </Container>
                 )
             }
+
+            combobox_for_analyst = (
+                <Card.Body>
+                    Or select an existing product <br/>
+                    <Form.Control as="select" onChange={this.fieldChangeHandler}
+                                  name={'product'}>
+                        <option value={''} key={'empty'}>{"Select a product"}</option>
+                        {
+                            this.state.all_products.map((prod) =>
+                                <option value={prod.id} key={prod.id}>{prod.name}</option>)
+                        }
+                    </Form.Control>
+
+                </Card.Body>
+            )
         }
 
         if (!this.state.errors) {
@@ -300,6 +327,8 @@ class MainSearch extends React.Component {
                                         />
                                     </Card.Body>
 
+                                    {combobox_for_analyst}
+
                                     <Card.Body>
                                         Price from {this.state.price_min}€ to {this.state.price_max}€
                                         <RangeSlider
@@ -326,15 +355,15 @@ class MainSearch extends React.Component {
                                         Categories <br/>
                                         {this.state.all_categories.map(
                                             (cat) =>
-                                                    <Form.Check
-                                                        type='checkbox'
-                                                        id={cat.id}
-                                                        name={cat.name}
-                                                        label={cat.name}
-                                                        key={cat.id}
-                                                        onChange={this.fieldChangeHandler}
-                                                        className={'mx-md-2'}
-                                                    />
+                                                <Form.Check
+                                                    type='checkbox'
+                                                    id={cat.id}
+                                                    name={cat.name}
+                                                    label={cat.name}
+                                                    key={cat.id}
+                                                    onChange={this.fieldChangeHandler}
+                                                    className={'mx-md-2'}
+                                                />
                                         )}
                                     </Card.Body>
 
@@ -412,7 +441,7 @@ class MainSearch extends React.Component {
                         <Col className={"col-md-7"}>
                             <h3>{result_header}</h3>
                             {this.state.reports.map((report) => (
-                                <DetailReportItem report={report} col_size={"col-md-11"}/>
+                                <DetailReportItem report={report} col_size={"col-md-11"} key={report.properties.created_time}/>
                             ))}
                         </Col>
                     </Row>

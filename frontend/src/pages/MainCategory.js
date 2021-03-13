@@ -23,7 +23,7 @@ class MainCategory extends React.Component {
         const id = this.props.match.params.id;
         axios.get(`${PRODUCTS_CATEGORY_API}/${id}`).then(
             res => {
-                res.data.results.forEach((prod) => {
+                res.data.forEach((prod) => {
                     axios.get(`${REPORTS_PRODUCT_API}/${prod.id}`).then(
                         report_res => {
                             let prods_dict = this.state.products_reports;
