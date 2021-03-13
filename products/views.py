@@ -20,16 +20,19 @@ class RetrieveStoreAPI(generics.RetrieveAPIView):
 class RetrieveAllStoresAPI(generics.ListAPIView):
     queryset = Store.objects.all()
     serializer_class = serial.StoreSerializer
+    pagination_class = None
 
 
 class RetrieveAllProductsAPI(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = serial.ProductSerializer
+    pagination_class = None
 
 
 class RetrieveCategoryProductAPI(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = serial.ProductSerializer
+    pagination_class = None
 
     def get_queryset(self):
         return Product.objects.filter(categories=self.kwargs.get('pk'))
@@ -85,7 +88,7 @@ class CreateProductAPI(APIView):
             p.categories.set([request.data['categories']])
 
         p.save()
-        return Response({"product": serial.ProductSerializer(p).data}, status.HTTP_201_CREATED)
+        return Response({"result": serial.ProductSerializer(p).data}, status.HTTP_201_CREATED)
 
 
 class CreateCategoryAPI(generics.CreateAPIView):

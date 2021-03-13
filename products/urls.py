@@ -10,7 +10,7 @@ urlpatterns = [
     path('products', views.RetrieveAllProductsAPI.as_view()),
     path('products/category/<int:pk>', views.RetrieveCategoryProductAPI.as_view()),
     path('products/price/avg/<int:pk>', views.RetrieveProductPriceAVGAPI.as_view()),
-    path('categories/', views.RetrieveCategoriesAPI.as_view()),
+    path('categories', views.RetrieveCategoriesAPI.as_view()),
     path('products/most_reported', views.RetrieveMostReportedProductAPI.as_view()),
 
     # Post
