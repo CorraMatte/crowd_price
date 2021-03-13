@@ -26,6 +26,7 @@ class MainProduct extends React.Component {
         this.state = {
             product: null,
             reports: [],
+            total_reports: 0,
             prices: [],
             avg: 0,
             last_reports: [],
@@ -46,7 +47,8 @@ class MainProduct extends React.Component {
         axios.get(`${REPORTS_PRODUCT_API}/${id}`).then(
             res => {
                 this.setState({
-                    reports: res.data.results.features
+                    reports: res.data.results.features,
+                    total_reports: res.data.count
                 });
             });
 
@@ -128,7 +130,7 @@ class MainProduct extends React.Component {
                                     ) : <small>{"No category for this item"}</small>}
                                 </Card.Body>
                                 <Card.Body>
-                                    {`Has ${this.state.reports.length ? this.state.reports.length : '0'} reviews`}
+                                    {`Has ${this.state.total_reports} reviews`}
                                 </Card.Body>
                             </Card>
 

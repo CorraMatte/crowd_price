@@ -18,6 +18,7 @@ class MainProfile extends React.Component {
             user_profile: null,
             user_type: getUserType(),
             reports: [],
+            total_reports: 0,
             coords: [0, 0],
             errors: ''
         }
@@ -42,7 +43,8 @@ class MainProfile extends React.Component {
         axios.get(`${REPORTS_USER_API}`, getAuthHeader()).then(
             res => {
                 this.setState({
-                    reports: res.data.results.features
+                    reports: res.data.results.features,
+                    total_reports: res.data.count
                 })
         });
 
@@ -72,7 +74,7 @@ class MainProfile extends React.Component {
     render () {
         let profile_type;
         if (this.state.user_type === CONSUMER_LABEL) {
-            profile_type = <ConsumerDetail consumer={this.state.user_profile} />
+            profile_type = <ConsumerDetail consumer={this.state.user_profile} total_reports={this.state.total_reports} />
         } else if (this.state.user_type) {
             profile_type = <AnalystDetail analyst={this.state.user_profile} />
         }

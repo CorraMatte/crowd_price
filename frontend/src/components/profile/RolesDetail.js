@@ -203,7 +203,7 @@ class ConsumerDetail extends React.Component {
                     <h2>{get_badge_from_experience(consumer.experience)}</h2>
                 </Card.Body>
                 <Card.Body>
-                    You created {consumer.experience} reports
+                    You created {this.props.total_reports} reports
                 </Card.Body>
                 <Card.Footer>
                     <small>subscribe from {get_day_month_year_from_date(consumer.profile.subscribe_date)}</small>

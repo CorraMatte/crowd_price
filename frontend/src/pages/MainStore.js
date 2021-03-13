@@ -14,7 +14,8 @@ class MainStore extends React.Component {
         super(props);
         this.state = {
             store: null,
-            reports: []
+            reports: [],
+            total_reports: 0
         };
     }
 
@@ -29,9 +30,11 @@ class MainStore extends React.Component {
         });
 
         axios.get(`${REPORTS_STORE_API}/${id}`).then(
-            res => { this.setState({
-                reports: res.data.results.features
-            })
+            res => {
+                this.setState({
+                    total_reports: res.data.count,
+                    reports: res.data.results.features
+                })
         });
     }
 
@@ -60,7 +63,7 @@ class MainStore extends React.Component {
                                 <Card.Img variant={"top"} src={store.picture} className={'mw-100'}/>
                                 <Card.Header><h4>{store.name}</h4></Card.Header>
                                 <Card.Body>
-                                    There are {reports.length} reports in this store
+                                    There are {this.state.total_reports} reports in this store
                                 </Card.Body>
                             </Card>
                         </Col>
