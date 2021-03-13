@@ -28,8 +28,8 @@ import {LineChartItem} from "../components/graph/LineChartItem";
 class MainSearch extends React.Component {
     constructor(props) {
         super(props);
-        let past_date = new Date()
-        past_date.setDate(past_date.getDate() - 30)
+        let past_date = new Date();
+        past_date.setDate(past_date.getDate() - 30);
 
         this.state = {
             price_min: MIN_PRICE,
@@ -51,7 +51,7 @@ class MainSearch extends React.Component {
             sorting_options: [],
             dump_format_options: [],
             has_results: false,
-            errors: '',
+            errors: [],
 
             is_valid_search: false,
             saved_search_result: '',
@@ -136,7 +136,6 @@ class MainSearch extends React.Component {
             pnt: this.state.pnt
         }
 
-        console.log(req)
         const opt = isLoggedIn() ? getAuthHeader() : {};
         axios.post(REPORTS_SEARCH_API, req, opt).then(
             res => {
@@ -148,17 +147,27 @@ class MainSearch extends React.Component {
                 this.setState({
                     reports: res.data.features,
                     has_search: true,
-                    errors: '',
+                    errors: [],
                     is_valid_search: true,
                     prices: prices
                 });
 
             }).catch(
             err => {
+                let errors = [];
+
+                if ('after_date' in err.response.data) {
+                    errors.push("Insert a date not in the future");
+                }
+
+                if ('product_query' in err.response.data) {
+                    errors.push('You have to insert at least the product name');
+                }
+
                 this.setState({
-                    errors: 'You have to insert at least the product name',
+                    errors: errors,
                     is_valid_search: false
-                })
+                });
             }
         )
     }
@@ -260,7 +269,7 @@ class MainSearch extends React.Component {
                 </Form>
             )
 
-            if (this.state.prices) {
+            if (this.state.prices.length > 0) {
                 graph_result_for_analyst = (
                     <Container className={"float-left my-md-3"} fluid>
                         <Card bg={"light"} className={"my-md-3"}>
@@ -291,14 +300,16 @@ class MainSearch extends React.Component {
             )
         }
 
-        if (!this.state.errors) {
+        if (this.state.errors.length === 0) {
             if (!this.state.has_search) {
                 result_header = <span>press "search" to do a query</span>
             } else {
                 result_header = <span>There are {this.state.reports.length} reports for that product</span>
             }
         } else {
-            result_header = <Alert variant={"danger"}>{this.state.errors}</Alert>
+            result_header = this.state.errors.map(
+                (error) => <Alert variant={"danger"}>{error}</Alert>
+            );
         }
 
         const you_are_here_popup = {
