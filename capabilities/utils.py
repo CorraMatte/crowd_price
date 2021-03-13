@@ -7,6 +7,7 @@ from django.contrib.gis.db.models.functions import Distance
 from django.contrib.postgres.search import TrigramSimilarity
 from django.http import HttpResponse
 from excel_response import ExcelResponse
+
 from capabilities import serializers as serial
 from capabilities.models import Search, Report
 from products.models import Product, Store
@@ -39,14 +40,25 @@ def get_reports_by_search(search_pk, with_distance=True):
     if not search:
         return []
 
-    exact_reports = get_reports_from_product_set(Product.objects.filter(name__search=search.product_query), search, with_distance)
+    exact_reports = get_reports_from_product_set(
+        Product.objects.filter(name__search=search.product_query), search, with_distance
+    )
 
+    # Check if the product_query is a pk
     if search.profile and get_user_type(search.profile.user) == 'analyst':
+        try:
+            p = [Product.objects.get(pk=search.product_query)]
+            exact_reports = get_reports_from_product_set(p, search, with_distance)
+        except (Product.DoesNotExist, ValueError):
+            exact_reports = get_reports_from_product_set(
+                Product.objects.filter(name__search=search.product_query), search, with_distance
+            )
+
         reports = list(exact_reports.order_by(search.ordering_by))
     else:
         similar_reports = get_reports_from_product_set(Product.objects.annotate(
-                    similarity=TrigramSimilarity('name', search.product_query)
-                ).filter(similarity__gt=0.1), search, with_distance).difference(exact_reports)
+                similarity=TrigramSimilarity('name', search.product_query)
+        ).filter(similarity__gt=0.1), search, with_distance).difference(exact_reports)
         reports = list(exact_reports.order_by(search.ordering_by)) + list(similar_reports.order_by(search.ordering_by))
 
     return reports
@@ -114,5 +126,6 @@ def get_dump_json(search_pk, filename):
 # https://docs.djangoproject.com/en/3.1/howto/outputting-pdf/
 def get_dump_excel(search_pk, filename):
     return ExcelResponse(
-        cast_features_results(get_serial_reports_by_search(search_pk, False)), output_filename=filename, worksheet_name='reports'
+        cast_features_results(get_serial_reports_by_search(search_pk, False)), output_filename=filename,
+        worksheet_name='reports'
     )

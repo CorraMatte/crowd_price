@@ -34,6 +34,7 @@ class RetrieveReportBySearchAPI(APIView):
         return Response(get_serial_reports_by_search(pk), status.HTTP_200_OK)
 
 
+# TODO: PAGINATION
 class RetrieveReportByUserAPI(generics.ListAPIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer
@@ -48,6 +49,7 @@ class RetrieveReportByIDAPI(generics.RetrieveAPIView):
     serializer_class = serial.ReportSerializer
 
 
+# TODO: PAGINATION
 class RetrieveReportByStoreAPI(generics.ListAPIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer
@@ -57,6 +59,7 @@ class RetrieveReportByStoreAPI(generics.ListAPIView):
         return Report.objects.filter(store=store)
 
 
+# TODO: PAGINATION
 class RetrieveReportByProductAPI(generics.ListAPIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer
