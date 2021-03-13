@@ -18,7 +18,7 @@ import * as ImagePicker from "expo-image-picker";
 import {setPntState} from "../utils/utils";
 import {upload_style} from "../utils/styles";
 import {getAuthHeader, getToken} from "../utils/auth";
-import getTouchFromResponderEvent from "react-native-web/dist/hooks/usePressEvents/PressResponder";
+
 
 export class Upload extends React.Component {
     constructor(props) {
@@ -44,6 +44,47 @@ export class Upload extends React.Component {
             product_selected: 0,
             category_selected: 0
         }
+    }
+
+    alert_errors = (details) => {
+        let errors = "";
+        for (const [key, value] of Object.entries(details)) {
+            errors += `${key}: ${value} `;
+        }
+        return errors;
+    }
+
+    get_upload_headers = (token) => {
+        return {
+            headers: {
+                Authorization: "Token " + token,
+                'content-type': 'multipart/form-data',
+                Accept: 'application/json',
+            }
+        }
+    }
+
+    fill_state = () => {
+        axios.get(STORES_API).then(res => {
+            this.setState({
+                stores: res.data.features
+            })
+        })
+
+        axios.get(PRODUCTS_API).then(res => {
+            this.setState({
+                products: res.data,
+                all_products: res.data,
+            })
+        })
+
+        axios.get(CATEGORIES_API).then(res => {
+            this.setState({
+                categories: res.data.results
+            })
+        })
+
+        setPntState(this);
     }
 
     // https://docs.expo.io/versions/latest/sdk/imagepicker/#imagepickerlaunchimagelibraryasyncoptions
@@ -78,26 +119,7 @@ export class Upload extends React.Component {
     };
 
     componentDidMount() {
-        axios.get(STORES_API).then(res => {
-            this.setState({
-                stores: res.data.results.features
-            })
-        })
-
-        axios.get(PRODUCTS_API).then(res => {
-            this.setState({
-                products: res.data.results,
-                all_products: res.data.results,
-            })
-        })
-
-        axios.get(CATEGORIES_API).then(res => {
-            this.setState({
-                categories: res.data.results
-            })
-        })
-
-        setPntState(this);
+        this.fill_state();
     }
 
     add_report = () => {
@@ -122,7 +144,11 @@ export class Upload extends React.Component {
             return;
         }
 
-        let product_id = this.state.product_id;
+        let product_id = this.state.product_selected;
+
+        formData.append('price', this.state.price);
+        formData.append('pnt', this.state.pnt);
+
         if (this.state.product_id === 0) {
             if (this.state.category_selected === 0) {
                 Alert.alert('Select a category');
@@ -138,34 +164,40 @@ export class Upload extends React.Component {
                 token => {
                     axios.post(PRODUCT_ADD_API, req, getAuthHeader(token)).then(
                         res => {
-                            res.data.result.id;
+                            console.log(res.data.result)
+                            product_id = res.data.result.id;
+                            formData.append('product', product_id);
+                            getToken().then(
+                                token => {
+                                    axios.post(REPORT_ADD_API, formData, this.get_upload_headers(token)).then(
+                                        res => {
+                                            Alert.alert('Report has been upload successfully!');
+                                            this.setState(this.get_initial_state());
+                                            this.fill_state();
+                                            this.props.navigation.navigate("Menu");
+                                        }
+                                    ).catch(err => Alert.alert(this.alert_errors(err.response.data.detail)))
+                                }
+                            )
                         }
                     )
                 }
-                ).catch(err => Alert.alert(err))
+            ).catch(err => Alert.alert(this.alert_errors(err.response.data.detail)))
+        } else {
+            formData.append('product', product_id);
+            getToken().then(
+                token => {
+                    axios.post(REPORT_ADD_API, formData, this.get_upload_headers(token)).then(
+                        res => {
+                            Alert.alert('Report has been upload successfully!');
+                            this.setState(this.get_initial_state());
+                            this.fill_state();
+                            this.props.navigation.navigate("Menu");
+                        }
+                    ).catch(err => Alert.alert(this.alert_errors(err.response.data.detail)))
+                }
+            )
         }
-
-        formData.append('product', product_id);
-        formData.append('price', this.state.price);
-        formData.append('pnt', this.state.pnt);
-
-        getToken().then(
-            token => {
-                axios.post(REPORT_ADD_API, formData, {
-                    headers: {
-                        Authorization: "Token " + token,
-                        'content-type': 'multipart/form-data',
-                        Accept: 'application/json',
-                    }
-                }).then(
-                    res => {
-                        Alert.alert('Report has been upload successfully!');
-                        this.setState(this.get_initial_state());
-                        this.props.navigation.navigate("Menu");
-                    }
-                )
-            }
-        )
     }
 
     render() {
@@ -191,18 +223,23 @@ export class Upload extends React.Component {
                                 axios.get(`${PRODUCTS_CATEGORY_API}/${itemValue}`).then(
                                     res => {
                                         this.setState({
-                                            products: res.data.results,
+                                            products: res.data,
                                             category_id: itemIndex,
                                             category_selected: itemValue
                                         });
                                     }
-                                )}
+                                )
                             }
+                        }
                         }
                     >
                         <Picker.Item label={"Select a category"} value={0} key={0}/>
-                        {this.state.categories.map((cat) => <Picker.Item label={cat.name} value={cat.id}
-                                                                         key={cat.id}/>)}
+                        {this.state.categories.map((cat) =>
+                            <Picker.Item
+                                label={cat.name}
+                                value={cat.id}
+                                key={cat.id}/>)
+                        }
                     </Picker>
                 </View>
 
@@ -217,8 +254,12 @@ export class Upload extends React.Component {
                             })}
                     >
                         <Picker.Item label={"Select an item"} value={0} key={0}/>
-                        {this.state.products.map((prod) => <Picker.Item label={prod.name} value={prod.id}
-                                                                        key={prod.id}/>)}
+                        {this.state.products.map((prod) =>
+                            <Picker.Item
+                                label={prod.name}
+                                value={prod.id}
+                                key={prod.id}/>)
+                        }
                     </Picker>
                 </View>
 
