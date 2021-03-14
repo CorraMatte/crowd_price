@@ -16,7 +16,7 @@ import {Button, Card, Col, Container, Row} from "react-bootstrap";
 import CategoryItem from "../components/product/CategoryItem";
 import {LineChartItem} from "../components/graph/LineChartItem";
 import BarChartItem from "../components/graph/BarChartItem";
-import {_update_reports, getCoordinatesByIP, getIP} from "../components/utils/utils";
+import {_update_reports, get_day_month_year_from_date, getCoordinatesByIP, getIP} from "../components/utils/utils";
 import {PRODUCT_URL} from "../urls/navigation";
 
 
@@ -30,7 +30,7 @@ class MainProduct extends React.Component {
             prev_reports_url: '',
             prices: [],
             avg: 0,
-            last_reports: [],
+            // last_reports: [],
 
             popup: {}
         };
@@ -75,13 +75,16 @@ class MainProduct extends React.Component {
             }
         )
 
+/*
         axios.get(`${GRAPH_PRODUCT_PRICE_LAST_REPORT_API}/${id}`).then(
             res => {
+                console.log(res.data.results)
                 this.setState({
                     last_reports: res.data.results
                 });
             }
         )
+*/
 
         navigator.geolocation.getCurrentPosition(
             position => {
@@ -115,16 +118,19 @@ class MainProduct extends React.Component {
 
     render() {
         const prod = this.state.product;
-        console.log(this.state.reports)
-        console.log(this.state.next_reports_url)
-        console.log(this.state.prev_reports_url)
 
         if (!prod || !this.state.reports.results) {
-            return (<div></div>)
+            return (<div></div>);
         }
 
-
         const reports = this.state.reports.results.features;
+        let graph_data = [];
+        reports.forEach((rep) => {
+           graph_data.push({
+               name: get_day_month_year_from_date(rep.properties.created_time),
+               value: rep.properties.price
+           });
+        });
 
         return (
             <div>
@@ -176,7 +182,7 @@ class MainProduct extends React.Component {
                                 <h3>Prices based on the latest reports</h3>
                             </Card.Header>
                             <Card.Body>
-                                <BarChartItem data={this.state.last_reports} label={"price"}/>
+                                <BarChartItem data={graph_data} label={"price"}/>
                             </Card.Body>
                         </Card>
 
@@ -185,13 +191,13 @@ class MainProduct extends React.Component {
                                 <h3>Reports for this product</h3>
                             </Card.Header>
                             <Card.Body>
-                                <DetailGroupReport reports={this.state.reports}/>
-                            </Card.Body>
-                            <Card.Body>
                                 <Button id={"previous"} onClick={this.update_reports} className={"float-left"}
                                         disabled={!this.state.prev_reports_url}>previous</Button>
                                 <Button id={"next"} onClick={this.update_reports} className={"float-right"}
                                         disabled={!this.state.next_reports_url}>next</Button>
+                            </Card.Body>
+                            <Card.Body>
+                                <DetailGroupReport reports={this.state.reports}/>
                             </Card.Body>
                         </Card>
                     </Container>
