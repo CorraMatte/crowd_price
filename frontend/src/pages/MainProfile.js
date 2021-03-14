@@ -86,10 +86,6 @@ class MainProfile extends React.Component {
             profile_type = <AnalystDetail analyst={this.state.user_profile} />
         }
 
-        if (!this.state.reports.results) {
-            return (<div></div>);
-        }
-
         return (
             <div>
                 <HeaderLogged />
