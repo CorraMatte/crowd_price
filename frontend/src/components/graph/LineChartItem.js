@@ -30,7 +30,9 @@ export class LineChartItem extends Component {
                         domain = {['auto', 'auto']}
                         tickFormatter = {(unixTime) => moment(unixTime).format('DD/MM/YYYY')}
                     />
-                    <YAxis />
+                    <YAxis
+                        type="number" domain={[0, this.props.max ? Math.ceil(this.props.max + (this.props.max * 5 / 100)) : 'auto']}
+                    />
                     <Tooltip
                         labelFormatter={(label) => (moment(label).format('DD/MM/YYYY hh:mm:ss'))}
                         formatter={(value, name, props) => ( [value + "€", name, ] )}

@@ -18,7 +18,6 @@ export const getIP = () => {
 export const setPntState = (component) => {
     Location.requestPermissionsAsync().then(
         res => {
-            console.log(res)
             if (res.status === 'granted') {
                 Location.getCurrentPositionAsync({accuracy: Accuracy.Balanced}).then(
                     location => {

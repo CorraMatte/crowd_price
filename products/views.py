@@ -4,7 +4,7 @@ from capabilities.models import Report
 from products.models import Product, Store, Category
 import products.serializers as serial
 from rest_framework import status, generics, permissions
-from django.db.models import Count, Avg
+from django.db.models import Count, Avg, Max
 
 
 class RetrieveProductAPI(generics.RetrieveAPIView):
@@ -43,6 +43,13 @@ class RetrieveProductPriceAVGAPI(APIView):
         product = generics.get_object_or_404(Product.objects.all(), pk=pk)
         avg = Report.objects.filter(product=product).aggregate(avg=Avg('price'))['avg']
         return Response({"result": avg}, status.HTTP_200_OK)
+
+
+class RetrieveProductPriceMAXAPI(APIView):
+    def get(self, request, pk):
+        product = generics.get_object_or_404(Product.objects.all(), pk=pk)
+        max = Report.objects.filter(product=product).aggregate(max=Max('price'))['max']
+        return Response({"result": max}, status.HTTP_200_OK)
 
 
 class RetrieveMostReportedProductAPI(APIView):

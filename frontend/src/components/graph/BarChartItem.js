@@ -18,27 +18,33 @@ export class BarChartItem extends React.Component {
     }
 
     render() {
+        let graph_data = []
+
         if (this.props.label === 'price' && this.props.data) {
             this.props.data.forEach((data) => {
-                    data.value = parseFloat(data.value).toFixed(2);
+                    graph_data.push({
+                        value: parseFloat(parseFloat(data.value).toFixed(2)),
+                        name: data.name
+                    });
                 }
             )
         }
 
         return (
             <ResponsiveContainer width={"100%"} height={500}>
-                <BarChart data={this.props.data} >
-                    <CartesianGrid strokeDasharray="3 3" />
+                <BarChart data={graph_data}>
+                    <CartesianGrid strokeDasharray="3 3"/>
                     <YAxis
                         tickFormatter={this.formatYAxisForPrice}
+                        type="number" domain={[0, this.props.max ? Math.ceil(this.props.max + (this.props.max * 5 / 100)) : 'auto']}
                     />
                     <XAxis dataKey="name">
                     </XAxis>
                     <Tooltip
                         formatter={this.getFormatterForPrice}
                     />
-                    <Legend />
-                    <Bar name={this.props.label} dataKey="value" fill="#8884d8" />
+                    <Legend/>
+                    <Bar name={this.props.label} dataKey="value" fill="#8884d8"/>
                 </BarChart>
             </ResponsiveContainer>
         )

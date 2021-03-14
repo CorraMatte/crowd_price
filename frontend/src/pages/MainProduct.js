@@ -4,7 +4,7 @@ import {DetailGroupReport} from "../components/report/DetailGroupReport";
 import {
     GRAPH_PRODUCT_PRICE_TREND_API,
     PRODUCT_API,
-    PRODUCT_PRICE_AVG_API,
+    PRODUCT_PRICE_AVG_API, PRODUCT_PRICE_MAX_API,
     REPORTS_PRODUCT_API
 } from "../urls/endpoints";
 import {isLoggedIn} from "../auth";
@@ -29,6 +29,7 @@ class MainProduct extends React.Component {
             prev_reports_url: '',
             prices: [],
             avg: 0,
+            max_price: 0,
 
             popup: {}
         };
@@ -45,6 +46,13 @@ class MainProduct extends React.Component {
             res => {
                 this.setState({
                     product: res.data
+                });
+            });
+
+        axios.get(`${PRODUCT_PRICE_MAX_API}/${id}`).then(
+            res => {
+                this.setState({
+                    max_price: res.data.result
                 });
             });
 
@@ -160,7 +168,7 @@ class MainProduct extends React.Component {
                                 <h3>Prices based on report</h3>
                             </Card.Header>
                             <Card.Body>
-                                <LineChartItem prices={this.state.prices}/>
+                                <LineChartItem prices={this.state.prices} max={this.state.max_price}/>
                             </Card.Body>
                         </Card>
 
@@ -169,7 +177,7 @@ class MainProduct extends React.Component {
                                 <h3>Prices based on the latest reports</h3>
                             </Card.Header>
                             <Card.Body>
-                                <BarChartItem data={graph_data} label={"price"}/>
+                                <BarChartItem data={graph_data} label={"price"} max={this.state.max_price}/>
                             </Card.Body>
                         </Card>
 
