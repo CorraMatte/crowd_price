@@ -7,8 +7,8 @@ import {getUserType, getAuthHeader} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import StaticMap from "../components/map/StaticMap";
 import {ANALYST_LABEL, CONSUMER_LABEL} from "../components/utils/const";
-import {getCoordinatesByIP, getIP} from "../components/utils/utils";
-import {Card, Col, Container, Row} from "react-bootstrap";
+import {_update_reports, getCoordinatesByIP, getIP} from "../components/utils/utils";
+import {Button, Card, Col, Container, Row} from "react-bootstrap";
 
 
 class MainProfile extends React.Component {
@@ -18,10 +18,16 @@ class MainProfile extends React.Component {
             user_profile: null,
             user_type: getUserType(),
             reports: [],
-            total_reports: 0,
+            next_reports_url: '',
+            prev_reports_url: '',
             coords: [0, 0],
             errors: ''
         }
+    }
+
+    update_reports = (e) => {
+        e.preventDefault();
+        _update_reports(this, e, getAuthHeader());
     }
 
     componentDidMount() {
@@ -43,8 +49,9 @@ class MainProfile extends React.Component {
         axios.get(`${REPORTS_USER_API}`, getAuthHeader()).then(
             res => {
                 this.setState({
-                    reports: res.data.results.features,
-                    total_reports: res.data.count
+                    reports: res.data,
+                    next_reports_url: res.data.next,
+                    prev_reports_url: res.data.previous,
                 })
         });
 
@@ -74,9 +81,13 @@ class MainProfile extends React.Component {
     render () {
         let profile_type;
         if (this.state.user_type === CONSUMER_LABEL) {
-            profile_type = <ConsumerDetail consumer={this.state.user_profile} total_reports={this.state.total_reports} />
+            profile_type = <ConsumerDetail consumer={this.state.user_profile} total_reports={this.state.reports.count} />
         } else if (this.state.user_type) {
             profile_type = <AnalystDetail analyst={this.state.user_profile} />
+        }
+
+        if (!this.state.reports.results) {
+            return (<div></div>);
         }
 
         return (
@@ -101,6 +112,12 @@ class MainProfile extends React.Component {
                                 <Card.Header>
                                     <h3>Reports created</h3>
                                 </Card.Header>
+                                <Card.Body>
+                                    <Button id={"previous"} onClick={this.update_reports} className={"float-left"}
+                                            disabled={!this.state.prev_reports_url}>previous</Button>
+                                    <Button id={"next"} onClick={this.update_reports} className={"float-right"}
+                                            disabled={!this.state.next_reports_url}>next</Button>
+                                </Card.Body>
                                 <Card.Body>
                                     <DetailGroupReport reports={this.state.reports} />
                                 </Card.Body>

@@ -49,7 +49,7 @@ export const get_day_month_year_from_date = (date) => {
     return moment(new_date).format("DD/MM/yyyy");
 }
 
-export const _update_reports = (obj, e) => {
+export const _update_reports = (obj, e, auth_header= {}) => {
     const _id = e.target.id;
     let url = '';
 
@@ -59,7 +59,7 @@ export const _update_reports = (obj, e) => {
         url = obj.state.prev_reports_url;
     }
 
-    axios.get(url).then(
+    axios.get(url, auth_header).then(
         res => {
             obj.setState({
                 reports: res.data,

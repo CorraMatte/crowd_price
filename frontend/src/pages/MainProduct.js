@@ -2,7 +2,6 @@ import React from "react";
 import axios from "axios";
 import {DetailGroupReport} from "../components/report/DetailGroupReport";
 import {
-    GRAPH_PRODUCT_PRICE_LAST_REPORT_API,
     GRAPH_PRODUCT_PRICE_TREND_API,
     PRODUCT_API,
     PRODUCT_PRICE_AVG_API,
@@ -30,7 +29,6 @@ class MainProduct extends React.Component {
             prev_reports_url: '',
             prices: [],
             avg: 0,
-            // last_reports: [],
 
             popup: {}
         };
@@ -74,17 +72,6 @@ class MainProduct extends React.Component {
                 });
             }
         )
-
-/*
-        axios.get(`${GRAPH_PRODUCT_PRICE_LAST_REPORT_API}/${id}`).then(
-            res => {
-                console.log(res.data.results)
-                this.setState({
-                    last_reports: res.data.results
-                });
-            }
-        )
-*/
 
         navigator.geolocation.getCurrentPosition(
             position => {
