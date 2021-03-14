@@ -20,7 +20,7 @@ class SavedSearch extends React.Component {
                     axios.get(`${REPORTS_SEARCH_API}/${search.id}`).then(
                         reports => {
                             let saved_searches = this.state.saved_searcher_results;
-                            saved_searches[search.id] = reports.data.features;
+                            saved_searches[search.id] = reports.data;
                             this.setState({
                                 saved_searcher_results: saved_searches
                             })

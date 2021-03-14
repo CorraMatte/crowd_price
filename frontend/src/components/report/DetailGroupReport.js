@@ -47,7 +47,13 @@ class DetailReportItem extends React.Component {
 
 class DetailGroupReport extends React.Component {
     render() {
+
+        if (!this.props.reports.results) {
+            return (<div></div>);
+        }
+
         const res = this.props.reports.results.features;
+
         return (
             <div>
                 <Row className={"ml-md-2"}>

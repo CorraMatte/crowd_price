@@ -15,7 +15,7 @@ class NewerReports extends React.Component {
     componentDidMount() {
         axios.get(REPORTS_NEWER_API).then(res => {
             this.setState({
-                reports: res.data.results.features,
+                reports: res.data,
             });
         });
     }

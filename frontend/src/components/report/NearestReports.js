@@ -21,7 +21,7 @@ class NearestReports extends React.Component {
                 axios.post(REPORTS_NEAREST_API, req, getAuthHeader()).then(
                     res => {
                         this.setState({
-                            reports: res.data.results.features
+                            reports: res.data
                         })
                     });
             },
@@ -34,7 +34,7 @@ class NearestReports extends React.Component {
                                 axios.post(REPORTS_NEAREST_API, req, getAuthHeader()).then(
                                     res => {
                                     this.setState({
-                                        reports: res.data.results.features
+                                        reports: res.data
                                     })
                                 });
                             }

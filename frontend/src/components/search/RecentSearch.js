@@ -9,7 +9,8 @@ class RecentSearch extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            searches: []
+            searches: [],
+            reports: []
         }
     }
 
@@ -25,7 +26,7 @@ class RecentSearch extends React.Component {
                     axios.get(`${REPORTS_SEARCH_API}/${search_id}`, getAuthHeader()).then(
                         res => {
                             this.setState({
-                                reports: res.data.features
+                                reports: res.data
                             });
                         }
                     )
