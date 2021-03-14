@@ -46,13 +46,12 @@ class Stores extends React.Component
     componentDidMount() {
         axios.get(STORES_API).then(
             res => {
-                let stores = res.data.results.features;
+                let stores = res.data.features;
 
                 stores.forEach(
                     store => {
                         axios.get(`${REPORTS_STORE_API}/${store.id}`).then(
                             res => {
-                                // MAYBE CAN BE IMPROVE, SILLY UPDATE STATE IN A LOOP
                                 store.reports = res.data.results.features.slice(0, 4);
                                 this.setState({
                                     stores: stores,
