@@ -42,6 +42,8 @@ class MainSearch extends React.Component {
             ordering_by: '-created_time',
             reports: [],
             pnt: 'POINT(0 0)',
+            page: 0,
+            current_search_pk: 0,
 
             export_format: 'csv',
             prices: [],
@@ -140,16 +142,17 @@ class MainSearch extends React.Component {
         axios.post(REPORTS_SEARCH_API, req, opt).then(
             res => {
                 let prices = []
-                res.data.features.forEach((rep) => {
+                res.data.results.features.forEach((rep) => {
                     prices.push({date: rep.properties.created_time, price: rep.properties.price});
                 });
 
                 this.setState({
-                    reports: res.data.features,
+                    reports: res.data,
                     has_search: true,
                     errors: [],
                     is_valid_search: true,
-                    prices: prices
+                    prices: prices,
+                    current_search_pk: res.data.id
                 });
 
             }).catch(
@@ -246,11 +249,36 @@ class MainSearch extends React.Component {
         });
     }
 
+    update_reports = (e) => {
+        e.preventDefault();
+        const opt = isLoggedIn() ? getAuthHeader() : {};
+
+        const _id = e.target.id;
+        let url = `${REPORTS_SEARCH_API}/${this.state.current_search_pk}/`;
+        let page;
+
+        if (_id === "next") {
+            page = this.state.page + 1;
+        } else if (_id === "previous") {
+            page = this.state.page - 1;
+        }
+
+        url += page;
+        axios.get(url, opt).then(
+            res => {
+                this.setState({
+                    reports: res.data,
+                    page: page
+                });
+            });
+    }
+
     render() {
         let result_header;
         let dump_menu = "";
         let graph_result_for_analyst = "";
         let combobox_for_analyst = "";
+        const reports = this.state.reports.results ? this.state.reports.results.features.slice(0, 10) : [];
 
         if (getUserType() === ANALYST_LABEL) {
             dump_menu = (
@@ -304,7 +332,7 @@ class MainSearch extends React.Component {
             if (!this.state.has_search) {
                 result_header = <span>press "search" to do a query</span>
             } else {
-                result_header = <span>There are {this.state.reports.length} reports for that product</span>
+                result_header = <span>There are {this.state.reports.count} reports for that product</span>
             }
         } else {
             result_header = this.state.errors.map(
@@ -451,23 +479,34 @@ class MainSearch extends React.Component {
                         </Col>
                         <Col className={"col-md-7"}>
                             <h3>{result_header}</h3>
-                            {this.state.reports.map((report) => (
-                                <DetailReportItem report={report} col_size={"col-md-11"} key={report.properties.created_time}/>
+                            {reports.map((report) => (
+                                <DetailReportItem report={report} col_size={"col-md-11"}
+                                                  key={report.properties.created_time}/>
                             ))}
+                            {
+                                this.state.reports.count ? (
+                                    <div>
+                                        <Button id={"previous"} onClick={this.update_reports} className={"float-left"}
+                                                disabled={!this.state.page}>previous</Button>
+                                        <Button id={"next"} onClick={this.update_reports} className={"float-right"}
+                                                disabled={(((this.state.page + 1) * 10) > this.state.reports.count)}>next</Button>
+                                    </div>
+                                ) : <div></div>
+                            }
                         </Col>
                     </Row>
                 </Container>
 
                 {graph_result_for_analyst}
 
-                {this.state.reports.length > 0 ?
+                {this.state.reports.count > 0 ?
                     <Container className={"float-left my-md-3"} fluid>
                         <Card>
                             <Card.Header>
-                                <h3>{this.state.reports.length ? "Results in the map" : ""}</h3>
+                                <h3>{this.state.reports.count ? "Results in the map" : ""}</h3>
                             </Card.Header>
                             <Card.Body>
-                                <DynMap reports={this.state.reports} popup={you_are_here_popup}/>
+                                <DynMap reports={reports} popup={you_are_here_popup}/>
                             </Card.Body>
                         </Card>
                     </Container> :

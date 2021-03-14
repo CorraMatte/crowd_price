@@ -8,7 +8,7 @@ urlpatterns = [
     path('reports/user', views.RetrieveReportByUserAPI.as_view()),
     path('reports/product/<int:pk>', views.RetrieveReportByProductAPI.as_view()),
     path('reports/store/<int:pk>', views.RetrieveReportByStoreAPI.as_view()),
-    path('reports/search/<int:pk>', views.RetrieveReportBySearchAPI.as_view()),
+    path('reports/search/<int:pk>/<int:page>', views.RetrieveReportBySearchWithPaginationAPI.as_view()),
     path('reports/newer', views.RetrieveNewerReportAPI.as_view()),
     path('search/latest', views.RetrieveLatestSearchAPI.as_view()),
     path('search/starred', views.RetrieveStarredSearchAPI.as_view()),

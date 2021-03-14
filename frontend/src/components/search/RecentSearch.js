@@ -23,7 +23,7 @@ class RecentSearch extends React.Component {
                     });
                 } else {
                     const search_id = res.data.results.features[0].id;
-                    axios.get(`${REPORTS_SEARCH_API}/${search_id}`, getAuthHeader()).then(
+                    axios.get(`${REPORTS_SEARCH_API}/${search_id}/0`, getAuthHeader()).then(
                         res => {
                             this.setState({
                                 reports: res.data

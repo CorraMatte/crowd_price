@@ -25,16 +25,26 @@ class RetrieveReportByNewSearchAPI(APIView):
             serial_search.validated_data['profile'] = Profile.objects.get(user=self.request.user.pk)
 
         search = serial_search.save()
-        return Response(get_serial_reports_by_search(search.pk), status.HTTP_200_OK)
+        res = get_serial_reports_by_search(search.pk)
+        return Response({
+            'count': len(res['features']),
+            'id': search.pk,
+            'results': res
+        }, status.HTTP_200_OK)
 
 
-class RetrieveReportBySearchAPI(APIView):
-    def get(self, request, pk):
+class RetrieveReportBySearchWithPaginationAPI(APIView):
+    def get(self, request, pk, page):
         generics.get_object_or_404(Search.objects.all(), pk=pk)
-        return Response({'results': get_serial_reports_by_search(pk)}, status.HTTP_200_OK)
+        res = get_serial_reports_by_search(pk)
+        return Response({
+            'count': len(res['features']),
+            'results': {
+                'features': res['features'][page * 9:(page * 10) + 10]
+            }
+        }, status.HTTP_200_OK)
 
 
-# TODO: PAGINATION
 class RetrieveReportByUserAPI(generics.ListAPIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer
@@ -49,7 +59,6 @@ class RetrieveReportByIDAPI(generics.RetrieveAPIView):
     serializer_class = serial.ReportSerializer
 
 
-# TODO: PAGINATION
 class RetrieveReportByStoreAPI(generics.ListAPIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer
@@ -59,7 +68,6 @@ class RetrieveReportByStoreAPI(generics.ListAPIView):
         return Report.objects.filter(store=store)
 
 
-# TODO: PAGINATION
 class RetrieveReportByProductAPI(generics.ListAPIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer

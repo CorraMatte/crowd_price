@@ -17,7 +17,7 @@ class SavedSearch extends React.Component {
         axios.get(SEARCH_STARRED_API, getAuthHeader()).then(
             res => {
                 res.data.results.features.forEach((search) => {
-                    axios.get(`${REPORTS_SEARCH_API}/${search.id}`).then(
+                    axios.get(`${REPORTS_SEARCH_API}/${search.id}/0`).then(
                         reports => {
                             let saved_searches = this.state.saved_searcher_results;
                             saved_searches[search.id] = reports.data;
