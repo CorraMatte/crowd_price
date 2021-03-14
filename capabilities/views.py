@@ -31,7 +31,7 @@ class RetrieveReportByNewSearchAPI(APIView):
 class RetrieveReportBySearchAPI(APIView):
     def get(self, request, pk):
         generics.get_object_or_404(Search.objects.all(), pk=pk)
-        return Response(get_serial_reports_by_search(pk), status.HTTP_200_OK)
+        return Response({'results': get_serial_reports_by_search(pk)}, status.HTTP_200_OK)
 
 
 # TODO: PAGINATION
@@ -78,12 +78,11 @@ class RetrieveNearestReportAPI(APIView):
         except (GEOSException, ValueError) as e:
             return Response({"detail": f"position not in a valid format: {e}"}, status.HTTP_400_BAD_REQUEST)
 
-        return Response(
-            {"results": serial.ReportSerializer(
+        return Response({
+            "results": serial.ReportSerializer(
                 Report.objects.all().annotate(distance=Distance("pnt", pnt)).order_by("distance")[:9], many=True
-            ).data},
-            status.HTTP_200_OK
-        )
+            ).data
+        }, status.HTTP_200_OK)
 
 
 class RetrieveNewerReportAPI(generics.ListAPIView):
