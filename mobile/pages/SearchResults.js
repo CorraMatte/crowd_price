@@ -3,7 +3,7 @@ import {Button, FlatList, StyleSheet, Text, View} from "react-native";
 import AppHeader from "../utils/AppHeader";
 import {SEARCH_RESULTS_TITLE_STR} from "../utils/strings";
 import {get_str_date} from "../utils/utils";
-import {search_result_style} from "../utils/styles";
+import {search_result_style, search_style} from "../utils/styles";
 
 
 class Item extends React.Component {
@@ -26,7 +26,7 @@ class Item extends React.Component {
 export class SearchResults extends React.Component {
     render() {
         let new_data = [];
-        this.props.route.params.results.forEach(
+        this.props.route.params.results.features.forEach(
             (value) => new_data.push({
                 id: '' + value.id,
                 longitude: '' + value.geometry.coordinates[0],
@@ -41,14 +41,21 @@ export class SearchResults extends React.Component {
         )
 
         return (
-            <View>
+            <View style={{
+                flex: 1,
+                backgroundColor: "#E5EAF5"
+            }}>
                 <AppHeader title={SEARCH_RESULTS_TITLE_STR} />
-                <FlatList
-                    data={new_data}
-                    renderItem={({item}) => (
-                        <Item data={item} navigation={this.props.navigation} />
-                    )}
-                />
+                <View style={{flex: 1, justifyContent:"space-around"}}>
+                    <Text style={search_result_style.title_style}>There are {this.props.route.params.results.features.length} results</Text>
+                    <FlatList
+                        style={{flex: 10}}
+                        data={new_data}
+                        renderItem={({item}) => (
+                            <Item data={item} navigation={this.props.navigation} />
+                        )}
+                    />
+                </View>
             </View>
         )
     }

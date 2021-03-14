@@ -40,7 +40,7 @@ class Search(models.Model):
 
     after_date = models.DateTimeField(
         validators=[NotFuture],
-        default=italy_timezone.localize(datetime.datetime.now() - datetime.timedelta(days=30))
+        default=italy_timezone.localize(datetime.datetime.now() - datetime.timedelta(days=365))
     )
     distance = models.PositiveIntegerField(default=MAX_DISTANCE, validators=[MaxValueValidator(MAX_DISTANCE)])
     pnt = models.PointField(srid=SRID, null=True)

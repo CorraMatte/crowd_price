@@ -118,10 +118,17 @@ const item_date_str = {
     marginBottom: 5
 }
 
+const title_style = {
+    fontSize: 28,
+    alignSelf: 'center',
+    flex: 0.1
+}
+
 export const search_result_style = StyleSheet.create({
     item_view: item_view,
     item_date_str: item_date_str,
-    item_title_str: item_title_str
+    item_title_str: item_title_str,
+    title_style: title_style
 });
 
 

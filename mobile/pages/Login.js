@@ -40,7 +40,7 @@ export class Login extends React.Component {
         getToken().then(
             res => {
                 if (res !== null) {
-                    this.props.navigation.navigate("Upload");
+                    this.props.navigation.navigate("Menu");
                 }
             }
         )
