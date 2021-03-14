@@ -28,8 +28,8 @@ class MainCategory extends React.Component {
                         report_res => {
                             let prods_dict = this.state.products_reports;
                             let prods = this.state.products;
-                            prods_dict[prod.name] = report_res.data.results.features;
-                            prod.count = report_res.data.results.features.length;
+                            prods_dict[prod.name] = report_res.data;
+                            prod.count = report_res.data.count;
                             prods.push(prod);
                             this.setState({
                                 products: prods,
@@ -58,12 +58,12 @@ class MainCategory extends React.Component {
 
         let prods_views = []
         for (const [prod_name, reports] of Object.entries(products_dict)) {
-            if (reports.length > 0) {
+            if (reports.count > 0) {
                 prods_views.push(
                     <Container className={"my-md-3"} fluid>
                         <Card bg={"light"} className={"my-md-3"}>
                             <Card.Header>
-                                <h3>Reports for {prod_name}</h3>
+                                <h3>Latest reports for {prod_name}</h3>
                             </Card.Header>
                             <Card.Body>
                                 <DetailGroupReport reports={reports}/>
