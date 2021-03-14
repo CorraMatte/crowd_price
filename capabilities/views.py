@@ -37,10 +37,16 @@ class RetrieveReportBySearchWithPaginationAPI(APIView):
     def get(self, request, pk, page):
         generics.get_object_or_404(Search.objects.all(), pk=pk)
         res = get_serial_reports_by_search(pk)
+
+        try:
+            slice_results = res['features'][page * 9:(page * 10) + 10]
+        except IndexError:
+            return Response({'detail': 'Value of the page is not correct'}, status.HTTP_400_BAD_REQUEST)
+
         return Response({
             'count': len(res['features']),
             'results': {
-                'features': res['features'][page * 9:(page * 10) + 10]
+                'features': slice_results
             }
         }, status.HTTP_200_OK)
 
