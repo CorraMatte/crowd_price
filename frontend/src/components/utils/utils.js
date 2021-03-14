@@ -49,6 +49,26 @@ export const get_day_month_year_from_date = (date) => {
     return moment(new_date).format("DD/MM/yyyy");
 }
 
+export const _update_reports = (obj, e) => {
+    const _id = e.target.id;
+    let url = '';
+
+    if (_id === "next") {
+        url = obj.state.next_reports_url;
+    } else if (_id === "previous"){
+        url = obj.state.prev_reports_url;
+    }
+
+    axios.get(url).then(
+        res => {
+            obj.setState({
+                reports: res.data,
+                next_reports_url: res.data.next,
+                prev_reports_url: res.data.previous,
+            });
+        });
+}
+
 export const get_badge_from_experience = (exp) => {
     if (exp < NEW_USER_THRESHOLD) {
         return <Badge variant={"primary"} pill>{NEW_USER_LABEL}</Badge>

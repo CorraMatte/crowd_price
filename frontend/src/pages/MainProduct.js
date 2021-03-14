@@ -12,11 +12,11 @@ import {isLoggedIn} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 import DynMap from "../components/map/DynMap";
-import {Card, Col, Container, Row} from "react-bootstrap";
+import {Button, Card, Col, Container, Row} from "react-bootstrap";
 import CategoryItem from "../components/product/CategoryItem";
 import {LineChartItem} from "../components/graph/LineChartItem";
 import BarChartItem from "../components/graph/BarChartItem";
-import {getCoordinatesByIP, getIP} from "../components/utils/utils";
+import {_update_reports, getCoordinatesByIP, getIP} from "../components/utils/utils";
 import {PRODUCT_URL} from "../urls/navigation";
 
 
@@ -26,13 +26,19 @@ class MainProduct extends React.Component {
         this.state = {
             product: null,
             reports: [],
-            total_reports: 0,
+            next_reports_url: '',
+            prev_reports_url: '',
             prices: [],
             avg: 0,
             last_reports: [],
 
             popup: {}
         };
+    }
+
+    update_reports = (e) => {
+        e.preventDefault();
+        _update_reports(this, e);
     }
 
     componentDidMount() {
@@ -47,8 +53,9 @@ class MainProduct extends React.Component {
         axios.get(`${REPORTS_PRODUCT_API}/${id}`).then(
             res => {
                 this.setState({
-                    reports: res.data.results.features,
-                    total_reports: res.data.count
+                    reports: res.data,
+                    next_reports_url: res.data.next,
+                    prev_reports_url: res.data.previous,
                 });
             });
 
@@ -77,7 +84,7 @@ class MainProduct extends React.Component {
         )
 
         navigator.geolocation.getCurrentPosition(
-            position =>  {
+            position => {
                 this.setState({
                     popup: {
                         longitude: position.coords.longitude,
@@ -108,11 +115,16 @@ class MainProduct extends React.Component {
 
     render() {
         const prod = this.state.product;
-        const reports = this.state.reports;
+        console.log(this.state.reports)
+        console.log(this.state.next_reports_url)
+        console.log(this.state.prev_reports_url)
 
-        if (!prod) {
+        if (!prod || !this.state.reports.results) {
             return (<div></div>)
         }
+
+
+        const reports = this.state.reports.results.features;
 
         return (
             <div>
@@ -121,7 +133,9 @@ class MainProduct extends React.Component {
                     <Row>
                         <Col className={"col-md-4"}>
                             <Card bg={"dark"} className={"text-light"}>
-                                <Card.Header><h4><a className={"text-light"} href={`${PRODUCT_URL}/${prod.id}`}>{prod.name}</a></h4></Card.Header>
+                                <Card.Header><h4><a className={"text-light"}
+                                                    href={`${PRODUCT_URL}/${prod.id}`}>{prod.name}</a></h4>
+                                </Card.Header>
                                 <Card.Body>
                                     Categories <br/>
                                     {prod.categories.length > 0 ? prod.categories.map((cat) => (
@@ -130,7 +144,7 @@ class MainProduct extends React.Component {
                                     ) : <small>{"No category for this item"}</small>}
                                 </Card.Body>
                                 <Card.Body>
-                                    {`Has ${this.state.total_reports} reviews`}
+                                    {`Has ${this.state.reports.count} reviews`}
                                 </Card.Body>
                             </Card>
 
@@ -146,14 +160,14 @@ class MainProduct extends React.Component {
                     </Row>
                 </Container>
 
-                {this.state.reports.length > 0 ? (
+                {reports.length > 0 ? (
                     <Container className={"my-5"} fluid>
                         <Card bg={"light"} className={"my-md-3"}>
                             <Card.Header>
                                 <h3>Prices based on report</h3>
                             </Card.Header>
                             <Card.Body>
-                                <LineChartItem prices={this.state.prices} />
+                                <LineChartItem prices={this.state.prices}/>
                             </Card.Body>
                         </Card>
 
@@ -162,7 +176,7 @@ class MainProduct extends React.Component {
                                 <h3>Prices based on the latest reports</h3>
                             </Card.Header>
                             <Card.Body>
-                                <BarChartItem data={this.state.last_reports} label={"price"} />
+                                <BarChartItem data={this.state.last_reports} label={"price"}/>
                             </Card.Body>
                         </Card>
 
@@ -172,6 +186,12 @@ class MainProduct extends React.Component {
                             </Card.Header>
                             <Card.Body>
                                 <DetailGroupReport reports={this.state.reports}/>
+                            </Card.Body>
+                            <Card.Body>
+                                <Button id={"previous"} onClick={this.update_reports} className={"float-left"}
+                                        disabled={!this.state.prev_reports_url}>previous</Button>
+                                <Button id={"next"} onClick={this.update_reports} className={"float-right"}
+                                        disabled={!this.state.next_reports_url}>next</Button>
                             </Card.Body>
                         </Card>
                     </Container>
