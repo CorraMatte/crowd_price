@@ -479,10 +479,16 @@ class MainSearch extends React.Component {
                         </Col>
                         <Col className={"col-md-7"}>
                             <h3>{result_header}</h3>
-                            {reports.map((report) => (
-                                <DetailReportItem report={report} col_size={"col-md-11"}
-                                                  key={report.properties.created_time}/>
-                            ))}
+                            <Row>
+                                {reports.map((report) => (
+                                    <DetailReportItem
+                                        report={report}
+                                        col_size={"col-md-3"}
+                                        key={report.properties.created_time}
+                                    />
+                                ))}
+                            </Row>
+
                             {
                                 this.state.reports.count ? (
                                     <div>

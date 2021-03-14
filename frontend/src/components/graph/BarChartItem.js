@@ -28,6 +28,8 @@ export class BarChartItem extends React.Component {
                     });
                 }
             )
+        } else {
+            graph_data = this.props.data;
         }
 
         return (
