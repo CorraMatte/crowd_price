@@ -7,7 +7,6 @@ from django.contrib.gis.db.models.functions import Distance
 from django.contrib.postgres.search import TrigramSimilarity
 from django.http import HttpResponse
 from excel_response import ExcelResponse
-
 from capabilities import serializers as serial
 from capabilities.models import Search, Report
 from products.models import Product, Store
@@ -58,7 +57,7 @@ def get_reports_by_search(search_pk, with_distance=True):
     else:
         similar_reports = get_reports_from_product_set(Product.objects.annotate(
                 similarity=TrigramSimilarity('name', search.product_query)
-        ).filter(similarity__gt=0.1), search, with_distance).difference(exact_reports)
+        ).filter(similarity__gt=0.2), search, with_distance).difference(exact_reports)
         reports = list(exact_reports.order_by(search.ordering_by)) + list(similar_reports.order_by(search.ordering_by))
 
     return reports
