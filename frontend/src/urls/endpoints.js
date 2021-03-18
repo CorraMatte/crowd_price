@@ -24,6 +24,7 @@ export const SEARCH_FAVORITE_ADD_API = `${backend_url}/search/favorite/add`;
 export const SEARCH_FAVORITE_REMOVE_API = `${backend_url}/search/favorite/remove`;
 export const SEARCH_SORT_OPTIONS_API = `${backend_url}/search/sort/options`;
 export const SEARCH_FAVORITE_ALL_API = `${backend_url}/search/favorite/all`;
+export const SEARCH_API = `${backend_url}/search`;
 
 export const REPORTS_DUMP_API = `${backend_url}/reports/dump`;
 export const DUMP_FORMAT_OPTIONS_API = `${backend_url}/dump/format/options`;

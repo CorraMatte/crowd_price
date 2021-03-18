@@ -15,6 +15,7 @@ import StaticMap from "../components/map/StaticMap";
 import {ANALYST_LABEL, CONSUMER_LABEL} from "../components/utils/const";
 import {_update_reports, getCoordinatesByIP, getIP} from "../components/utils/utils";
 import {Button, Card, Col, Container, ListGroup, Row} from "react-bootstrap";
+import {SEARCH_URL} from "../urls/navigation";
 
 
 class MainProfile extends React.Component {
@@ -151,16 +152,17 @@ class MainProfile extends React.Component {
                                             <ListGroup>
                                                 {
                                                     this.state.starred_searches.map((search) => (
-                                                        <ListGroup.Item>
+                                                        <ListGroup.Item key={search.id}>
                                                             <div className={'d-inline float-left'}>
-                                                                Your saved research for <b>{search.product}</b> has {search.total_results}. <br />
-                                                                <a href={""}>Click here to open in the search tab</a>
+                                                                Your saved research
+                                                                for <b>{search.product}</b> has {search.total_results} results. <br/>
+                                                                <a href={`${SEARCH_URL}/${search.id}`}>Click here to open in the search tab</a>
                                                             </div>
                                                             <Button
                                                                 className={'d-inline float-right'}
                                                                 variant={'danger'}
                                                                 id={search.id}
-                                                                name={'delete'+search.id}
+                                                                name={'delete' + search.id}
                                                                 onClick={this.remove_starred_search}
                                                             >
                                                                 Remove
@@ -173,7 +175,6 @@ class MainProfile extends React.Component {
                                     }
                                 </Card.Body>
                             </Card>
-
 
                             <Card bg={"light"} className={"my-md-3"}>
                                 <Card.Header>
@@ -196,5 +197,6 @@ class MainProfile extends React.Component {
         )
     }
 }
+
 
 export default MainProfile;

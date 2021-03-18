@@ -3,7 +3,7 @@ import axios from "axios";
 import {
     CATEGORIES_API,
     DUMP_FORMAT_OPTIONS_API, PRODUCTS_API, REPORTS_DUMP_API,
-    REPORTS_SEARCH_API,
+    REPORTS_SEARCH_API, SEARCH_API,
     SEARCH_FAVORITE_ADD_API,
     SEARCH_SORT_OPTIONS_API
 } from "../urls/endpoints";
@@ -32,21 +32,10 @@ class MainSearch extends React.Component {
         past_date.setDate(past_date.getDate() - 30);
 
         this.state = {
-            price_min: MIN_PRICE,
-            price_max: MAX_PRICE,
-            product_query: '',
-            product: '',
-            categories: [],
-            distance: 100,
-            after_date: past_date,
-            ordering_by: '-created_time',
-            reports: [],
-            pnt: 'POINT(0 0)',
-            page: 0,
-            current_search_pk: 0,
-
             export_format: 'csv',
             prices: [],
+            page: 0,
+            reports: [],
 
             all_products: [],
             all_categories: [],
@@ -60,7 +49,17 @@ class MainSearch extends React.Component {
 
             latitude: 0,
             longitude: 0,
-            zoom: 15
+            zoom: 15,
+            price_min: MIN_PRICE,
+            price_max: MAX_PRICE,
+            product_query: '',
+            product: '',
+            categories: [],
+            distance: 100,
+            after_date: past_date,
+            ordering_by: '-created_time',
+            pnt: 'POINT(0 0)',
+            current_search_pk: 0,
         }
     }
 
@@ -73,6 +72,35 @@ class MainSearch extends React.Component {
     }
 
     componentDidMount() {
+        const search_id = this.props.match.params.id;
+
+        if (search_id) {
+            axios.get(`${SEARCH_API}/${search_id}`).then(
+                res => {
+                    const props = res.data.properties;
+                    const coords = res.data.geometry.coordinates;
+                    let url = `${REPORTS_SEARCH_API}/${search_id}/0`;
+                    const opt = isLoggedIn() ? getAuthHeader() : {};
+
+                    axios.get(url, opt).then(
+                        reports => {
+                            this.setState({
+                                reports: reports.data,
+                                price_min: props.price_min,
+                                price_max: props.price_max,
+                                product_query: props.product_query,
+                                categories: props.categories,
+                                distance: props.distance,
+                                ordering_by: props.ordering_by,
+                                current_search_pk: search_id,
+                                after_date: new Date(props.after_date),
+                                pnt: `POINT(${coords[0]} ${coords[1]})`
+                            });
+                        });
+                }
+            )
+        }
+
         axios.get(CATEGORIES_API).then(res => {
             this.setState({
                 all_categories: res.data.results

@@ -25,7 +25,7 @@ export class BaseRouter extends React.Component {
                 <Route path="/stores/" component={Stores} />
                 <Route path="/login/" component={Login} />
                 <Route path="/signup/" component={Signup} />
-                <Route path="/search/" component={MainSearch} />
+                <Route path="/search/:id?" component={MainSearch} />
                 <Route path="/product/:id" component={MainProduct} />
                 <Route path="/report/:id" component={MainReport} />
                 <Route path="/store/:id" component={MainStore} />
