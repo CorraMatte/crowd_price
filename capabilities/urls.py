@@ -12,6 +12,7 @@ urlpatterns = [
     path('reports/newer', views.RetrieveNewerReportAPI.as_view()),
     path('search/latest', views.RetrieveLatestSearchAPI.as_view()),
     path('search/starred', views.RetrieveStarredSearchAPI.as_view()),
+    path('search/<int:pk>', views.RetrieveSearchAPI.as_view()),
     path('search/sort/options', views.GetSortingOptions.as_view()),
     path('dump/format/options', views.GetDumpFormatOptions.as_view()),
     path('search/favorite/all', views.GetFavoriteSearchCurrentUser.as_view()),

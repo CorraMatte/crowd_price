@@ -65,6 +65,11 @@ class RetrieveReportByIDAPI(generics.RetrieveAPIView):
     serializer_class = serial.ReportSerializer
 
 
+class RetrieveSearchAPI(generics.RetrieveAPIView):
+    queryset = Search.objects.all()
+    serializer_class = serial.SearchSerializer
+
+
 class RetrieveReportByStoreAPI(generics.ListAPIView):
     queryset = Report.objects.all()
     serializer_class = serial.ReportSerializer
@@ -221,7 +226,7 @@ class GetFavoriteSearchCurrentUser(APIView):
             res.append({
                 'id': s.id,
                 'product': s.product_query,
-                'total_results': len(get_serial_reports_by_search(s.id))
+                'total_results': len(get_serial_reports_by_search(s.id)['features'])
             })
 
         return Response({'results': res}, status.HTTP_200_OK)
