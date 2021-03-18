@@ -4,7 +4,7 @@ import {
     CATEGORIES_API,
     DUMP_FORMAT_OPTIONS_API, PRODUCTS_API, REPORTS_DUMP_API,
     REPORTS_SEARCH_API,
-    SEARCH_ADD_FAVORITE_API,
+    SEARCH_FAVORITE_ADD_API,
     SEARCH_SORT_OPTIONS_API
 } from "../urls/endpoints";
 import {Alert, Button, Card, Col, Container, Form, Row} from "react-bootstrap";
@@ -189,7 +189,7 @@ class MainSearch extends React.Component {
     }
 
     addToFavorite = () => {
-        axios.post(SEARCH_ADD_FAVORITE_API, {}, getAuthHeader()).then(
+        axios.post(SEARCH_FAVORITE_ADD_API, {}, getAuthHeader()).then(
             res => {
                 this.setState({
                     errors: '',

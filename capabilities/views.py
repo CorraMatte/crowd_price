@@ -227,6 +227,27 @@ class GetFavoriteSearchCurrentUser(APIView):
         return Response({'results': res}, status.HTTP_200_OK)
 
 
+class RemoveFavoriteSearchCurrentUser(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        user = User.objects.get(pk=request.user.id)
+        try:
+            _id = request.data['id']
+            search = Search.objects.get(pk=_id, profile=Profile.objects.get(user=user), is_starred=True)
+            if not search:
+                raise ObjectDoesNotExist
+
+            search.is_starred = False
+            search.save()
+        except (ObjectDoesNotExist, KeyError):
+            return Response({
+                'details': 'Insert the ID of the search to remove or ID not found or not valid.'
+            }, status.HTTP_400_BAD_REQUEST)
+
+        return Response({'detail': 'Search correctly removed'}, status.HTTP_201_CREATED)
+
+
 class GetSortingOptions(APIView):
     def get(self, request):
         return Response({'results': OrderBy.choices}, status.HTTP_200_OK)

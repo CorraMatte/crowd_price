@@ -21,5 +21,6 @@ urlpatterns = [
     path('report/add', views.CreateReportAPI.as_view()),
     path('reports/dump', views.DownloadDumpAPI.as_view()),
     path('search/favorite/add', views.AddSearchToFavoriteAPI.as_view()),
+    path('search/favorite/remove', views.RemoveFavoriteSearchCurrentUser.as_view()),
     path('reports/nearest', views.RetrieveNearestReportAPI.as_view()),
 ]

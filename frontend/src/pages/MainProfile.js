@@ -1,6 +1,12 @@
 import React from "react";
 import axios from "axios";
-import {ANALYST_API, CONSUMER_API, REPORTS_USER_API, SEARCH_FAVORITE_ALL_API} from "../urls/endpoints";
+import {
+    ANALYST_API,
+    CONSUMER_API,
+    REPORTS_USER_API,
+    SEARCH_FAVORITE_ALL_API,
+    SEARCH_FAVORITE_REMOVE_API
+} from "../urls/endpoints";
 import {AnalystDetail, ConsumerDetail} from "../components/profile/RolesDetail";
 import {DetailGroupReport} from "../components/report/DetailGroupReport";
 import {getUserType, getAuthHeader} from "../auth";
@@ -31,6 +37,16 @@ class MainProfile extends React.Component {
         _update_reports(this, e, getAuthHeader());
     }
 
+    update_starred_search = () => {
+        axios.get(SEARCH_FAVORITE_ALL_API, getAuthHeader()).then(
+            res => {
+                this.setState({
+                    starred_searches: res.data.results
+                })
+            }
+        );
+    }
+
     componentDidMount() {
         if (this.state.user_type === CONSUMER_LABEL) {
             axios.get(CONSUMER_API, getAuthHeader()).then(
@@ -40,13 +56,7 @@ class MainProfile extends React.Component {
                     })
                 });
 
-            axios.get(SEARCH_FAVORITE_ALL_API, getAuthHeader()).then(
-                res => {
-                    this.setState({
-                        starred_searches: res.data.results
-                    })
-                }
-            );
+            this.update_starred_search();
 
         } else if (this.state.user_type === ANALYST_LABEL) {
             axios.get(ANALYST_API, getAuthHeader()).then(
@@ -89,6 +99,21 @@ class MainProfile extends React.Component {
         );
     }
 
+    remove_starred_search = (e) => {
+        e.preventDefault();
+        const req = {
+            id: e.target.id
+        };
+        console.log(req);
+
+
+        axios.post(SEARCH_FAVORITE_REMOVE_API, req, getAuthHeader()).then(
+            res => {
+                this.update_starred_search();
+            }
+        )
+    }
+
     render() {
         let profile_type;
         if (this.state.user_type === CONSUMER_LABEL) {
@@ -118,19 +143,34 @@ class MainProfile extends React.Component {
                         <Container className={"col-md-12 my-5"} fluid>
                             <Card bg={"light"} className={"my-md-3"}>
                                 <Card.Header>
-                                    Your saved Search
+                                    Your saved search
                                 </Card.Header>
                                 <Card.Body>
-                                    <ListGroup>
-                                        {
-                                            this.state.starred_searches.map((search) => (
-                                                <ListGroup.Item>
-                                                    Your saved research for <b>{search.product}</b> has {search.total_results}. <br />
-                                                    <a href={""}>Click here to open in the search tab</a>
-                                                </ListGroup.Item>
-                                            ))
-                                        }
-                                    </ListGroup>
+                                    {
+                                        this.state.starred_searches.length > 0 ?
+                                            <ListGroup>
+                                                {
+                                                    this.state.starred_searches.map((search) => (
+                                                        <ListGroup.Item>
+                                                            <div className={'d-inline float-left'}>
+                                                                Your saved research for <b>{search.product}</b> has {search.total_results}. <br />
+                                                                <a href={""}>Click here to open in the search tab</a>
+                                                            </div>
+                                                            <Button
+                                                                className={'d-inline float-right'}
+                                                                variant={'danger'}
+                                                                id={search.id}
+                                                                name={'delete'+search.id}
+                                                                onClick={this.remove_starred_search}
+                                                            >
+                                                                Remove
+                                                            </Button>
+                                                        </ListGroup.Item>
+                                                    ))
+                                                }
+                                            </ListGroup>
+                                            : <p>{"You didn't save any search you've done"}</p>
+                                    }
                                 </Card.Body>
                             </Card>
 
