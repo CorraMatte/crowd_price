@@ -210,6 +210,23 @@ class AddSearchToFavoriteAPI(APIView):
         return Response({'detail': 'success'}, status.HTTP_201_CREATED)
 
 
+class GetFavoriteSearchCurrentUser(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        user = User.objects.get(pk=request.user.id)
+        searches = Search.objects.filter(profile=Profile.objects.get(user=user), is_starred=True)
+        res = []
+        for s in searches:
+            res.append({
+                'id': s.id,
+                'product': s.product_query,
+                'total_results': len(get_serial_reports_by_search(s.id))
+            })
+
+        return Response({'results': res}, status.HTTP_200_OK)
+
+
 class GetSortingOptions(APIView):
     def get(self, request):
         return Response({'results': OrderBy.choices}, status.HTTP_200_OK)

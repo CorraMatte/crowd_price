@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import {ANALYST_API, CONSUMER_API, REPORTS_USER_API} from "../urls/endpoints";
+import {ANALYST_API, CONSUMER_API, REPORTS_USER_API, SEARCH_FAVORITE_ALL_API} from "../urls/endpoints";
 import {AnalystDetail, ConsumerDetail} from "../components/profile/RolesDetail";
 import {DetailGroupReport} from "../components/report/DetailGroupReport";
 import {getUserType, getAuthHeader} from "../auth";
@@ -8,7 +8,7 @@ import HeaderLogged from "../components/utils/HeaderLogged";
 import StaticMap from "../components/map/StaticMap";
 import {ANALYST_LABEL, CONSUMER_LABEL} from "../components/utils/const";
 import {_update_reports, getCoordinatesByIP, getIP} from "../components/utils/utils";
-import {Button, Card, Col, Container, Row} from "react-bootstrap";
+import {Button, Card, Col, Container, ListGroup, Row} from "react-bootstrap";
 
 
 class MainProfile extends React.Component {
@@ -21,6 +21,7 @@ class MainProfile extends React.Component {
             next_reports_url: '',
             prev_reports_url: '',
             coords: [0, 0],
+            starred_searches: [],
             errors: ''
         }
     }
@@ -32,18 +33,28 @@ class MainProfile extends React.Component {
 
     componentDidMount() {
         if (this.state.user_type === CONSUMER_LABEL) {
-            axios.get(`${CONSUMER_API}`, getAuthHeader()).then(
-                res => {this.setState({
-                    user_profile: res.data
-                })
-            });
-        } else if (this.state.user_type === ANALYST_LABEL) {
-            axios.get(`${ANALYST_API}`, getAuthHeader()).then(
+            axios.get(CONSUMER_API, getAuthHeader()).then(
                 res => {
                     this.setState({
                         user_profile: res.data
                     })
-            });
+                });
+
+            axios.get(SEARCH_FAVORITE_ALL_API, getAuthHeader()).then(
+                res => {
+                    this.setState({
+                        starred_searches: res.data.results
+                    })
+                }
+            );
+
+        } else if (this.state.user_type === ANALYST_LABEL) {
+            axios.get(ANALYST_API, getAuthHeader()).then(
+                res => {
+                    this.setState({
+                        user_profile: res.data
+                    })
+                });
         }
 
         axios.get(`${REPORTS_USER_API}`, getAuthHeader()).then(
@@ -53,10 +64,10 @@ class MainProfile extends React.Component {
                     next_reports_url: res.data.next,
                     prev_reports_url: res.data.previous,
                 })
-        });
+            });
 
         navigator.geolocation.getCurrentPosition(
-            position =>  {
+            position => {
                 this.setState({
                     coords: [position.coords.longitude, position.coords.latitude]
                 });
@@ -78,17 +89,17 @@ class MainProfile extends React.Component {
         );
     }
 
-    render () {
+    render() {
         let profile_type;
         if (this.state.user_type === CONSUMER_LABEL) {
-            profile_type = <ConsumerDetail consumer={this.state.user_profile} total_reports={this.state.reports.count} />
+            profile_type = <ConsumerDetail consumer={this.state.user_profile} total_reports={this.state.reports.count}/>
         } else if (this.state.user_type) {
-            profile_type = <AnalystDetail analyst={this.state.user_profile} />
+            profile_type = <AnalystDetail analyst={this.state.user_profile}/>
         }
 
         return (
             <div>
-                <HeaderLogged />
+                <HeaderLogged/>
                 <Container className={"my-md-5"} fluid>
                     <Row>
                         <Col className={"col-md-4 ml-md-1"}>
@@ -97,13 +108,33 @@ class MainProfile extends React.Component {
                         <Col className={"col-md-1"}></Col>
                         <Col className={"col-md-6"}>
                             <h3>Location of the store on the map</h3>
-                            <StaticMap latitude={this.state.coords[1]} longitude={this.state.coords[0]} label={"Your current location"} />
+                            <StaticMap latitude={this.state.coords[1]} longitude={this.state.coords[0]}
+                                       label={"Your current location"}/>
                         </Col>
                     </Row>
                 </Container>
                 {
                     this.state.user_type === CONSUMER_LABEL ?
                         <Container className={"col-md-12 my-5"} fluid>
+                            <Card bg={"light"} className={"my-md-3"}>
+                                <Card.Header>
+                                    Your saved Search
+                                </Card.Header>
+                                <Card.Body>
+                                    <ListGroup>
+                                        {
+                                            this.state.starred_searches.map((search) => (
+                                                <ListGroup.Item>
+                                                    Your saved research for <b>{search.product}</b> has {search.total_results}. <br />
+                                                    <a href={""}>Click here to open in the search tab</a>
+                                                </ListGroup.Item>
+                                            ))
+                                        }
+                                    </ListGroup>
+                                </Card.Body>
+                            </Card>
+
+
                             <Card bg={"light"} className={"my-md-3"}>
                                 <Card.Header>
                                     <h3>Reports created</h3>
@@ -115,7 +146,7 @@ class MainProfile extends React.Component {
                                             disabled={!this.state.next_reports_url}>next</Button>
                                 </Card.Body>
                                 <Card.Body>
-                                    <DetailGroupReport reports={this.state.reports} />
+                                    <DetailGroupReport reports={this.state.reports}/>
                                 </Card.Body>
                             </Card>
                         </Container>

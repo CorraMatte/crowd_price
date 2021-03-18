@@ -14,6 +14,7 @@ urlpatterns = [
     path('search/starred', views.RetrieveStarredSearchAPI.as_view()),
     path('search/sort/options', views.GetSortingOptions.as_view()),
     path('dump/format/options', views.GetDumpFormatOptions.as_view()),
+    path('search/favorite/all', views.GetFavoriteSearchCurrentUser.as_view()),
 
     # Post
     path('reports/search', views.RetrieveReportByNewSearchAPI.as_view()),
