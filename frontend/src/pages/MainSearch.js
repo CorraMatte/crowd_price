@@ -8,7 +8,12 @@ import {
     SEARCH_SORT_OPTIONS_API
 } from "../urls/endpoints";
 import {Alert, Button, Card, Col, Container, Form, Row} from "react-bootstrap";
+import {RangeSlider, Slider} from 'reactrangeslider';
+import ReactMapGL, {Marker} from "react-map-gl";
+import 'mapbox-gl/dist/mapbox-gl.css';
+import {FaSearchLocation} from 'react-icons/fa';
 import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import {ACCESS_TOKEN, ANALYST_LABEL, MAX_DISTANCE, MAX_PRICE, MIN_PRICE} from "../components/utils/const"
 import {DetailReportItem} from "../components/report/DetailGroupReport";
 import {getAuthHeader, getUserType, isLoggedIn} from "../auth";
@@ -17,12 +22,8 @@ import {HeaderUnLogged} from "../components/utils/HeaderUnLogged";
 import DynMap from "../components/map/DynMap";
 import {saveAs} from 'file-saver'
 import {getCoordinatesByIP, getIP} from "../components/utils/utils";
-import {RangeSlider, Slider} from 'reactrangeslider';
-import "react-datepicker/dist/react-datepicker.css";
-import ReactMapGL, {Marker} from "react-map-gl";
-import 'mapbox-gl/dist/mapbox-gl.css';
-import {FaSearchLocation} from 'react-icons/fa';
 import {LineChartItem} from "../components/graph/LineChartItem";
+
 
 
 class MainSearch extends React.Component {
@@ -436,7 +437,11 @@ class MainSearch extends React.Component {
 
                                     <Card.Body>
                                         Published after <br/>
-                                        <DatePicker selected={this.state.after_date} onChange={this.dateChangeHandler}/>
+                                        <DatePicker
+                                            selected={this.state.after_date}
+                                            onChange={this.dateChangeHandler}
+                                            locale={'it'}
+                                        />
                                     </Card.Body>
 
                                     <Card.Body>

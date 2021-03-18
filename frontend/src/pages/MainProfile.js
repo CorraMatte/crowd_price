@@ -105,8 +105,6 @@ class MainProfile extends React.Component {
         const req = {
             id: e.target.id
         };
-        console.log(req);
-
 
         axios.post(SEARCH_FAVORITE_REMOVE_API, req, getAuthHeader()).then(
             res => {
