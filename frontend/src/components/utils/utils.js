@@ -49,6 +49,11 @@ export const get_day_month_year_from_date = (date) => {
     return moment(new_date).format("DD/MM/yyyy");
 }
 
+    export const get_full_date = (date) => {
+    const new_date = new Date(date);
+    return moment(new_date).format("DD/MM/yyyy hh:mm:ss");
+}
+
 export const _update_reports = (obj, e, auth_header= {}) => {
     const _id = e.target.id;
     let url = '';

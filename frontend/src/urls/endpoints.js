@@ -27,6 +27,7 @@ export const SEARCH_FAVORITE_ALL_API = `${backend_url}/search/favorite/all`;
 export const SEARCH_API = `${backend_url}/search`;
 
 export const REPORTS_DUMP_API = `${backend_url}/reports/dump`;
+export const DUMP_LAST_API = `${backend_url}/dump/last`;
 export const DUMP_FORMAT_OPTIONS_API = `${backend_url}/dump/format/options`;
 
 export const STORES_API = `${backend_url}/stores`;

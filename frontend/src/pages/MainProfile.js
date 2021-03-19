@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import {
     ANALYST_API,
-    CONSUMER_API,
+    CONSUMER_API, DUMP_LAST_API,
     REPORTS_USER_API,
     SEARCH_FAVORITE_ALL_API,
     SEARCH_FAVORITE_REMOVE_API
@@ -13,7 +13,7 @@ import {getUserType, getAuthHeader} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import StaticMap from "../components/map/StaticMap";
 import {ANALYST_LABEL, CONSUMER_LABEL} from "../components/utils/const";
-import {_update_reports, getCoordinatesByIP, getIP} from "../components/utils/utils";
+import {_update_reports, get_full_date, getCoordinatesByIP, getIP} from "../components/utils/utils";
 import {Button, Card, Col, Container, ListGroup, Row} from "react-bootstrap";
 import {SEARCH_URL} from "../urls/navigation";
 
@@ -25,6 +25,7 @@ class MainProfile extends React.Component {
             user_profile: null,
             user_type: getUserType(),
             reports: [],
+            dumps: [],
             next_reports_url: '',
             prev_reports_url: '',
             coords: [0, 0],
@@ -57,8 +58,6 @@ class MainProfile extends React.Component {
                     })
                 });
 
-            this.update_starred_search();
-
         } else if (this.state.user_type === ANALYST_LABEL) {
             axios.get(ANALYST_API, getAuthHeader()).then(
                 res => {
@@ -66,7 +65,16 @@ class MainProfile extends React.Component {
                         user_profile: res.data
                     })
                 });
+
+            axios.get(DUMP_LAST_API, getAuthHeader()).then(
+                res => {
+                    this.setState({
+                        dumps: res.data
+                    })
+                });
         }
+
+        this.update_starred_search();
 
         axios.get(`${REPORTS_USER_API}`, getAuthHeader()).then(
             res => {
@@ -142,40 +150,6 @@ class MainProfile extends React.Component {
                         <Container className={"col-md-12 my-5"} fluid>
                             <Card bg={"light"} className={"my-md-3"}>
                                 <Card.Header>
-                                    Your saved search
-                                </Card.Header>
-                                <Card.Body>
-                                    {
-                                        this.state.starred_searches.length > 0 ?
-                                            <ListGroup>
-                                                {
-                                                    this.state.starred_searches.map((search) => (
-                                                        <ListGroup.Item key={search.id}>
-                                                            <div className={'d-inline float-left'}>
-                                                                Your saved research
-                                                                for <b>{search.product}</b> has {search.total_results} results. <br/>
-                                                                <a href={`${SEARCH_URL}/${search.id}`}>Click here to open in the search tab</a>
-                                                            </div>
-                                                            <Button
-                                                                className={'d-inline float-right'}
-                                                                variant={'danger'}
-                                                                id={search.id}
-                                                                name={'delete' + search.id}
-                                                                onClick={this.remove_starred_search}
-                                                            >
-                                                                Remove
-                                                            </Button>
-                                                        </ListGroup.Item>
-                                                    ))
-                                                }
-                                            </ListGroup>
-                                            : <p>{"You didn't save any search you've done"}</p>
-                                    }
-                                </Card.Body>
-                            </Card>
-
-                            <Card bg={"light"} className={"my-md-3"}>
-                                <Card.Header>
                                     <h3>Reports created</h3>
                                 </Card.Header>
                                 <Card.Body>
@@ -191,9 +165,78 @@ class MainProfile extends React.Component {
                         </Container>
                         : <div></div>
                 }
+                {
+                    this.state.user_type === ANALYST_LABEL ?
+                        <Container className={"col-md-12 my-5"} fluid>
+                            {this.state.dumps.length > 0 ?
+                                <Card bg={"light"} className={"my-md-3"}>
+                                    <Card.Header>
+                                        Your latest download
+                                    </Card.Header>
+                                    <Card.Body>
+                                        <ListGroup>
+                                            {
+                                                this.state.dumps.map((dump) => (
+                                                    <ListGroup.Item key={dump.id}>
+                                                        <div className={'d-inline float-left'}>
+                                                            {get_full_date(dump.download_timestamp)}
+                                                        </div>
+                                                        <Button href={`${SEARCH_URL}/${dump.search}`}
+                                                                className={'float-right'}>
+                                                            Search
+                                                        </Button>
+                                                    </ListGroup.Item>
+                                                ))
+                                            }
+                                        </ListGroup>
+                                    </Card.Body>
+                                </Card>
+                                : <p>{"You didn't downlaod any search"}</p>
+                            }
+                        </Container>
+                        : <div></div>
+                }
+
+                <Container className={"col-md-12 my-5"} fluid>
+                    <Card bg={"light"} className={"my-md-3"}>
+                        <Card.Header>
+                            Your saved search
+                        </Card.Header>
+                        <Card.Body>
+                            {
+                                this.state.starred_searches.length > 0 ?
+                                    <ListGroup>
+                                        {
+                                            this.state.starred_searches.map((search) => (
+                                                <ListGroup.Item key={search.id}>
+                                                    <div className={'d-inline float-left'}>
+                                                        Your saved research
+                                                        for <b>{search.product}</b> has {search.total_results} results. <br/>
+                                                        <a href={`${SEARCH_URL}/${search.id}`}>Click here to open in the
+                                                            search tab</a>
+                                                    </div>
+                                                    <Button
+                                                        className={'d-inline float-right'}
+                                                        variant={'danger'}
+                                                        id={search.id}
+                                                        name={'delete' + search.id}
+                                                        onClick={this.remove_starred_search}
+                                                    >
+                                                        Remove
+                                                    </Button>
+                                                </ListGroup.Item>
+                                            ))
+                                        }
+                                    </ListGroup>
+                                    : <p>{"You didn't save any search you've done"}</p>
+                            }
+                        </Card.Body>
+                    </Card>
+                </Container>
             </div>
         )
     }
+
 }
 
 
