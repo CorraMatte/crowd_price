@@ -16,11 +16,12 @@ urlpatterns = [
     path('search/sort/options', views.GetSortingOptions.as_view()),
     path('dump/format/options', views.GetDumpFormatOptions.as_view()),
     path('search/favorite/all', views.GetFavoriteSearchCurrentUser.as_view()),
+    path('dump/last', views.GetLatestDumps.as_view()),
 
     # Post
     path('reports/search', views.RetrieveReportByNewSearchAPI.as_view()),
     path('report/add', views.CreateReportAPI.as_view()),
-    path('reports/dump', views.DownloadDumpAPI.as_view()),
+    path('reports/dump', views.DownloadLastDumpAPI.as_view()),
     path('search/favorite/add', views.AddSearchToFavoriteAPI.as_view()),
     path('search/favorite/remove', views.RemoveFavoriteSearchCurrentUser.as_view()),
     path('reports/nearest', views.RetrieveNearestReportAPI.as_view()),

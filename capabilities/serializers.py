@@ -16,7 +16,7 @@ class SearchSerializer(geo_serializers.GeoFeatureModelSerializer):
 class DumpSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dump
-        fields = ['id', 'download_timestamp', 'export_format']
+        fields = ['id', 'download_timestamp', 'export_format', 'search']
 
 
 class ReportSerializer(geo_serializers.GeoFeatureModelSerializer):

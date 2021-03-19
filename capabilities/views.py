@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from capabilities.utils import *
 from rest_framework.views import APIView
-from capabilities.models import Report, OrderBy, Format
+from capabilities.models import Report, OrderBy, Format, Dump
 from profiles.models import Consumer, Analyst
 from capabilities import serializers as serial
 from rest_framework.response import Response
@@ -160,6 +160,19 @@ class RetrieveLatestSearchAPI(generics.ListAPIView):
             return []
 
 
+class GetLatestDumps(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        return Response(
+            serial.DumpSerializer(
+                Dump.objects.filter(analyst__profile__user=request.user.pk).order_by('-download_timestamp')[:10],
+                many=True
+            ).data,
+            status.HTTP_200_OK
+        )
+
+
 class RetrieveStarredSearchAPI(generics.ListAPIView):
     queryset = Search.objects.all()
     serializer_class = serial.SearchSerializer
@@ -169,14 +182,12 @@ class RetrieveStarredSearchAPI(generics.ListAPIView):
         return Search.objects.filter(profile__user=self.request.user.pk, is_starred=True).order_by('-created_time')[:3]
 
 
-class DownloadDumpAPI(APIView):
+class DownloadLastDumpAPI(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    # Check if the user is an analyst
     def post(self, request):
         try:
             analyst = Analyst.objects.get(profile__user=request.user.pk)
-
         except ObjectDoesNotExist:
             return Response({'detail': 'user not allowed'}, status.HTTP_403_FORBIDDEN)
 
@@ -186,6 +197,7 @@ class DownloadDumpAPI(APIView):
 
         s = Search.objects.filter(profile_id=analyst.profile.id).latest('created_time')
         serial_dump.validated_data['search'] = s
+        serial_dump.validated_data['analyst'] = analyst
         dump = serial_dump.save()
 
         if dump.export_format == 'csv':
