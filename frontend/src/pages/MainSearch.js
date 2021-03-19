@@ -440,7 +440,7 @@ class MainSearch extends React.Component {
                                         <DatePicker
                                             selected={this.state.after_date}
                                             onChange={this.dateChangeHandler}
-                                            locale={'it'}
+                                            dateFormat="dd/MM/yyyy"
                                         />
                                     </Card.Body>
 
