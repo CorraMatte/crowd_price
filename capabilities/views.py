@@ -187,16 +187,15 @@ class DownloadDumpAPI(APIView):
         s = Search.objects.filter(profile_id=analyst.profile.id).latest('created_time')
         serial_dump.validated_data['search'] = s
         dump = serial_dump.save()
-        filename = f"report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.{dump.export_format}"
 
         if dump.export_format == 'csv':
-            return get_dump_csv(dump.search.pk, filename)
+            return get_dump_csv(dump.search.pk, f"report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.csv")
 
         elif dump.export_format == 'json':
-            return get_dump_json(dump.search.pk, filename)
+            return get_dump_json(dump.search.pk, f"report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.json")
 
         elif dump.export_format == 'xls':
-            return get_dump_excel(dump.search.pk, filename)
+            return get_dump_excel(dump.search.pk, f"report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}")
 
         else:
             return Response({'detail': 'export type not supported'}, status.HTTP_400_BAD_REQUEST)

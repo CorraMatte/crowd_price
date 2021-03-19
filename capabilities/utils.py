@@ -85,12 +85,14 @@ def cast_features_results(reports):
     res = []
     for r in reports['features']:
         geo = r['geometry']
-        r = r['properties']
+        r = {**{'id': r['id']}, **r['properties']}
+
         if geo is not None:
             r['latitude'] = geo['coordinates'][0]
             r['longitude'] = geo['coordinates'][1]
-        else:
-            r['store'] = Store.objects.get(pk=r['store']).name
+
+        if r['store']:
+            r['store'] = r['store']['name']
 
         r['product'] = Product.objects.get(pk=r['product']['id']).name
         r['consumer'] = Consumer.objects.get(pk=r['consumer']['id']).profile.user.email
