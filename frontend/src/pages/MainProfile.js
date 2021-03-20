@@ -152,15 +152,22 @@ class MainProfile extends React.Component {
                                 <Card.Header>
                                     <h3>Reports created</h3>
                                 </Card.Header>
-                                <Card.Body>
-                                    <Button id={"previous"} onClick={this.update_reports} className={"float-left"}
-                                            disabled={!this.state.prev_reports_url}>previous</Button>
-                                    <Button id={"next"} onClick={this.update_reports} className={"float-right"}
-                                            disabled={!this.state.next_reports_url}>next</Button>
-                                </Card.Body>
-                                <Card.Body>
-                                    <DetailGroupReport reports={this.state.reports}/>
-                                </Card.Body>
+                                {
+                                    this.state.reports.length > 0 ?
+                                        <div>
+                                            <Card.Body>
+                                                <Button id={"previous"} onClick={this.update_reports}
+                                                        className={"float-left"}
+                                                        disabled={!this.state.prev_reports_url}>previous</Button>
+                                                <Button id={"next"} onClick={this.update_reports} className={"float-right"}
+                                                        disabled={!this.state.next_reports_url}>next</Button>
+                                            </Card.Body>
+                                            <Card.Body>
+                                                <DetailGroupReport reports={this.state.reports}/>
+                                            </Card.Body>
+                                            </div>
+                                        : <Card.Body>You didn't create any reports</Card.Body>
+                                }
                             </Card>
                         </Container>
                         : <div></div>
@@ -183,7 +190,7 @@ class MainProfile extends React.Component {
                                                         </div>
                                                         <Button href={`${SEARCH_URL}/${dump.search}`}
                                                                 className={'float-right'}>
-                                                            Search
+                                                            Go to Search
                                                         </Button>
                                                     </ListGroup.Item>
                                                 ))
@@ -228,7 +235,7 @@ class MainProfile extends React.Component {
                                             ))
                                         }
                                     </ListGroup>
-                                    : <p>{"You didn't save any search you've done"}</p>
+                                    : <div>{"You didn't save any search you've done"}</div>
                             }
                         </Card.Body>
                     </Card>
