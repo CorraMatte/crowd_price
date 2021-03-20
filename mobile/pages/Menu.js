@@ -32,6 +32,7 @@ export class Menu extends React.Component {
 
                 axios.get(CONSUMER_API, getAuthHeader(token)).then(
                     res => {
+                        console.log(res.data)
                         this.setState({
                             user: res.data.profile.user.email
                         });
@@ -51,8 +52,13 @@ export class Menu extends React.Component {
                         style={menu_style.title_message_user_str}
                     >
                         {"You are logged as"} <Text
-                        style={{...menu_style.title_message_user_str, ...{fontWeight: 'bold'}}}
+                        style={{fontWeight: 'bold'}}
                     >{this.state.user}</Text>
+                    </Text>
+                    <Text style={menu_style.title_message_user_str}>
+                        {"You have published "}
+                        <Text style={{fontWeight: 'bold'}}>{this.state.exp}</Text>
+                        <Text>{" reports"}</Text>
                     </Text>
                 </View>
                 <View style={menu_style.menu_message_view}>
