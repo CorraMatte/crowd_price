@@ -11,6 +11,11 @@ const menu_message_view = {
     justifyContent: "center"
 }
 
+const menu_user_message_view = {
+    flex: 0.5,
+    justifyContent: 'center'
+}
+
 const menu_buttons_view_group = {
     flex: 2,
     justifyContent: "center",
@@ -20,6 +25,11 @@ const menu_buttons_view_group = {
 const title_message_str = {
     textAlign: "center",
     fontSize: 34
+}
+
+const title_message_user_str = {
+    fontSize: 20,
+    textAlign: 'center'
 }
 
 const menu_button_view = {
@@ -46,7 +56,9 @@ export const menu_style = StyleSheet.create({
     menu_button_view: menu_button_view,
     menu_buttons_view_group: menu_buttons_view_group,
     menu_message_str: title_message_str,
-    menu_exp_view: menu_exp_view
+    menu_exp_view: menu_exp_view,
+    menu_user_message_view: menu_user_message_view,
+    title_message_user_str: title_message_user_str
 });
 
 const search_message = {
