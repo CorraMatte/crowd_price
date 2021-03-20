@@ -38,10 +38,10 @@ export class Signup extends React.Component {
         axios.post(CONSUMER_SIGNUP_API, req).then(
             res => {
                 if (res.status === 201) {
-                    Alert.alert("Account created!\n\nNow you can log in...");
+                    Alert.alert("Account created!", "Now you can log in...");
                     this.props.navigation.navigate("Login");
                 } else {
-                    Alert.alert(res.data);
+                    Alert.alert("Error during the signup", res.data);
                     this.setState({
                         'errors': res.data
                     })
