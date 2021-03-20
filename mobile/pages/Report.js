@@ -36,10 +36,14 @@ export class Report extends React.Component {
                     <Text style={report_style.report_message_str}>{data.product}</Text>
                 </View>
                 <View style={report_style.report_text_view}>
-                    <Text style={report_style.report_price_str}>{"Registered price: " + data.price + "€"}</Text>
+                    <Text style={report_style.report_price_str}>{"Registered price is "}
+                        <Text style={{fontWeight: 'bold'}}>{data.price + "€"}</Text>
+                    </Text>
                     {
                         data.store ?
-                            <Text style={report_style.report_detail_str}>{"Created in store: " + data.store}</Text>
+                                <Text style={report_style.report_detail_str}>{"Created in "}
+                                    <Text style={{fontWeight: 'bold'}}>{data.store}</Text>
+                                </Text>
                             : <Text></Text>
                     }
                     <Text style={report_style.report_detail_str}>{"by: " + data.profile}</Text>

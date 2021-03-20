@@ -8,7 +8,7 @@ import {REPORTS_SEARCH_API, SEARCH_SORT_OPTIONS_API} from "../urls/endpoints";
 import {getAuthHeader, getToken} from "../utils/auth";
 import AppHeader from "../utils/AppHeader";
 import {Picker} from "@react-native-picker/picker";
-import RangeSlider from 'react-native-range-slider-expo';
+import RangeSlider, {Slider} from 'react-native-range-slider-expo';
 import {search_style} from "../utils/styles";
 
 
@@ -93,21 +93,23 @@ export class Search extends React.Component {
                     </View>
 
                     <View style={search_style.search_input_view}>
-                        <Text style={search_style.distance_txt}>Maximum distance</Text>
-                        <TextInput
-                            value={"" + this.state.distance}
-                            onChangeText={(text => {
-                                this.setState({distance: text})
+                        <Text style={search_style.distance_txt}>Maximum distance {this.state.distance}km</Text>
+                        <Slider
+                            min={0}
+                            max={MAX_DISTANCE}
+                            step={10}
+                            initialValue={100}
+                            valueOnChange={(value => {
+                                this.setState({distance: value})
                             })}
-                            style={search_style.text_input}
-                            keyboardType="number-pad"
-                            label="distance"
-                            placeholder="100"
                         />
+
                     </View>
 
                     <View style={search_style.search_input_view}>
-                        <Text style={search_style.distance_txt}>Price</Text>
+                        <Text style={search_style.distance_txt}>
+                            Price from {this.state.price_min} to {this.state.price_max}
+                        </Text>
                         <RangeSlider
                             min={MIN_PRICE}
                             max={MAX_PRICE}
@@ -129,7 +131,8 @@ export class Search extends React.Component {
                                 })
                             }
                         >
-                            {this.state.sorting_options.map((opt) => <Picker.Item label={opt[1]} value={opt[0]} key={opt[0]}/>)}
+                            {this.state.sorting_options.map((opt) => <Picker.Item label={opt[1]} value={opt[0]}
+                                                                                  key={opt[0]}/>)}
                         </Picker>
                     </View>
 

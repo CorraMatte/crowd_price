@@ -57,7 +57,7 @@ export const MAX_PRICE = 5000;
 export const MIN_PRICE = 0;
 
 // Max distance in KM
-export const MAX_DISTANCE = 100;
+export const MAX_DISTANCE = 1000;
 
 // Max Experience
 export const MAX_EXPERIENCE = 100;

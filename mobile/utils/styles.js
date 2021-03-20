@@ -28,7 +28,7 @@ const title_message_str = {
 }
 
 const title_message_user_str = {
-    fontSize: 20,
+    fontSize: 16,
     textAlign: 'center'
 }
 
