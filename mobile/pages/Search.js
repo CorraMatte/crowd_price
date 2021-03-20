@@ -56,7 +56,6 @@ export class Search extends React.Component {
             token => {
                 axios.post(REPORTS_SEARCH_API, req, getAuthHeader(token)).then(
                     res => {
-                        console.log(res.data)
                         this.props.navigation.navigate("SearchResults", {results: res.data.results});
                     }).catch(
                     err => {

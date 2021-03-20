@@ -32,7 +32,6 @@ export class Menu extends React.Component {
 
                 axios.get(CONSUMER_API, getAuthHeader(token)).then(
                     res => {
-                        console.log()
                         this.setState({
                             user: res.data.profile.user.email
                         });

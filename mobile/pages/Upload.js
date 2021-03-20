@@ -51,6 +51,7 @@ export class Upload extends React.Component {
         for (const [key, value] of Object.entries(details)) {
             errors += `${key}: ${value} `;
         }
+
         return errors;
     }
 
@@ -135,8 +136,8 @@ export class Upload extends React.Component {
             });
         }
 
-        if (this.state.store_id !== 0) {
-            formData.append('store', this.state.store_id)
+        if (this.state.store_selected !== 0) {
+            formData.append('store', this.state.store_selected)
         }
 
         if ((this.state.product_id === 0 && this.state.new_product_name === "") || this.state.price === 0) {
@@ -164,7 +165,6 @@ export class Upload extends React.Component {
                 token => {
                     axios.post(PRODUCT_ADD_API, req, getAuthHeader(token)).then(
                         res => {
-                            console.log(res.data.result)
                             product_id = res.data.result.id;
                             formData.append('product', product_id);
                             getToken().then(
@@ -176,13 +176,17 @@ export class Upload extends React.Component {
                                             this.fill_state();
                                             this.props.navigation.navigate("Menu");
                                         }
-                                    ).catch(err => Alert.alert(this.alert_errors(err.response.data.detail)))
+                                    ).catch(err => {
+                                        Alert.alert('Error during the upload', this.alert_errors(err.response.data.detail))
+                                    })
                                 }
                             )
                         }
                     )
                 }
-            ).catch(err => Alert.alert(this.alert_errors(err.response.data.detail)))
+            ).catch(err => {
+                Alert.alert('Error during the upload', this.alert_errors(err.response.data.detail))
+            })
         } else {
             formData.append('product', product_id);
             getToken().then(
@@ -194,7 +198,9 @@ export class Upload extends React.Component {
                             this.fill_state();
                             this.props.navigation.navigate("Menu");
                         }
-                    ).catch(err => Alert.alert(this.alert_errors(err.response.data.detail)))
+                    ).catch(err => {
+                        Alert.alert('Error during the upload', this.alert_errors(err.response.data.detail))
+                    })
                 }
             )
         }

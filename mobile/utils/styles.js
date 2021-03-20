@@ -226,8 +226,8 @@ export const upload_style = StyleSheet.create({
     container: report_container,
     text_input: text_input,
     upload_text_input: search_input_view,
-    upload_message_str: title_message_str,
-    upload_message_view: menu_message_view,
+    upload_message_str: search_message,
+    upload_message_view: search_message_view,
     picker: picker,
     picker_view: picker_view,
     upload_button_view: upload_button_view
