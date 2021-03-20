@@ -73,11 +73,17 @@ class GetMostSearchedCategories(APIView):
     def get(self, request):
         res = Search.objects.filter(
             profile__in=Profile.objects.filter(consumer__isnull=False)).values('categories').annotate(
-            count=Count('categories')).order_by('-count', 'categories')[:10]
+            count=Count('categories')
+        ).order_by('-count', 'categories')[:10]
 
         serial_res = []
         for r in res:
-            serial_res.append({"name": r['categories'], "value": r['count']})
+            if r['categories'] is None:
+                continue
+
+            serial_res.append({
+                "name": Category.objects.get(pk=r['categories']).name, "value": r['count']
+            })
 
         return Response({'results': serial_res}, status.HTTP_200_OK)
 
