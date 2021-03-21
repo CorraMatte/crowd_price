@@ -74,7 +74,6 @@ INSTALLED_APPS = [
 
     # https://github.com/openwisp/django-rest-framework-gis#geofeaturemodelserializer
     'rest_framework_gis',
-
     'rest_framework.authtoken',
 
     # Password validator https://pypi.org/project/django-password-validators/
@@ -161,12 +160,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 16,
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
     {
         'NAME': 'django_password_validators.password_character_requirements.password_validation.PasswordCharacterValidator',
