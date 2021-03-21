@@ -132,7 +132,7 @@ class SearchTest(APITestCase):
         response = self.client.post('/reports/search', data=search)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         json_response = response.json()
-        self.assertEqual(len(json_response['features']), len(Report.objects.all()))
+        self.assertEqual(len(json_response['results']['features']), len(Report.objects.all()))
 
     """
         Test the filters for category in search results
@@ -143,21 +143,21 @@ class SearchTest(APITestCase):
         search = {"product_query": "product", "categories": [Category.objects.all()[0].pk], 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search).json()
         self.assertEqual(
-            len(response['features']),
+            len(response['results']['features']),
             len(Report.objects.filter(product__categories__in=[Category.objects.all()[0].pk]))
         )
 
         search = {"product_query": "product", "categories": [Category.objects.all()[1].pk], 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search).json()
         self.assertEqual(
-            len(response['features']),
+            len(response['results']['features']),
             len(Report.objects.filter(product__categories__in=[Category.objects.all()[1].pk]))
         )
 
         search = {"product_query": "product", "categories": [c.pk for c in Category.objects.all()], 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search).json()
         self.assertEqual(
-            len(response['features']),
+            len(response['results']['features']),
             len(Report.objects.filter(product__categories__in=[c.pk for c in Category.objects.all()]).distinct())
         )
 
@@ -169,16 +169,16 @@ class SearchTest(APITestCase):
     def test_price_search_api_result(self):
         search = {"product_query": "product", "price_min": 50, 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search).json()
-        self.assertEqual(len(response['features']), len(Report.objects.filter(price__gte=50)))
+        self.assertEqual(len(response['results']['features']), len(Report.objects.filter(price__gte=50)))
         search = {"product_query": "product", "price_min": 100, 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search).json()
-        self.assertEqual(len(response['features']), len(Report.objects.filter(price__gte=100)))
+        self.assertEqual(len(response['results']['features']), len(Report.objects.filter(price__gte=100)))
         search = {"product_query": "product", "price_max": 50, 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search).json()
-        self.assertEqual(len(response['features']), len(Report.objects.filter(price__lte=50)))
+        self.assertEqual(len(response['results']['features']), len(Report.objects.filter(price__lte=50)))
         search = {"product_query": "product", "price_max": 100, 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search).json()
-        self.assertEqual(len(response['features']), len(Report.objects.filter(price__lte=100)))
+        self.assertEqual(len(response['results']['features']), len(Report.objects.filter(price__lte=100)))
 
     """
         Test the filters for date in search results
@@ -194,13 +194,13 @@ class SearchTest(APITestCase):
 
         search = {"product_query": "product", 'after_date': str_now, 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search).json()
-        self.assertEqual(len(response['features']), len(Report.objects.filter(
+        self.assertEqual(len(response['results']['features']), len(Report.objects.filter(
             created_time__gte=now
         )))
         str_now_minus_30 = (now - datetime.timedelta(days=30)).strftime("%Y-%m-%dT%H:%M:%S")
         search = {"product_query": "product", 'after_date': str_now_minus_30, 'pnt': 'POINT(-100.1000 44.0000)'}
         response = self.client.post('/reports/search', data=search).json()
-        self.assertEqual(len(response['features']),
+        self.assertEqual(len(response['results']['features']),
                          len(Report.objects.filter(created_time__gte=now - datetime.timedelta(days=30))))
 
     """
@@ -216,7 +216,7 @@ class SearchTest(APITestCase):
         response = self.client.post('/reports/search', data=search).json()
         pnt = GEOSGeometry('POINT(-200.1000 44.0000)', srid=SRID)
         self.assertEqual(
-            len(response['features']),
+            len(response['results']['features']),
             len(Report.objects.filter(pnt__distance_lte=(pnt, Distance(km=100))))
         )
 
@@ -265,15 +265,14 @@ class DumpTests(APITestCase):
 
     def test_csv_dump(self):
         search = {"product_query": "product", "pnt": 'POINT(-100.0208 44.0489)', "categories": [1]}
-        self.client.post('/reports/search', data=search)
-        dump = {"export_format": "csv"}
+        search_id = self.client.post('/reports/search', data=search).json()['id']
+        dump = {"export_format": "csv", "search": search_id}
         response = self.client.post(self.url, data=dump)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response._headers['content-type'][1], 'text/csv')
         csv_str = StringIO(response.content.decode())
         reader = csv.DictReader(
-            csv_str, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL,fieldnames=get_dump_fieldnames()
-
+            csv_str, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, fieldnames=get_dump_fieldnames()
         )
         next(reader)
         lines = []
@@ -288,8 +287,8 @@ class DumpTests(APITestCase):
 
     def test_json_dump(self):
         search = {"product_query": "product", "pnt": 'POINT(-100.0208 44.0489)'}
-        self.client.post('/reports/search', data=search)
-        dump = {"export_format": "json"}
+        search_id = self.client.post('/reports/search', data=search).json()['id']
+        dump = {"export_format": "json", "search": search_id}
         response = self.client.post(self.url, data=dump)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response._headers['content-type'][1], 'application/json; charset=utf8')
@@ -302,8 +301,8 @@ class DumpTests(APITestCase):
 
     def test_excel_dump(self):
         search = {"product_query": "product", "pnt": 'POINT(-100.0208 44.0489)'}
-        self.client.post('/reports/search', data=search)
-        dump = {"export_format": "xls"}
+        search_id = self.client.post('/reports/search', data=search).json()['id']
+        dump = {"export_format": "xls", "search": search_id}
         response = self.client.post(self.url, data=dump)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(

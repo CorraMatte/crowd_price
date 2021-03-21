@@ -62,7 +62,6 @@ class Format(models.TextChoices):
 
 class Dump(models.Model):
     search = models.ForeignKey(Search, on_delete=models.CASCADE)
-    analyst = models.ForeignKey(Analyst, null=True, on_delete=models.SET_NULL)
     download_timestamp = models.DateTimeField(auto_now_add=True)
     export_format = models.CharField(max_length=4, choices=Format.choices, default=Format.CSV.value)
 

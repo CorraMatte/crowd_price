@@ -9,7 +9,7 @@ from django.http import HttpResponse
 from excel_response import ExcelResponse
 from capabilities import serializers as serial
 from capabilities.models import Search, Report
-from products.models import Product, Store
+from products.models import Product
 from profiles.models import Consumer
 from profiles.utils import get_user_type
 

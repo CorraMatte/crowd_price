@@ -3,6 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from capabilities.utils import *
 from rest_framework.views import APIView
 from capabilities.models import Report, OrderBy, Format, Dump
+from products.models import Store
 from profiles.models import Consumer, Analyst
 from capabilities import serializers as serial
 from rest_framework.response import Response
@@ -166,7 +167,7 @@ class GetLatestDumps(APIView):
     def get(self, request):
         return Response(
             serial.DumpSerializer(
-                Dump.objects.filter(analyst__profile__user=request.user.pk).order_by('-download_timestamp')[:10],
+                Dump.objects.filter(search__profile__user=request.user.pk).order_by('-download_timestamp')[:10],
                 many=True
             ).data,
             status.HTTP_200_OK
@@ -186,6 +187,7 @@ class DownloadLastDumpAPI(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
+        # Check if the current user is an analyst
         try:
             analyst = Analyst.objects.get(profile__user=request.user.pk)
         except ObjectDoesNotExist:
@@ -197,7 +199,6 @@ class DownloadLastDumpAPI(APIView):
 
         s = Search.objects.filter(profile_id=analyst.profile.id).latest('created_time')
         serial_dump.validated_data['search'] = s
-        serial_dump.validated_data['analyst'] = analyst
         dump = serial_dump.save()
 
         if dump.export_format == 'csv':
