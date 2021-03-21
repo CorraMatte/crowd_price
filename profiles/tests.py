@@ -5,6 +5,8 @@ from crowd_price.validators import NotFuture
 import datetime
 from django.core.exceptions import ValidationError
 
+from profiles.models import Organization
+
 
 class ValidationTest(APITestCase):
     """
@@ -122,19 +124,23 @@ class UserTests(APITestCase):
     """
 
     def test_login_type(self):
+        org = Organization(name='org')
+        org.save()
+
         url = '/consumer/signup'
         user = {
             "username": "UserVerySecure", "password1": "P2sswordVeryS€cure@", "password2": "P2sswordVeryS€cure@",
             "email": "test.consumer@gmail.com"
         }
-        self.client.post(url, data=user)
+        res = self.client.post(url, data=user)
 
         url = '/analyst/signup'
         user = {
             "username": "UserVerySecure", "password1": "P1sswordVeryS€cure@", "password2": "P1sswordVeryS€cure@",
-            "email": "test.analyst@gmail.com"
+            "email": "test.analyst@gmail.com", 'organization': org.pk
         }
-        self.client.post(url, data=user)
+        res = self.client.post(url, data=user)
+
         url = '/user/login'
         user = {"password": "P1sswordVeryS€cure@", "email": "test.analyst@gmail.com"}
         _type = self.client.post(url, data=user).json()['type']
