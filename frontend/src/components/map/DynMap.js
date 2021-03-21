@@ -66,13 +66,27 @@ export class DynMap extends React.Component {
             return (<div></div>)
         }
 
+        let latitude, longitude;
+        if (this.state.latitude === 0) {
+            if (popups.length === 0) {
+                latitude = this.props.popup.latitude;
+                longitude = this.props.popup.longitude;
+            } else {
+                latitude = popups[0].latitude;
+                longitude = popups[0].longitude;
+            }
+        } else {
+            latitude = this.state.latitude;
+            longitude = this.state.longitude;
+        }
+
         return (
             <ReactMapGL
                 width="100%"
                 height="50vh"
                 zoom={this.state.zoom}
-                latitude={this.state.latitude || popups.length === 0 ? this.state.latitude : popups[0].latitude}
-                longitude={this.state.longitude || popups.length === 0 ? this.state.longitude : popups[0].longitude}
+                latitude={latitude}
+                longitude={longitude}
                 mapStyle="mapbox://styles/mapbox/streets-v11"
                 onViewportChange={this.MapChange}
                 mapboxApiAccessToken={ACCESS_TOKEN}
