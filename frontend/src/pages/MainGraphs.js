@@ -1,6 +1,7 @@
 import React from "react";
 import HeaderLogged from "../components/utils/HeaderLogged";
 import {
+    ANALYST_API,
     GRAPH_REPORT_CATEGORY_TOP_API,
     GRAPH_REPORT_PRODUCT_TOP_API,
     GRAPH_REPORT_PRODUCT_TOP_PRICE_AVG_API,
@@ -10,7 +11,7 @@ import {
     GRAPH_SEARCH_PRODUCT_TOP_API
 } from "../urls/endpoints";
 import axios from "axios";
-import {getAuthHeader} from "../auth";
+import {getAuthHeader, isLoggedIn} from "../auth";
 import BarChartItem from "../components/graph/BarChartItem";
 import {
     GRAPH_REPORT_CATEGORY_TOP_TITLE,
@@ -22,6 +23,7 @@ import {
     GRAPH_SEARCH_PRODUCT_TOP_TITLE
 } from "../components/utils/const";
 import {Card, Container} from "react-bootstrap";
+import {Redirect} from "react-router-dom";
 
 
 export class MainGraphs extends React.Component {
@@ -77,29 +79,47 @@ export class MainGraphs extends React.Component {
             value.width = 750;
         }
 
-        this.state = graphs;
+        this.state = {...graphs, ...{isAnalyst: true}};
     }
 
     componentDidMount() {
-        for (const [field, value] of Object.entries(this.state)) {
-            axios.get(value.url, getAuthHeader()).then(
-                res => {
-                    value.data = res.data.results;
-                    this.setState({
-                        [field]: value
-                    })
+        axios.get(ANALYST_API, getAuthHeader()).then(
+            res => {
+                const isAnalyst = !(Object.keys(res.data).length === 0 && res.data.constructor === Object)
+                console.log(res.data)
+                console.log(isAnalyst)
+
+                this.setState({
+                    isAnalyst: isAnalyst
+                });
+
+                if (isAnalyst) {
+                    for (const [field, value] of Object.entries(this.state)) {
+                        axios.get(value.url, getAuthHeader()).then(
+                            res => {
+                                value.data = res.data.results;
+                                this.setState({
+                                    [field]: value
+                                })
+                            }
+                        );
+                    }
                 }
-            );
-        }
+            }
+        );
     }
 
     render() {
         let graphs = [];
 
+        if (!this.state.isAnalyst) {
+            return <Redirect to="/"/>
+        }
+
         for (const [field, value] of Object.entries(this.state)) {
             let graph;
             if (value.type === 'barchart') {
-                graph = <BarChartItem key={field} data={value.data} label={value.label} />
+                graph = <BarChartItem key={field} data={value.data} label={value.label}/>
             }
 
             graphs.push(
@@ -107,12 +127,12 @@ export class MainGraphs extends React.Component {
                     <Card.Header>{value.title}</Card.Header>
                     {graph}
                 </Card>
-                )
+            )
         }
 
         return (
             <Container fluid>
-                <HeaderLogged />
+                <HeaderLogged/>
                 {graphs}
             </Container>
         )
