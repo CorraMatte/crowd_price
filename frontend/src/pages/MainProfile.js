@@ -11,11 +11,11 @@ import {AnalystDetail, ConsumerDetail} from "../components/profile/RolesDetail";
 import {DetailGroupReport} from "../components/report/DetailGroupReport";
 import {getUserType, getAuthHeader} from "../auth";
 import HeaderLogged from "../components/utils/HeaderLogged";
-import StaticMap from "../components/map/StaticMap";
 import {ANALYST_LABEL, CONSUMER_LABEL} from "../components/utils/const";
 import {_update_reports, get_full_date, getCoordinatesByIP, getIP} from "../components/utils/utils";
 import {Button, Card, Col, Container, ListGroup, Row} from "react-bootstrap";
 import {SEARCH_URL} from "../urls/navigation";
+import DynMap from "../components/map/DynMap";
 
 
 class MainProfile extends React.Component {
@@ -129,6 +129,19 @@ class MainProfile extends React.Component {
             profile_type = <AnalystDetail analyst={this.state.user_profile}/>
         }
 
+        let reports;
+        if (this.state.reports.results) {
+            reports = this.state.reports.results.features;
+        } else {
+            reports = []
+        }
+
+        const you_are_here_popup = {
+            latitude: this.state.coords[1],
+            longitude: this.state.coords[0],
+            label: "Your current location"
+        }
+
         return (
             <div>
                 <HeaderLogged/>
@@ -140,8 +153,7 @@ class MainProfile extends React.Component {
                         <Col className={"col-md-1"}></Col>
                         <Col className={"col-md-6"}>
                             <h3>Location of the store on the map</h3>
-                            <StaticMap latitude={this.state.coords[1]} longitude={this.state.coords[0]}
-                                       label={"Your current location"}/>
+                            <DynMap popup={you_are_here_popup} reports={reports}/>
                         </Col>
                     </Row>
                 </Container>
@@ -153,19 +165,20 @@ class MainProfile extends React.Component {
                                     <h3>Reports created</h3>
                                 </Card.Header>
                                 {
-                                    this.state.reports.length > 0 ?
+                                    this.state.reports.count > 0 ?
                                         <div>
                                             <Card.Body>
                                                 <Button id={"previous"} onClick={this.update_reports}
                                                         className={"float-left"}
                                                         disabled={!this.state.prev_reports_url}>previous</Button>
-                                                <Button id={"next"} onClick={this.update_reports} className={"float-right"}
+                                                <Button id={"next"} onClick={this.update_reports}
+                                                        className={"float-right"}
                                                         disabled={!this.state.next_reports_url}>next</Button>
                                             </Card.Body>
                                             <Card.Body>
                                                 <DetailGroupReport reports={this.state.reports}/>
                                             </Card.Body>
-                                            </div>
+                                        </div>
                                         : <Card.Body>You didn't create any reports</Card.Body>
                                 }
                             </Card>

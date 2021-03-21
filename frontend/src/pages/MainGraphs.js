@@ -11,7 +11,7 @@ import {
     GRAPH_SEARCH_PRODUCT_TOP_API
 } from "../urls/endpoints";
 import axios from "axios";
-import {getAuthHeader, isLoggedIn} from "../auth";
+import {getAuthHeader} from "../auth";
 import BarChartItem from "../components/graph/BarChartItem";
 import {
     GRAPH_REPORT_CATEGORY_TOP_TITLE,
