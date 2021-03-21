@@ -29,15 +29,13 @@ SECRET_KEY = '#+jd7&fdx#3$jf0ttsn)ir9i3!d#&((!t0373sg3@6jl(2@bc3'
 DEBUG = True
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['*']
-CORS_ORIGIN_ALLOW_ALL = True
-
 # ALLOWED_HOSTS = ['127.0.0.1']
 # CORS_ORIGIN_ALLOW_ALL = False
-
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000',
-)
+# CORS_ORIGIN_WHITELIST = (
+#     'http://localhost:3000',
+# )
+ALLOWED_HOSTS = ['*']
+CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOW_HEADERS = default_headers + (
     "Content-Disposition",
@@ -59,6 +57,8 @@ INSTALLED_APPS = [
     # Extension
     'django_extensions',
     'django.contrib.gis',
+    'django.contrib.sites',
+    'corsheaders',
 
     # Custom
     'products',
@@ -75,23 +75,10 @@ INSTALLED_APPS = [
     # https://github.com/openwisp/django-rest-framework-gis#geofeaturemodelserializer
     'rest_framework_gis',
 
-    # https://django-rest-auth.readthedocs.io/en/latest/installation.html#social-authentication-optional
-    'dj_rest_auth',
     'rest_framework.authtoken',
 
-    'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'dj_rest_auth.registration',
-    'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.twitter',
-
-    'corsheaders',
     # Password validator https://pypi.org/project/django-password-validators/
     'django_password_validators',
-    'django_password_validators.password_history',
-
 
     'django.contrib.postgres'
 ]
@@ -130,13 +117,11 @@ WSGI_APPLICATION = 'crowd_price.wsgi.application'
 
 # REST FRAMEWORK
 REST_FRAMEWORK = {
-    ## Ale
-    # Toglie la formattazione delle pagine html e restituisce puro json
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': 9,
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
@@ -157,17 +142,8 @@ ACCOUNT_USERNAME_REQUIRED = False
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
 DATABASES = {
-    # 'defult': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        #'ENGINE': 'django.contrib.gis.db.backends.spatialite',
-        #          'NAME': 'db.sqlite3',
-        # This is where you put the name of the db file.
-        # If one doesn't exist, it will be created at migration time.
-    # }
     'default': {
-        #'ENGINE': 'django.db.backends.postgresql',
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'postgres',
         'USER': 'postgres',
@@ -175,13 +151,10 @@ DATABASES = {
         'HOST': '0.0.0.0',
         'PORT': '5432',
     }
-
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -210,7 +183,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -224,10 +196,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-
 STATIC_URL = '/static/'
-STATIC_ROOT = '/tmp/static/'
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
