@@ -147,11 +147,10 @@ class MainProfile extends React.Component {
                 <HeaderLogged/>
                 <Container className={"my-md-5"} fluid>
                     <Row>
-                        <Col className={"col-md-4 ml-md-1"}>
+                        <Col className={"col-md-4"}>
                             {profile_type}
                         </Col>
-                        <Col className={"col-md-1"}></Col>
-                        <Col className={"col-md-6"}>
+                        <Col className={"col-md-8"}>
                             <h3>Your location on the map</h3>
                             <DynMap popup={you_are_here_popup} reports={reports}/>
                         </Col>
