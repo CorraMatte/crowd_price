@@ -133,7 +133,6 @@ class CreateReportAPI(APIView):
         if 'pnt' not in request.data and 'store' not in request.data:
             return Response({'detail': 'point or store must be provided'}, status.HTTP_400_BAD_REQUEST)
 
-        consumer.experience += 1
         consumer.save()
 
         serializer.validated_data['consumer'] = consumer

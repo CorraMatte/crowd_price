@@ -1,6 +1,7 @@
 from django.contrib.auth.password_validation import validate_password
 from django.core.validators import validate_image_file_extension
 from django.core.exceptions import ValidationError
+from jsonschema._reflect import ObjectNotFound
 from rest_framework.authtoken.models import Token
 from rest_framework import generics, status, permissions
 from profiles.models import Consumer, Organization, Analyst, Profile
@@ -18,7 +19,7 @@ class CreateConsumerAPI(APIView):
         if isinstance(p, Response):
             return p
 
-        c = Consumer(profile=p, experience=0)
+        c = Consumer(profile=p) #, experience=0)
         c.save()
         return Response({"detail": serial.ConsumerSerializer(c).data}, status.HTTP_201_CREATED)
 
@@ -43,7 +44,11 @@ class RetrieveAnalystAPI(generics.RetrieveAPIView):
 
     def get_object(self):
         queryset = self.filter_queryset(self.get_queryset())
-        obj = queryset.get(profile__user=self.request.user.pk)
+        try:
+            obj = queryset.get(profile__user=self.request.user.pk)
+        except ObjectNotFound:
+            obj = {}
+
         self.check_object_permissions(self.request, obj)
         return obj
 
@@ -55,7 +60,11 @@ class RetrieveConsumerAPI(generics.RetrieveAPIView):
 
     def get_object(self):
         queryset = self.filter_queryset(self.get_queryset())
-        obj = queryset.get(profile__user=self.request.user.pk)
+        try:
+            obj = queryset.get(profile__user=self.request.user.pk)
+        except ObjectNotFound:
+            obj = {}
+
         self.check_object_permissions(self.request, obj)
         return obj
 

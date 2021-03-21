@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from crowd_price.validators import *
 from crowd_price.const import *
-from django.core.validators import MaxValueValidator, validate_image_file_extension
 from django.contrib.gis.db import models
 
 
@@ -26,17 +25,15 @@ class Profile(models.Model):
 
 class Consumer(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    experience = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(MAX_EXPERIENCE)])
-
-    # Could be useful
-    # is_oauth = models.BooleanField(default=False)
 
     def __str__(self):
         return self.profile.user.email
 
     @property
-    def experience_level(self):
-        return self.experience / 10
+    def experience(self):
+        from capabilities.models import Report
+        exp = Report.objects.filter(consumer=self).count()
+        return MAX_EXPERIENCE if exp > MAX_EXPERIENCE else exp
 
     class Meta:
         ordering = ['profile__user__email']
