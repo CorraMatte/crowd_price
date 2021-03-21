@@ -359,7 +359,7 @@ class MainSearch extends React.Component {
 
         if (this.state.errors.length === 0) {
             if (!this.state.has_search) {
-                result_header = <span>press "search" to do a query</span>
+                result_header = <span>Insert the product name and make a search!</span>
             } else {
                 result_header = <span>There are {this.state.reports.count} reports for that product</span>
             }
