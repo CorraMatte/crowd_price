@@ -86,8 +86,6 @@ export class MainGraphs extends React.Component {
         axios.get(ANALYST_API, getAuthHeader()).then(
             res => {
                 const isAnalyst = !(Object.keys(res.data).length === 0 && res.data.constructor === Object)
-                console.log(res.data)
-                console.log(isAnalyst)
 
                 this.setState({
                     isAnalyst: isAnalyst

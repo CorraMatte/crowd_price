@@ -152,11 +152,51 @@ class MainProfile extends React.Component {
                         </Col>
                         <Col className={"col-md-1"}></Col>
                         <Col className={"col-md-6"}>
-                            <h3>Location of the store on the map</h3>
+                            <h3>Your location on the map</h3>
                             <DynMap popup={you_are_here_popup} reports={reports}/>
                         </Col>
                     </Row>
                 </Container>
+
+
+                <Container className={"col-md-12 my-5"} fluid>
+                    <Card bg={"light"} className={"my-md-3"}>
+                        <Card.Header>
+                            Your saved search
+                        </Card.Header>
+                        <Card.Body>
+                            {
+                                this.state.starred_searches.length > 0 ?
+                                    <ListGroup>
+                                        {
+                                            this.state.starred_searches.map((search) => (
+                                                <ListGroup.Item key={search.id}>
+                                                    <div className={'d-inline float-left'}>
+                                                        Your saved research
+                                                        for <b>{search.product}</b> has {search.total_results} results. <br/>
+                                                        <a href={`${SEARCH_URL}/${search.id}`}>
+                                                            Click here to open in the search tab
+                                                        </a>
+                                                    </div>
+                                                    <Button
+                                                        className={'d-inline float-right'}
+                                                        variant={'danger'}
+                                                        id={search.id}
+                                                        name={'delete' + search.id}
+                                                        onClick={this.remove_starred_search}
+                                                    >
+                                                        Remove
+                                                    </Button>
+                                                </ListGroup.Item>
+                                            ))
+                                        }
+                                    </ListGroup>
+                                    : <div>{"You didn't save any search you've done"}</div>
+                            }
+                        </Card.Body>
+                    </Card>
+                </Container>
+
                 {
                     this.state.user_type === CONSUMER_LABEL ?
                         <Container className={"col-md-12 my-5"} fluid>
@@ -216,43 +256,6 @@ class MainProfile extends React.Component {
                         </Container>
                         : <div></div>
                 }
-
-                <Container className={"col-md-12 my-5"} fluid>
-                    <Card bg={"light"} className={"my-md-3"}>
-                        <Card.Header>
-                            Your saved search
-                        </Card.Header>
-                        <Card.Body>
-                            {
-                                this.state.starred_searches.length > 0 ?
-                                    <ListGroup>
-                                        {
-                                            this.state.starred_searches.map((search) => (
-                                                <ListGroup.Item key={search.id}>
-                                                    <div className={'d-inline float-left'}>
-                                                        Your saved research
-                                                        for <b>{search.product}</b> has {search.total_results} results. <br/>
-                                                        <a href={`${SEARCH_URL}/${search.id}`}>Click here to open in the
-                                                            search tab</a>
-                                                    </div>
-                                                    <Button
-                                                        className={'d-inline float-right'}
-                                                        variant={'danger'}
-                                                        id={search.id}
-                                                        name={'delete' + search.id}
-                                                        onClick={this.remove_starred_search}
-                                                    >
-                                                        Remove
-                                                    </Button>
-                                                </ListGroup.Item>
-                                            ))
-                                        }
-                                    </ListGroup>
-                                    : <div>{"You didn't save any search you've done"}</div>
-                            }
-                        </Card.Body>
-                    </Card>
-                </Container>
             </div>
         )
     }
