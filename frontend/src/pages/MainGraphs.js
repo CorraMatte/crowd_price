@@ -30,53 +30,54 @@ export class MainGraphs extends React.Component {
     constructor(props) {
         super(props);
         let graphs = {
-            most_active_user: {
-                url: GRAPH_REPORT_USER_MOST_ACTIVE_API,
-                title: GRAPH_REPORT_USER_MOST_ACTIVE_TITLE,
-                label: 'reports',
-                type: 'barchart'
-            },
-            most_rated_products: {
-                url: GRAPH_REPORT_PRODUCT_TOP_API,
-                title: GRAPH_REPORT_PRODUCT_TOP_TITLE,
-                label: 'reports',
-                type: 'barchart'
-            },
-            most_rated_categories: {
-                url: GRAPH_REPORT_CATEGORY_TOP_API,
-                title: GRAPH_REPORT_CATEGORY_TOP_TITLE,
-                label: 'reports',
-                type: 'barchart'
-            },
-            most_rated_stores: {
-                url: GRAPH_REPORT_STORE_TOP_API,
-                title: GRAPH_REPORT_STORE_TOP_TITLE,
-                label: 'reports',
-                type: 'barchart'
-            },
-            most_searched_categories: {
-                url: GRAPH_SEARCH_CATEGORY_TOP_API,
-                title: GRAPH_SEARCH_CATEGORY_TOP_TITLE,
-                label: 'searches',
-                type: 'barchart'
-            },
-            most_searched_products: {
-                url: GRAPH_SEARCH_PRODUCT_TOP_API,
-                title: GRAPH_SEARCH_PRODUCT_TOP_TITLE,
-                label: 'searches',
-                type: 'barchart'
-            },
-            most_report_products_avg_price: {
-                url: GRAPH_REPORT_PRODUCT_TOP_PRICE_AVG_API,
-                title: GRAPH_REPORT_PRODUCT_TOP_PRICE_AVG_TITLE,
-                label: 'price',
-                type: 'barchart'
+            graphs: {
+                most_active_user: {
+                    url: GRAPH_REPORT_USER_MOST_ACTIVE_API,
+                    title: GRAPH_REPORT_USER_MOST_ACTIVE_TITLE,
+                    label: 'reports',
+                    type: 'barchart'
+                },
+                most_rated_products: {
+                    url: GRAPH_REPORT_PRODUCT_TOP_API,
+                    title: GRAPH_REPORT_PRODUCT_TOP_TITLE,
+                    label: 'reports',
+                    type: 'barchart'
+                },
+                most_rated_categories: {
+                    url: GRAPH_REPORT_CATEGORY_TOP_API,
+                    title: GRAPH_REPORT_CATEGORY_TOP_TITLE,
+                    label: 'reports',
+                    type: 'barchart'
+                },
+                most_rated_stores: {
+                    url: GRAPH_REPORT_STORE_TOP_API,
+                    title: GRAPH_REPORT_STORE_TOP_TITLE,
+                    label: 'reports',
+                    type: 'barchart'
+                },
+                most_searched_categories: {
+                    url: GRAPH_SEARCH_CATEGORY_TOP_API,
+                    title: GRAPH_SEARCH_CATEGORY_TOP_TITLE,
+                    label: 'searches',
+                    type: 'barchart'
+                },
+                most_searched_products: {
+                    url: GRAPH_SEARCH_PRODUCT_TOP_API,
+                    title: GRAPH_SEARCH_PRODUCT_TOP_TITLE,
+                    label: 'searches',
+                    type: 'barchart'
+                },
+                most_report_products_avg_price: {
+                    url: GRAPH_REPORT_PRODUCT_TOP_PRICE_AVG_API,
+                    title: GRAPH_REPORT_PRODUCT_TOP_PRICE_AVG_TITLE,
+                    label: 'price',
+                    type: 'barchart'
+                }
             }
         }
 
-        for (const value of Object.values(graphs)) {
-            value.width = 500;
-            value.width = 750;
+        for (const value of Object.values(graphs.graphs)) {
+            value.height = 750;
         }
 
         this.state = {...graphs, ...{isAnalyst: true}};
@@ -92,7 +93,7 @@ export class MainGraphs extends React.Component {
                 });
 
                 if (isAnalyst) {
-                    for (const [field, value] of Object.entries(this.state)) {
+                    for (const [field, value] of Object.entries(this.state.graphs)) {
                         axios.get(value.url, getAuthHeader()).then(
                             res => {
                                 value.data = res.data.results;
@@ -114,7 +115,7 @@ export class MainGraphs extends React.Component {
             return <Redirect to="/"/>
         }
 
-        for (const [field, value] of Object.entries(this.state)) {
+        for (const [field, value] of Object.entries(this.state.graphs)) {
             let graph;
             if (value.type === 'barchart') {
                 graph = <BarChartItem key={field} data={value.data} label={value.label}/>
