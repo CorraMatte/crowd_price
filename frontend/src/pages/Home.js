@@ -13,7 +13,12 @@ class Home extends React.Component {
     render() {
         let only_log_features;
         if (isLoggedIn()) {
-            only_log_features = [<SavedSearch />, <RecentSearch />, <NearestReports />,];
+            only_log_features =
+                <div>
+                    <SavedSearch />
+                    <RecentSearch />
+                    <NearestReports />
+                </div>
         }
         return (
             <div>

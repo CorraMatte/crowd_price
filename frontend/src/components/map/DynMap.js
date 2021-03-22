@@ -102,7 +102,7 @@ export class DynMap extends React.Component {
                             >
                                 {
                                     popup.labels.map((label) =>
-                                        <div>{label}</div>
+                                        <div key={label}>{label}</div>
                                     )
                                 }
                             </Popup>
