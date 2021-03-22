@@ -40,11 +40,10 @@ export class Report extends React.Component {
                         <Text style={{fontWeight: 'bold'}}>{data.price + "€"}</Text>
                     </Text>
                     {
-                        data.store ?
+                        data.store &&
                                 <Text style={report_style.report_detail_str}>{"Created in "}
                                     <Text style={{fontWeight: 'bold'}}>{data.store}</Text>
                                 </Text>
-                            : <Text></Text>
                     }
                     <Text style={report_style.report_detail_str}>{"by: " + data.profile}</Text>
                     <Text></Text>
