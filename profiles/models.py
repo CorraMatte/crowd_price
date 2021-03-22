@@ -32,8 +32,7 @@ class Consumer(models.Model):
     @property
     def experience(self):
         from capabilities.models import Report
-        exp = Report.objects.filter(consumer=self).count()
-        return MAX_EXPERIENCE if exp > MAX_EXPERIENCE else exp
+        return Report.objects.filter(consumer=self).count()
 
     class Meta:
         ordering = ['profile__user__email']
