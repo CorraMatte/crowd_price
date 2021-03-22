@@ -72,6 +72,15 @@ class MainSearch extends React.Component {
         })
     }
 
+    get_prices_from_reports = (reports) => {
+        let prices = []
+        reports.forEach((rep) => {
+            prices.push({date: rep.properties.created_time, price: rep.properties.price});
+        });
+
+        return prices
+    }
+
     componentDidMount() {
         const search_id = this.props.match.params.id;
 
@@ -85,6 +94,7 @@ class MainSearch extends React.Component {
 
                     axios.get(url, opt).then(
                         reports => {
+                            const prices = this.get_prices_from_reports(reports.data.results.features);
                             this.setState({
                                 reports: reports.data,
                                 price_min: props.price_min,
@@ -95,7 +105,8 @@ class MainSearch extends React.Component {
                                 ordering_by: props.ordering_by,
                                 current_search_pk: search_id,
                                 after_date: new Date(props.after_date),
-                                pnt: `POINT(${coords[0]} ${coords[1]})`
+                                pnt: `POINT(${coords[0]} ${coords[1]})`,
+                                prices: prices
                             });
                         });
                 }
@@ -170,10 +181,7 @@ class MainSearch extends React.Component {
         const opt = isLoggedIn() ? getAuthHeader() : {};
         axios.post(REPORTS_SEARCH_API, req, opt).then(
             res => {
-                let prices = []
-                res.data.results.features.forEach((rep) => {
-                    prices.push({date: rep.properties.created_time, price: rep.properties.price});
-                });
+                const prices = this.get_prices_from_reports(res.data.results.features);
 
                 this.setState({
                     reports: res.data,
