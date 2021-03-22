@@ -10,7 +10,5 @@ The frontend is developed using React.
 The mobile application is developed using React Native.
 
 
-
-
-# ! IMPORTANT !
-Still under developments.
+## Django Classes
+![UML](UML.png)
