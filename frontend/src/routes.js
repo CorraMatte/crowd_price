@@ -33,7 +33,7 @@ export class BaseRouter extends React.Component {
 
                 <LoginRequiredRoute path="/logout/" component={Logout} />
                 <LoginRequiredRoute path='/profile/' component={MainProfile}/>
-                <LoginRequiredRoute path='/graph/' component={MainGraphs}/>
+                <LoginRequiredRoute path='/graphs/' component={MainGraphs}/>
 
                 {/*Mobile features*/}
                 {/*<LoginRequiredRoute path='/upload/' component={Upload}/>}

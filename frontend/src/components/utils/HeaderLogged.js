@@ -10,7 +10,7 @@ export class HeaderLogged extends React.Component {
         let feature;
         const user_type = getUserType();
         if (user_type === ANALYST_LABEL) {
-            feature = <Nav.Link href="/graph/">Graph</Nav.Link>
+            feature = <Nav.Link href="/graphs/">Graphs</Nav.Link>
         }
 
         return (
