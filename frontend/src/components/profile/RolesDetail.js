@@ -133,9 +133,8 @@ class ProfileDetail extends React.Component {
                         </Button>
                     </Form>
                     {
-                        this.state.picture_error ?
-                        <Alert variant={"danger"} className={'d-block'}>{this.state.picture_error}</Alert> :
-                        <div></div>
+                        this.state.picture_error &&
+                        <Alert variant={"danger"} className={'d-block'}>{this.state.picture_error}</Alert>
                     }
                 </Card.Body>
 

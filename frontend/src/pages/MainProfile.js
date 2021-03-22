@@ -197,7 +197,7 @@ class MainProfile extends React.Component {
                 </Container>
 
                 {
-                    this.state.user_type === CONSUMER_LABEL ?
+                    this.state.user_type === CONSUMER_LABEL &&
                         <Container className={"col-md-12 my-5"} fluid>
                             <Card bg={"light"} className={"my-md-3"}>
                                 <Card.Header>
@@ -222,10 +222,9 @@ class MainProfile extends React.Component {
                                 }
                             </Card>
                         </Container>
-                        : <div></div>
                 }
                 {
-                    this.state.user_type === ANALYST_LABEL ?
+                    this.state.user_type === ANALYST_LABEL &&
                         <Container className={"col-md-12 my-5"} fluid>
                             {this.state.dumps.length > 0 ?
                                 <Card bg={"light"} className={"my-md-3"}>
@@ -253,7 +252,6 @@ class MainProfile extends React.Component {
                                 : <p>{"You didn't downlaod any search"}</p>
                             }
                         </Container>
-                        : <div></div>
                 }
             </div>
         )

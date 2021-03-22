@@ -482,7 +482,7 @@ class MainSearch extends React.Component {
                                         </ReactMapGL>
                                     </Card.Body>
 
-                                    {isLoggedIn() ?
+                                    {isLoggedIn() &&
                                         <Card.Body>
                                             <br/>
                                             <br/>
@@ -493,16 +493,14 @@ class MainSearch extends React.Component {
                                             >
                                                 Add last search to favorite searches
                                             </Button>
-                                        </Card.Body> :
-                                        <div></div>
+                                        </Card.Body>
                                     }
 
                                     {
-                                        this.state.saved_search_result ?
+                                        this.state.saved_search_result &&
                                             <Card.Body>
                                                 <Alert variant={"success"}>{this.state.saved_search_result}</Alert>
-                                            </Card.Body> :
-                                            <div></div>
+                                            </Card.Body>
                                     }
 
                                 </Form>
@@ -523,14 +521,13 @@ class MainSearch extends React.Component {
                             </Row>
 
                             {
-                                this.state.reports.count ? (
+                                this.state.reports.count &&
                                     <div>
                                         <Button id={"previous"} onClick={this.update_reports} className={"float-left"}
                                                 disabled={!this.state.page}>previous</Button>
                                         <Button id={"next"} onClick={this.update_reports} className={"float-right"}
                                                 disabled={(((this.state.page + 1) * 10) > this.state.reports.count)}>next</Button>
                                     </div>
-                                ) : <div></div>
                             }
                         </Col>
                     </Row>

@@ -28,11 +28,10 @@ class DetailReportItem extends React.Component {
                     on the {get_day_month_year_from_date(props.created_time)}
                 </Card.Body>
                 {
-                    props.distance ?
+                    props.distance &&
                         <Card.Body>
                             {`The report is located at ${props.distance}km from your location`}
                         </Card.Body>
-                         : <div></div>
                 }
                 <Card.Body>
                     {store}
