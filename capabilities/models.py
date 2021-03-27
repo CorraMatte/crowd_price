@@ -66,7 +66,7 @@ class Dump(models.Model):
     export_format = models.CharField(max_length=4, choices=Format.choices, default=Format.CSV.value)
 
     def __str__(self):
-        return ' '.join(f'{field}: {value}' for field, value in model_to_dict(self).items())
+        return f'{self.download_timestamp} - {self.search.profile.user.email} in {self.export_format}'
 
     class Meta:
         ordering = ['-download_timestamp']
@@ -87,7 +87,7 @@ class Report(models.Model):
     pnt = models.PointField(srid=SRID, null=True)
 
     def __str__(self):
-        return f"{self.pk}: {self.product.name} {self.consumer.profile.user.email} {self.price}"
+        return f"{self.created_time}: {self.product.name} {self.consumer.profile.user.email} {self.price}€"
 
     class Meta:
         ordering = ['-created_time']
