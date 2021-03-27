@@ -24,7 +24,7 @@ class ReportAdmin(admin.ModelAdmin):
 
 class DumpAdmin(admin.ModelAdmin):
     list_display = [
-        'pk', '__str__'
+        'pk', 'download_timestamp', 'export_format', 'search'
     ]
     list_filter = [
         'search__profile__user', 'export_format', 'download_timestamp'
