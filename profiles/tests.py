@@ -55,8 +55,8 @@ class UserTests(APITestCase):
 
         url = '/user/update/password'
         new_creds = {
-            'new_password1': 'S3cureenough!',
-            'new_password2': 'S3cureenough!',
+            'new_password1': 'S3cureenoughNowEnoughChar!',
+            'new_password2': 'S3cureenoughNowEnoughChar!',
             'old_password': 'this is a wrong password!'
         }
         response = self.client.put(url, data=new_creds)
@@ -71,7 +71,7 @@ class UserTests(APITestCase):
         new_creds['new_password1'] = new_creds['new_password2'] = 'Moresecurenotenough!'
         response = self.client.put(url, data=new_creds)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        new_creds['new_password1'] = new_creds['new_password2'] = 'S3cureenough!'
+        new_creds['new_password1'] = new_creds['new_password2'] = 'S3cureenoughNowEnoughChar!'
         response = self.client.put(url, data=new_creds)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -97,7 +97,7 @@ class UserTests(APITestCase):
         user['password1'] = user['password2'] = 'Moresecurenotenough!'
         response = self.client.post(url, data=user)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        user['password1'] = user['password2'] = 'S3cureenough!'
+        user['password1'] = user['password2'] = 'S3cureenoughNowEnoughChar!'
         response = self.client.post(url, data=user)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
