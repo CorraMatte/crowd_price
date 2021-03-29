@@ -214,7 +214,13 @@ class MainSearch extends React.Component {
 
     downloadDump = (e) => {
         e.preventDefault();
-        const req = {"export_format": this.state.export_format}
+        const req = {
+            "export_format": this.state.export_format,
+            'search': this.state.current_search_pk
+        }
+
+        console.log(req)
+
         axios.post(REPORTS_DUMP_API, req, {
             headers: {Authorization: `Token ${isLoggedIn()}`},
             responseType: 'blob'
@@ -529,7 +535,7 @@ class MainSearch extends React.Component {
                             </Row>
 
                             {
-                                this.state.reports.count &&
+                                this.state.reports.count > 0 &&
                                     <div>
                                         <Button id={"previous"} onClick={this.update_reports} className={"float-left"}
                                                 disabled={!this.state.page}>previous</Button>

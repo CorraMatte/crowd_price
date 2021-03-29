@@ -188,7 +188,7 @@ class DownloadLastDumpAPI(APIView):
     def post(self, request):
         # Check if the current user is an analyst
         try:
-            analyst = Analyst.objects.get(profile__user=request.user.pk)
+            Analyst.objects.get(profile__user=request.user.pk)
         except ObjectDoesNotExist:
             return Response({'detail': 'user not allowed'}, status.HTTP_403_FORBIDDEN)
 
@@ -196,8 +196,6 @@ class DownloadLastDumpAPI(APIView):
         if not serial_dump.is_valid():
             return Response(serial_dump.errors, status.HTTP_400_BAD_REQUEST)
 
-        s = Search.objects.filter(profile_id=analyst.profile.id).latest('created_time')
-        serial_dump.validated_data['search'] = s
         dump = serial_dump.save()
 
         if dump.export_format == 'csv':

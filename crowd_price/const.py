@@ -4,9 +4,6 @@ MAX_PRICE = 5000.00
 # 1 cent as minimum price
 MIN_PRICE = 0.00
 
-# Max experience of a user
-MAX_EXPERIENCE = 100
-
 MAX_DIGITS = 6
 DECIMAL_PLACES = 2
 
