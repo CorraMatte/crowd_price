@@ -237,7 +237,7 @@ class MainProfile extends React.Component {
                                                 this.state.dumps.map((dump) => (
                                                     <ListGroup.Item key={dump.id}>
                                                         <div className={'d-inline float-left'}>
-                                                            {get_full_date(dump.download_timestamp)}
+                                                            {get_full_date(dump.download_timestamp)} - {dump.export_format}
                                                         </div>
                                                         <Button href={`${SEARCH_URL}/${dump.search}`}
                                                                 className={'float-right'}>

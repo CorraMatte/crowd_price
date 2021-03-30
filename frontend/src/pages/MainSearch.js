@@ -219,8 +219,6 @@ class MainSearch extends React.Component {
             'search': this.state.current_search_pk
         }
 
-        console.log(req)
-
         axios.post(REPORTS_DUMP_API, req, {
             headers: {Authorization: `Token ${isLoggedIn()}`},
             responseType: 'blob'

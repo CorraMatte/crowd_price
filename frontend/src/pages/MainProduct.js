@@ -31,7 +31,11 @@ class MainProduct extends React.Component {
             avg: 0,
             max_price: 0,
 
-            popup: {}
+            popup: {
+                longitude: 0,
+                latitude: 0,
+                label: "Your current location"
+            }
         };
     }
 
